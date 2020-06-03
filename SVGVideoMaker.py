@@ -1,0 +1,231 @@
+"""
+Necessary to make simple video
+"""
+
+# region Imports
+import os
+from enum import Enum
+from getpass import getuser
+from cairosvg import svg2png
+from subprocess import Popen, PIPE
+from math import ceil
+# endregion Imports
+
+class Format(Enum):
+    PNG = "png"
+    SVG = "svg"
+    MP4 = "mp4"
+    GIF = "gif"
+
+class SVGVideoMaker:
+
+    file_count = 0
+
+    def __init__(self, svg, width=500, height=500, fps=30, verbose=False):
+        """
+        Instantiate a Video Maker
+        :param svg: the svg to draw
+        :param width: width in px
+        :param height: height in px
+        :param fps: number of frames per seconds
+        :param verbose: True if you want video maker inform you on his progression
+        """
+        self.svg = svg
+
+        # Verbose for debug
+        self.verbose = verbose
+        self.svg.set_verbose(verbose)
+
+        # Frame per seconds
+        self.fps = fps
+        self.svg.set_fps(self.fps)
+
+        # Size / Dimension
+        self.width = width
+        self.height = height
+        self.svg.set_size(width, height)
+
+    def make_movie(self, max_time=None):
+        """
+        Return all svg in string for each frame on
+        :param max_time: if none make all frame of one animation, otherwise make all frame on 'max_time'
+        :return: all svg frames in string with the frame number
+        """
+        # Inform the different key animation
+        if self.verbose:
+            self.svg.display_keys_animations()
+
+        # Prepare the size of movie
+        nb_frame = ceil(max_time) * self.fps if max_time else self.svg.get_nb_frames()
+
+        # Encapsulate generator in try to reset animation
+        # if the generator was break
+        try:
+            self.svg.init_animation()
+            # Around max time to sup value
+            for i in range(nb_frame):
+                if self.verbose:
+                    print(f"Compute frame {i}")
+                yield i, self.svg.get_svg()
+                self.svg.update()
+        except GeneratorExit:
+            # Reset animation when generator was break
+            self.svg.reset()
+
+        # Normal reset
+        self.svg.reset()
+
+    def save_movie(self, path="./", name="out", ext="mp4", max_time=None):
+        """
+        Make a video file from svg and all the key frame
+        :param path: the path where you save video
+        :param name: the name of video
+        :param ext: the extension of your video
+        :param max_time: the time of the end of video
+        :return:
+        """
+        # Prepare command to write video
+        cmd = [
+            "ffmpeg",
+            "-y", # Overwrite output file if exist
+            "-s", f"{self.width}x{self.height}", # Size
+            "-r", f"{self.fps}", # fps
+            "-i", "-", # input come from a pipe like that "exec | ffmpeg"
+            f"{path}{name}.{ext}"
+        ]
+
+        pipe = Popen(cmd, stdin=PIPE, stderr=PIPE) # Start video compilation with command
+        # Display bytestream on stdin to pass at ffmpeg
+        for _, frame in self.make_movie(max_time=max_time):
+            pipe.stdin.write(svg2png(frame))
+
+    def save_frame(self, frame_number=-1, path="./", name=None):
+        """
+        Save the frame 'frame_number' on a file at 'path' with 'name' and extension 'ext'
+        :param frame_number: the number of frame to save if not given save last frame
+        :param path: the path where you save frame
+        :param name: the name of your frame
+        :return: nothing
+        """
+        # Compute name
+        if name:
+            n = name
+        else:
+            n = f"frame{frame_number}_{str(SVGVideoMaker.file_count).zfill(5)}"
+            SVGVideoMaker.file_count += 1
+
+        frame = None
+        # Find frame and save it
+        for i, frame in self.make_movie():
+            if i + 1 == frame_number:
+                # If no name given, assign name like that : frame_53_00001
+                save(frame, f"{path}{n}", Format.PNG)
+                break
+        else:  # If frame not found, print last
+            if frame:
+                save(frame, path, Format.PNG)
+            else:
+                # If None, the movie have no frame
+                raise Exception(f"Can't display frame {frame_number} if movie have no frame")
+
+    def print_frame(self, frame_number=-1):
+        """
+        Print frame on terminal, if 'frame_number' is -1, print last frame
+        :param frame_number: the number of frame to save, -1 save last frame
+        :return: nothing
+        """
+        path = get_default_path_name()
+        i, frame, max_time = 0, None, self.svg.get_max_time()
+        # Find frame and save it on tmp
+        for i, frame in self.make_movie():
+            if i + 1 == frame_number:
+                save(frame, path, Format.PNG)
+                break
+        else:  # If frame not found, print last frame we have
+            if frame:
+                save(frame, path, Format.PNG)
+                frame_number = i # Change the number of frame
+            else:
+                # If None, the movie have no frame
+                raise Exception(f"Can't display frame {frame_number} if movie have no frame")
+
+        display_on_term(f"{path}", f"Frame {frame_number}" if frame_number != -1 else "Last frame")
+
+# region Utility
+def get_default_path_name(ext=Format.PNG):
+    """
+    Get a string who indicate a default path with a default name
+    :param ext: the extension to add at end of path name
+    :return: the string to indicate default path
+    """
+    # Create different directories for each user
+    path = f"/tmp/{getuser()}/"
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+    ext = ext.value if isinstance(ext, Format) else ext
+    path_name = f"{path}svg_frame{str(SVGVideoMaker.file_count).zfill(5)}.{ext}"
+    SVGVideoMaker.file_count += 1
+    return path_name
+
+def save(element, path, ext):
+    """
+    Save element at path with extension 'ext'
+    :param element: element to save
+    :param path: the path to save element
+    :param ext: extension for element
+    :return:
+    """
+    ext = ext.value if isinstance(ext, Format) else ext
+    if ext == Format.PNG.value:
+        svg2png(element, write_to=f"{path}")
+    elif ext == Format.SVG.value:
+        with open(f"{path}", "w") as f:
+            f.write(element)
+            f.close()
+# endregion Utility
+
+# region Terminal
+def display(svg_element, path=None, name=None, ext=Format.PNG):
+    """
+    Display the svg on terminal, if no name or path, save it in default path and name
+    :param svg_element: the element to display
+    :param path: the path to save element
+    :param name: the name of file
+    :param ext: he extension of element (SVG or PNG)
+    :return: nothing
+    """
+    extension = ext.value if isinstance(ext, Format) else ext
+    path = f"{path}{name}.{extension}" if path and name else get_default_path_name(ext)
+    save(svg_element.get_svg(), path, ext)
+    display_on_term(path, f"{name}" if name else f"{path}")
+
+def display_on_term(path_to_file, title=None):
+    """
+    Display picture save at path_to_file. Add title if not None before picture
+    :param path_to_file: the path of picture
+    :param title: the title to display
+    :return: nothing
+    """
+    if title:
+        print(f"{title}")
+    try:
+        # Search if we can display picture in the terminal
+        # And display it if it's possible
+        terminal = os.environ["TERM"]
+        if terminal == "xterm-kitty":
+            os.system(f"kitty +kitten icat {path_to_file}")
+        elif terminal == "terminolgy":
+            os.system(f"tycat {path_to_file}")
+        elif terminal == "xterm-256color":
+            print("Not supported natively")
+            os.system(f"viu {path_to_file}")
+            print(f"If you don't see image, "
+                  f"You can display pseudo image in {terminal} "
+                  f"By installing viu (command cargo install viu), who need rust.")
+        else:
+            print(f"Terminal {terminal} isn't supported")
+    except KeyError:
+        # If we don't in a terminal, we can't get os.environ["TERM"]
+        print("Not in terminal")
+# endregion Terminal
