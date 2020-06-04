@@ -6,6 +6,11 @@ The aim of this project is to write easy animation from description of position.
 To do that, we use svg structure. <br/>
 You create shape like circle, point, polygon, rectangle... and add animation by key time (in second).
 
+## Documentation 
+
+You can have full documentation if you execute command : <br/>
+> python -m sphinx -b /path/to/SVGVideoMaker/Documentation /path/to/SVGVideoMaker/Documentation/html
+
 ## Shapes 
 
 Available shapes :
@@ -39,13 +44,15 @@ See video in examples file.
 ### Misc
 
 This example illustrate divers function you can use with this API.
+![Misc Gif](./examples/Misc.gif)
 
 ### Voronoi
 
 This example is an implementation of Voronoi diagram.
+![Voronoi Gif](./examples/Voronoi.gif)
 
 ### Game
 
 This example is an implementation of territory battle.
-
+![Game Gif](./examples/Game.gif)
  

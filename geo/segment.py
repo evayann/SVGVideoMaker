@@ -1,5 +1,6 @@
 """
-segment between two points.
+Segment between two points.
+With his svg implementation.
 """
 
 # region Imports

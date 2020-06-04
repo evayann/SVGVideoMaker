@@ -1,5 +1,5 @@
 """
-polygons.
+All necessary to create, animate, and make geometry operation on Polygon.
 """
 
 # region Imports
@@ -10,22 +10,22 @@ from geo.animation import ModificationAnimation
 from geo.utility import nearest_point, dont_match, couples
 # endregion Imports
 
-
 class Polygon(ModificationAnimation):
-    """
-    a polygon is an ordered set of points.
+    """A polygon is a list of point.
 
-    for example:
-
-    - create a triangle:
-
-    triangle = Polygon([Point([0, 0]), Point([1, 1]), Point([2, 0])])
-
-    - loop on all segments in a polygon:
-
-    for segment in polygon.segments():
-        ....
-
+    Args:
+        points:
+        id:
+        fps:
+        debug:
+        use_style:
+        is_fill:
+        fill_color:
+        is_stroke:
+        stroke_color:
+        stroke_width:
+        opacity:
+        others_rules:
     """
 
     p_id = 0
@@ -135,7 +135,7 @@ class Polygon(ModificationAnimation):
     # endregion Animation
 
     # region Shape
-    def reshape(self, lower_shape, bigger_shape, apply=False):
+    def reshape(self, lower_shape: list, bigger_shape: list, apply=False):
         matched = [-1] * len(bigger_shape)
 
         # Fill with nearest point

@@ -1,6 +1,5 @@
 """
-quadrants are rectangular boxes delimiting a set of items.
-they are used in display to compute image sizes.
+Quadrants are rectangular boxes delimiting a set of items.
 """
 
 class Quadrant:
@@ -15,16 +14,14 @@ class Quadrant:
         """
         return deepcopy of given quadrant.
         """
-        return Quadrant(
-            list(self.min_coordinates), list(self.max_coordinates))
+        return Quadrant(list(self.min_coordinates), list(self.max_coordinates))
 
     @classmethod
     def empty_quadrant(cls, dimension):
         """
         return an empty quadrant in space of given dimension
         """
-        min_coordinates = []
-        max_coordinates = []
+        min_coordinates, max_coordinates = [], []
         for _ in range(dimension):
             min_coordinates.append(float('+inf'))
             max_coordinates.append(float('-inf'))
@@ -42,9 +39,11 @@ class Quadrant:
                 self.max_coordinates[i] = added_coordinate
 
     def update(self, other):
-        """
-        expands self quadrant by taking constraints from other quadrant into account.
-        the new one will have the minimal size needed to contain both initial ones.
+        """Expands self quadrant by taking constraints from other quadrant into account.
+        The new one will have the minimal size needed to contain both initial ones.
+
+        Args:
+            other (Quadrant) : The other quadrant to update the self quadrant.
         """
         assert len(self.min_coordinates) == len(other.min_coordinates), \
             'merge in different spaces'
@@ -56,29 +55,43 @@ class Quadrant:
                 self.max_coordinates[i] = coordinate
 
     def limits(self, index):
-        """
-        returns array of limits for a given coordinate index
+        """Returns tuple of limits for a given coordinate index.
+
+        Args:
+            index (int) : The index to get the limits.
+
+        Returns:
+            tuple : Returns tuple of limits for a given coordinate index.
         """
         return self.min_coordinates[index], self.max_coordinates[index]
 
     def intersect(self, other):
-        """
-        do we have any region in common ?
+        """Get a boolean who indicate if the two quadrant have region in common.
+
+        Args:
+            other (Quadrant) : The other quadrant to check intersection.
+
+        Returns:
+            bool : True if intersect, otherwise False.
         """
         return all((mi1 < ma2 and ma1 > mi2) for mi1, mi2, ma1, ma2 in zip(self.min_coordinates, other.min_coordinates, self.max_coordinates, other.max_coordinates))
 
     def inflate(self, distance):
-        """
-        get bigger quadrant containing original one + any point outside
-        original at distance less than given
+        """Get bigger quadrant containing original one + any point outside
+        original at distance less than given.
+
+        Args:
+            distance (int) : The distance inflation to add at quadrant.
         """
         self.min_coordinates = [c - distance for c in self.min_coordinates]
         self.max_coordinates = [c + distance for c in self.max_coordinates]
 
     def inflate_factor(self, factor):
-        """
-        get bigger quadrant by applying a multiplicative factor in each
-        dimension, where 1 means "unchanged"
+        """Get bigger quadrant by applying a multiplicative factor in each
+        dimension, where 1 means "unchanged".
+
+        Args:
+            factor (int) : The factor of inflation to multiply at quadrant.
         """
         self.min_coordinates, self.max_coordinates = \
             zip(*[(cmin - (cmax - cmin) * (factor - 1) / 2,
@@ -86,9 +99,10 @@ class Quadrant:
                   for cmin, cmax in zip(self.min_coordinates, self.max_coordinates)])
 
     def devide(self):
-        """
-        devide a quadrant in 4 equal subquadrant
-        :return:
+        """Devide a quadrant in 4 equal subquadrant
+
+        Returns:
+            list : List of 4 subquadrant.
         """
         devided = []
 
@@ -105,20 +119,18 @@ class Quadrant:
         return devided
 
     def get_arrays(self):
-        """
-        returns arrays of limits
+        """Return tuple of min and max coordinate.
+
+        Returns:
+            tuple : Return tuple of min and max coordinate.
         """
         return self.min_coordinates, self.max_coordinates
 
+    # region Override
     def __repr__(self):
         return f"{str(self)}\n"
 
     def __str__(self):
         return f"mi:x {round(self.min_coordinates[0],2)}, y {round(self.min_coordinates[1],2)} " \
                f"ma:x {round(self.max_coordinates[0],2)}, y {round(self.max_coordinates[1],2)}"
-
-
-if __name__ == '__main__':
-    q = Quadrant.empty_quadrant(4)
-    print(q.min_coordinates)
-    print(q.max_coordinates)
+    # endregion Override

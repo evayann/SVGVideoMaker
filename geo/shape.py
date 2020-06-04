@@ -1,5 +1,5 @@
 """
-Implementation of necessary for shape displaying
+Implementation of necessary for shape displaying.
 """
 
 # region Imports
@@ -45,9 +45,19 @@ class Shape(ABC):
 				self.others_rules.append(rule)
 
 	def is_style(self):
+		"""Get if shape have a custom style.
+
+		Returns:
+			bool: True if shape have custom style, otherwise False.
+		"""
 		return self.use_style
 
 	def get_styles(self):
+		"""Get a string who describe all style.
+
+		Returns:
+			str: The string who describe style of this shape.
+		"""
 		string = f'opacity="{self.opacity}" '
 		if self.use_style:
 			if self.is_fill:
@@ -66,26 +76,29 @@ class Shape(ABC):
 			return string
 
 	def get_svg(self):
-		"""
-		Return a string who describe shape only if it's visible
-		:return:
+		"""Return a string who describe shape only if it's visible.
+
+		Returns:
+			str: The string who describe the shape.
 		"""
 		return self.svg_content() if self.opacity > 0 else ""
 
 	# region Abstract
 	@abstractmethod
 	def svg_content(self):
-		"""
-		Return a string who describe the shape
-		:return: the string who describe the shape
+		"""Return a string who describe the shape.
+
+		Returns:
+			str: The string who describe the shape.
 		"""
 		pass
 
 	@abstractmethod
 	def bounding_quadrant(self):
-		"""
-		Return a quadrant who contain the shape
-		:return: the quadrant who contain the shape
+		"""Return a quadrant who contain the shape.
+
+		Returns:
+			Quadrant: The quadrant who contain the shape.
 		"""
 		pass
 	# endregion Abstract

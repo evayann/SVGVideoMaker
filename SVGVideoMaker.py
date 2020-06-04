@@ -12,24 +12,27 @@ from math import ceil
 # endregion Imports
 
 class Format(Enum):
+    """
+    Enumeration of different format (Picture, Video)
+    """
     PNG = "png"
     SVG = "svg"
     MP4 = "mp4"
     GIF = "gif"
 
 class SVGVideoMaker:
+    """ Instantiate a Video Maker.
 
+    Args:
+        svg     (SVG) : the svg to draw
+        width   (int) : width in px
+        height  (int) : height in px
+        fps     (int) : number of frames per seconds
+        verbose (bool): True if you want video maker inform you on his progression
+    """
     file_count = 0
 
     def __init__(self, svg, width=500, height=500, fps=30, verbose=False):
-        """
-        Instantiate a Video Maker
-        :param svg: the svg to draw
-        :param width: width in px
-        :param height: height in px
-        :param fps: number of frames per seconds
-        :param verbose: True if you want video maker inform you on his progression
-        """
         self.svg = svg
 
         # Verbose for debug
@@ -46,11 +49,15 @@ class SVGVideoMaker:
         self.svg.set_size(width, height)
 
     def make_movie(self, max_time=None):
+        """Generator who return all svg in string for each frame.
+
+        Args:
+            max_time (int): if none make all frame of one animation, otherwise make all frame on 'max_time'
+
+        Yields:
+            All svg frames in string with the frame number
         """
-        Return all svg in string for each frame on
-        :param max_time: if none make all frame of one animation, otherwise make all frame on 'max_time'
-        :return: all svg frames in string with the frame number
-        """
+
         # Inform the different key animation
         if self.verbose:
             self.svg.display_keys_animations()
@@ -76,14 +83,15 @@ class SVGVideoMaker:
         self.svg.reset()
 
     def save_movie(self, path="./", name="out", ext="mp4", max_time=None):
+        """Make a video file from svg and all the key frame.
+
+        Args:
+            path     (str) : The path where you save video. Default "./".
+            name     (str) : The name of video. Default "out".
+            ext      (str) : The extension of your video. Default mp4.
+            max_time (int) : The time of the end of video. Default value is the length of your video.
         """
-        Make a video file from svg and all the key frame
-        :param path: the path where you save video
-        :param name: the name of video
-        :param ext: the extension of your video
-        :param max_time: the time of the end of video
-        :return:
-        """
+
         # Prepare command to write video
         cmd = [
             "ffmpeg",
@@ -100,13 +108,14 @@ class SVGVideoMaker:
             pipe.stdin.write(svg2png(frame))
 
     def save_frame(self, frame_number=-1, path="./", name=None):
+        """Save the frame 'frame_number' on a file at 'path' with 'name' and extension 'ext'.
+
+        Args:
+            frame_number (int) : The number of frame to save if not given save last frame. Default is last frame (-1).
+            path         (str) : The path where you save frame. Default path "./".
+            name         (str) : The name of your frame. Default random name like "frame_numberXXXXX".
         """
-        Save the frame 'frame_number' on a file at 'path' with 'name' and extension 'ext'
-        :param frame_number: the number of frame to save if not given save last frame
-        :param path: the path where you save frame
-        :param name: the name of your frame
-        :return: nothing
-        """
+
         # Compute name
         if name:
             n = name
@@ -129,10 +138,10 @@ class SVGVideoMaker:
                 raise Exception(f"Can't display frame {frame_number} if movie have no frame")
 
     def print_frame(self, frame_number=-1):
-        """
-        Print frame on terminal, if 'frame_number' is -1, print last frame
-        :param frame_number: the number of frame to save, -1 save last frame
-        :return: nothing
+        """Print frame on terminal, if 'frame_number' is -1, print last frame.
+
+        Args:
+            frame_number (int) : The number of frame to save. Default -1 save last frame.
         """
         path = get_default_path_name()
         i, frame, max_time = 0, None, self.svg.get_max_time()
@@ -153,10 +162,13 @@ class SVGVideoMaker:
 
 # region Utility
 def get_default_path_name(ext=Format.PNG):
-    """
-    Get a string who indicate a default path with a default name
-    :param ext: the extension to add at end of path name
-    :return: the string to indicate default path
+    """Get a string who indicate a default path with a default name
+
+    Args:
+        ext (Format or str) : The extension to add at end of path name. Default "png".
+
+    Returns:
+        The string to indicate default path.
     """
     # Create different directories for each user
     path = f"/tmp/{getuser()}/"
@@ -169,12 +181,12 @@ def get_default_path_name(ext=Format.PNG):
     return path_name
 
 def save(element, path, ext):
-    """
-    Save element at path with extension 'ext'
-    :param element: element to save
-    :param path: the path to save element
-    :param ext: extension for element
-    :return:
+    """Save element at path with extension 'ext'.
+
+    Args:
+        element (str)           : The element to save.
+        path    (str)           : The path to save element.
+        ext     (Format or str) : The extension for element.
     """
     ext = ext.value if isinstance(ext, Format) else ext
     if ext == Format.PNG.value:
@@ -187,13 +199,13 @@ def save(element, path, ext):
 
 # region Terminal
 def display(svg_element, path=None, name=None, ext=Format.PNG):
-    """
-    Display the svg on terminal, if no name or path, save it in default path and name
-    :param svg_element: the element to display
-    :param path: the path to save element
-    :param name: the name of file
-    :param ext: he extension of element (SVG or PNG)
-    :return: nothing
+    """Display the svg on terminal, if no name or path, save it in default path and name.
+
+    Args:
+        svg_element (Shape)         : The element to display.
+        path        (str)           : The path to save element. Default path.
+        name        (str)           : The name of file. Default name.
+        ext         (Format or str) : The extension of element (SVG or PNG). Default "png".
     """
     extension = ext.value if isinstance(ext, Format) else ext
     path = f"{path}{name}.{extension}" if path and name else get_default_path_name(ext)
@@ -201,11 +213,11 @@ def display(svg_element, path=None, name=None, ext=Format.PNG):
     display_on_term(path, f"{name}" if name else f"{path}")
 
 def display_on_term(path_to_file, title=None):
-    """
-    Display picture save at path_to_file. Add title if not None before picture
-    :param path_to_file: the path of picture
-    :param title: the title to display
-    :return: nothing
+    """Display picture save at path_to_file. Add title if not None before picture.
+
+    Args:
+        path_to_file: The path of picture.
+        title: The title to display. If title print it on terminal.
     """
     if title:
         print(f"{title}")

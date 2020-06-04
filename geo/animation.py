@@ -8,12 +8,18 @@ from geo.shape import Shape
 
 
 class AnimationType(Enum):
+    """
+    Enumeration of different type of animation.
+    """
     TRANSLATION = 1
     MODIFICATION = 2
     INFLATION = 3
     DISPLAY = 4
 
 class AnimationState(Enum):
+    """
+    Enumeration of different state of animation.
+    """
     NEW = 0
     SAME = 1
     END = 2

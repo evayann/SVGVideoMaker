@@ -1,3 +1,7 @@
+"""
+Some utility function.
+"""
+
 # region Imports
 from itertools import islice, cycle
 from geo.segment import Segment
@@ -5,20 +9,33 @@ from geo.segment import Segment
 
 # region Utility
 def couples(iterable, turns=1):
+    """Iterate on all couples of given iterable.
+
+    This will wrap around last element.
+
+    Args:
+        iterable (iter) : The iterable to iter by couple.
+        turns    (int)  : The number of iteration on all element. Default is 1 turn.
+
+    Returns:
+        iter: An iterator by couple turn's time.
     """
-    iterate on all couples of given iterable.
-    this will wrap around last element.
+    """
+    
     """
     return zip(iterable*turns, islice(cycle(iterable*turns), 1, None))
 
 def dont_match(shape, shape_to_match, start_check=-1):
-    """
-    Return first point who don't match to shape_to_match
-    If match, return True, If partially match return False
-    :param shape: list of points to match
-    :param shape_to_match: list of points who want match
-    :param start_check: the index to start checking
-    :return:
+    """Return first point who don't match to shape_to_match.
+    If match, return True, If partially match return False.
+
+    Args:
+        shape: List of points to match.
+        shape_to_match: List of points who want match.
+        start_check: The index to start checking.
+
+    Returns:
+        bool: True if match, False otherwise.
     """
     # Start at 0 because first end of couple is at index 1 and we increment directly
     # The first point (index 0), is check at end
@@ -55,8 +72,19 @@ def dont_match(shape, shape_to_match, start_check=-1):
         return -1, True
 
 def nearest_point(points, point, exclude_index=None, exclude_elements=None):
+    """Return nearest point of point. If exclude_index have all index return None.
+
+    Args:
+        points           (list)  : The list of points.
+        point            (Point) : The point to search the nearest.
+        exclude_index    (list)  : The list of index excluded.
+        exclude_elements (list)  : The list of point excluded.
+
+    Returns:
+        int, point: index of point and the point
     """
-    Return nearest point of point. If exclude_index have all index return None.
+    """
+    
     :param points:
     :param point:
     :param exclude_index:

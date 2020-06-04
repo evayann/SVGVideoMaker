@@ -28,7 +28,6 @@ class Rectangle:#(Animation):
 		:param pt: the point
 		:return: a boolean to indicate if point is in rectangle
 		"""
-		# p1, _, _, p4 = (val for val in iter(self))
 		p1, p4 = self.points[0], self.points[-1]
 		return p1.x <= pt.x <= p4.x and p1.y <= pt.y <= p4.y
 
