@@ -32,16 +32,12 @@ class Polygon(Shape):
 
     p_id = 0
 
-    def __init__(self, points, id=None, fps=30, use_style=False, is_fill=False, fill_color="black",
-                 is_stroke=False, stroke_color="black", stroke_width=2, opacity=1, others_rules=None):
-        super().__init__(use_style=use_style, is_fill=is_fill, fill_color=fill_color,
-                        is_stroke=is_stroke, stroke_color=stroke_color, stroke_width=stroke_width,
-                        opacity=opacity, others_rules=others_rules)
+    def __init__(self, points, id=None, opacity=1, animation=False, style=True):
+        super().__init__(id=id, animation=ModificationAnimation if animation else None, style=style, opacity=opacity)
 
         assert len(points) > 2, "Polygon need at less 3 points"
-        # Override default animation with modficication animation
-        self.animations = ModificationAnimation(self)
-        self.animations.set_start(points, opacity)
+        # Override default animation with modification animation
+        self.set_animation_start(points, opacity, ModificationAnimation)
         self.start_points = points
         self.points = [p.copy() for p in points] # Copy points for animation
 
@@ -255,7 +251,7 @@ class Polygon(Shape):
             x_text, y_text = self.points[0].coordinates
             string += f'<text x="{x_text}" y="{y_text}">{self.id}</text>\n'
 
-        if DEBUG_LEVEL <= DebugLevel.VISUAL:
+        if DEBUG_LEVEL.value <= DebugLevel.VISUAL.value:
             string += "\n".join([p.svg_content() for p in self.points]) + "\n"
 
         return string

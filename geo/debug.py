@@ -13,8 +13,14 @@ class DebugLevel(Enum):
 	WARNING = 7  # Tell only warnings
 	NO      = 9  # Quiet like a Carp. Is always the bigger value of enum.
 
+
+DEBUG_LEVEL = DebugLevel.NO
+
 def msg(str, dbg_lvl):
 	if DEBUG_LEVEL.value <= dbg_lvl.value:
 		print(str)
 
-DEBUG_LEVEL = DebugLevel.NO
+def set_debug(dbg_lvl):
+	global DEBUG_LEVEL
+	DEBUG_LEVEL = dbg_lvl
+

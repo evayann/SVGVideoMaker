@@ -4,7 +4,8 @@ Implementation of necessary for shape displaying.
 
 # region Imports
 from abc import abstractmethod, ABC
-from geo.animation import Animation
+from geo.style import Style
+from geo.animation import Animation, ModificationAnimation
 # endregion Imports
 
 class Shape(ABC):
@@ -13,19 +14,11 @@ class Shape(ABC):
 	"""
 	COUNTER = 0
 
-	def __init__(self, id=None, use_style=False, is_fill=False, fill_color="black",
-	             is_stroke=False, stroke_color="black", stroke_width=2, opacity=1, others_rules=None):
-		"""
+	def __init__(self, id=None, animation=None, style=False, opacity=1):
+		"""Shape is an abstract class who describe main characteristics of a svg shape.
 
-		:param debug:
-		:param use_style:
-		:param is_fill:
-		:param fill_color:
-		:param is_stroke:
-		:param stroke_color:
-		:param stroke_width:
-		:param opacity:
-		:param others_rules:
+		Args:
+			id (str) : The id of shape. If None default id is the name of class with a number.
 		"""
 		if id:
 			self.id = id
@@ -33,24 +26,56 @@ class Shape(ABC):
 			self.id = f"{self.__class__.__name__}{Shape.COUNTER}"
 			Shape.COUNTER += 1
 
-		self.animations = Animation(self)
+		self.animations = animation(self) if animation else None
+		if style:
+			self.style = Style(opacity=opacity)
+		else:
+			self.style = None
 
-		# Set if we use style in different shape
-		self.use_style = use_style
+	# region Setters
+	def set_animation_start(self, init_pt, opacity, anim_type=Animation):
+		if self.animations is None:
+			if anim_type == Animation:
+				self.animations = Animation(self)
+			elif anim_type == ModificationAnimation:
+				self.animations = ModificationAnimation(self)
+		self.animations.set_start(init_pt, opacity)
 
-		# Set if we use fill, stroke, opacity... and set it
-		self.is_fill = is_fill
-		self.fill_color = fill_color
-		self.is_stroke = is_stroke
-		self.stroke_color = stroke_color
-		self.stroke_width = stroke_width
-		self.opacity = opacity
+	def set_style(self, fill_color=None, stroke_color=None, stroke_width=None, opacity=None, others_rules=None):
+		"""Set the style of a svg element.
 
-		# Others rules
-		self.others_rules = []
+		Args:
+			fill_color   (str)  : The color to fill shape. Default is black.
+			stroke_color (str)  : The color of stroke of the shape. Default is blue.
+			stroke_width (int)  : The size of stroke of the shape. Default is no stroke.
+			opacity      (int)  : The opacity of shape. Default is 1.
+			others_rules (list) : A list of some others rules. Default is no others rules.
+		"""
+		if self.style is None:
+			self.style = Style()
+
+		self.style.custom = True
+		if fill_color:
+			self.style.fill_color = fill_color
+		if stroke_color:
+			self.style.stroke_color = stroke_color
+		if stroke_width:
+			self.style.stroke_width = stroke_width
+		if opacity:
+			self.style.opacity = opacity
 		if others_rules:
-			for rule in others_rules:
-				self.others_rules.append(rule)
+			self.style.others_rules = others_rules
+
+	def add_other_rule(self, rules):
+		"""Add new rules at previous others rules.
+		Can be str or list
+
+		Args:
+			rules (str or list) : The rules to add.
+		"""
+		if self.style:
+			self.style.add_other_rules(rules)
+	# endregion Setters
 
 	# region Getters
 	def is_style(self):
@@ -59,7 +84,7 @@ class Shape(ABC):
 		Returns:
 			bool: True if shape have custom style, otherwise False.
 		"""
-		return self.use_style
+		return self.style.custom if self.style else False
 
 	def get_styles(self):
 		"""Get a string who describe all style.
@@ -67,22 +92,7 @@ class Shape(ABC):
 		Returns:
 			str: The string who describe style of this shape.
 		"""
-		string = f'opacity="{self.opacity}" '
-		if self.use_style:
-			if self.is_fill:
-				string += f'fill="{self.fill_color}" '
-			else:
-				string += f'fill="none" '
-
-			if self.is_stroke:
-				string += f'stroke="{self.stroke_color}" stroke-width="{self.stroke_width}" '
-
-			if self.others_rules:
-				string += " ".join(self.others_rules)
-
-			return string
-		else:
-			return string
+		return self.style.get_styles() if self.style else ""
 
 	def get_svg(self):
 		"""Return a string who describe shape only if it's visible.
@@ -90,7 +100,13 @@ class Shape(ABC):
 		Returns:
 			str: The string who describe the shape.
 		"""
-		return self.svg_content() if self.opacity > 0 else ""
+		if self.style:
+			if self.style.opacity > 0:
+				return self.svg_content()
+			else:
+				return ""
+		else:
+			return self.svg_content()
 	# endregion Getters
 
 	# region Animations
@@ -103,7 +119,8 @@ class Shape(ABC):
 		pass
 
 	def apply_opacity(self, value):
-		self.opacity = round(self.opacity + value, 3)
+		if self.style:
+			self.style.opacity = round(self.style.opacity + value, 3)
 	# endregion Animations
 
 	# region Abstract

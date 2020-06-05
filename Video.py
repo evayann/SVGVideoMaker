@@ -29,7 +29,6 @@ class Video:
         width   (int) : width in px
         height  (int) : height in px
         fps     (int) : number of frames per seconds
-        verbose (bool): True if you want video maker inform you on his progression
     """
     file_count = 0
 
@@ -56,7 +55,7 @@ class Video:
         """
 
         # Inform the different key animation
-        msg(self.svg.display_keys_animations(), DebugLevel.VERBOSE);
+        msg(self.svg.get_keys_animations(), DebugLevel.VERBOSE)
 
         # Prepare the size of movie
         nb_frame = ceil(max_time) * self.fps if max_time else self.svg.get_nb_frames()
@@ -123,7 +122,7 @@ class Video:
         for i, frame in self.make_movie():
             if i + 1 == frame_number:
                 # If no name given, assign name like that : frame_53_00001
-                save(frame, f"{path}{n}", Format.PNG)
+                save(frame, f"{path}{n}", Format.SVG)
                 break
         else:  # If frame not found, print last
             if frame:
@@ -185,9 +184,9 @@ def save(element, path, ext):
     """
     ext = ext.value if isinstance(ext, Format) else ext
     if ext == Format.PNG.value:
-        svg2png(element, write_to=f"{path}")
+        svg2png(element, write_to=f"{path}.{ext}")
     elif ext == Format.SVG.value:
-        with open(f"{path}", "w") as f:
+        with open(f"{path}.{ext}", "w") as f:
             f.write(element)
             f.close()
 # endregion Utility

@@ -46,8 +46,7 @@ class Group:
             element.animations.update()
 
     def display_animations(self):
-        for element in self.group:
-            element.animations.display_animations()
+        return "\n".join([el.animations.display_animations() for el in self.group if el.animations])
 
     def apply_translation(self, value):
         for element in self.group:

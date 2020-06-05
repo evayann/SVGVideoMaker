@@ -5,9 +5,9 @@ from geo.shape import Shape
 # endregion Imports
 
 class Arc(Shape):
-	def __init__(self, start, mid, end, opacity=1):
-		super().__init__(start, use_style=True, is_fill=False)
-		self.animations.set_start(start, opacity)
+	def __init__(self, start, mid, end, id=None, opacity=1):
+		super().__init__(id)
+		self.set_animation_start(start, opacity)
 		self.start_point = start
 		self.anim_point = start
 

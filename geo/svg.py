@@ -67,7 +67,14 @@ class SVG:
         Print all key animations of all svg element in svg.
         """
         for element in self.elements:
-            print(element.animations.display_animations())
+            if element.animations:
+                print(element.animations.display_animations())
+
+    def get_keys_animations(self):
+        """
+        Get string of all key animations of all svg element in svg.
+        """
+        return "\n".join([el.animations.display_animations() for el in self.elements if el.animations])
 
     def update(self):
         """
@@ -139,10 +146,10 @@ class SVG:
         """
         strings = []
         for color, thing in zip(cycle(iter(SVG.svg_colors)), self.elements):
-            if thing.is_style():
-                strings.append('<g>\n')
-            else:
-                strings.append('<g fill="{}" stroke="{}">\n'.format(color, color))
+            # if thing.is_style():
+            #     strings.append('<g>\n')
+            # else:
+            strings.append('<g fill="{}" stroke="{}">\n'.format(color, color))
             strings.append(thing.get_svg())
             strings.append('</g>\n')
         return " ".join(strings)
@@ -165,9 +172,6 @@ class SVG:
         Args:
             start_point (Circle) : The top left corner of view box.
             end_point   (Circle) : The bottom right corner of view box.
-
-        Returns:
-
         """
         self.start_vb = start_point
         self.end_vb = end_point

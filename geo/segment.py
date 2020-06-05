@@ -8,6 +8,7 @@ from geo.point import Point2D
 from geo.shape import Shape
 from geo.quadrant import Quadrant
 from geo.circle import Circle
+from geo.animation import Animation
 # endregion Imports
 
 class Segment(Shape):
@@ -29,18 +30,12 @@ class Segment(Shape):
         intersection = segment1.intersection_with(segment2)
 
     """
-    def __init__(self, start_point: Circle, end_point: Circle,
-                 fps=30, verbose=False,
-                 id=None, use_style=False, is_fill=False, fill_color="black",
-                 is_stroke=False, stroke_color="black", stroke_width=2, opacity=1, others_rules=None):
+    def __init__(self, start_point: Circle, end_point: Circle, id=None, opacity=1, animation=False, style=True):
         """
         create a segment from an array of two points.
         """
-        super().__init__(id=id, use_style=use_style,
-                         is_fill=is_fill, fill_color=fill_color,
-                         is_stroke=is_stroke, stroke_color=stroke_color, stroke_width=stroke_width,
-                         opacity=opacity, others_rules=others_rules)
-        self.animations.set_start([start_point, end_point], opacity)
+        super().__init__(id=id, animation=Animation if animation else None, style=style, opacity=opacity)
+        self.set_animation_start([start_point, end_point], opacity)
         self.endpoints = [start_point, end_point]
         self.anim_points = [start_point.copy(), end_point.copy()]
 

@@ -371,9 +371,13 @@ def main():
 	for p in polygons:
 		print(p.animations.display_animations())
 
-	video = Video(svg, width=width * 15, height=height * 15, fps=fps, verbose=False)
+	from geo.debug import set_debug, DebugLevel
+	set_debug(DebugLevel.VERBOSE)
+	video = Video(svg, width=width * 15, height=height * 15, fps=fps)
 	video.save_movie(name="The Game")
-	video.print_frame(50)
+	# video.print_frame(50)
+	# video.save_frame(50)
+	# video.save_frame(350)
 	print("End")
 
 

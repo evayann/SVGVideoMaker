@@ -10,25 +10,27 @@ class Point(Circle):
     """
     Class who implements necessary to create and display point
     """
-    def __init__(self, coordinates, debug=False, use_style=False, is_fill=False, fill_color="black",
-	             is_stroke=False, stroke_color="black", stroke_width=2, opacity=1, others_rules=None):
+    def __init__(self, coordinates, id=None, opacity=1, animation=False, style=True):
+        """Build a point using an array of coordinates.
+
+        Args:
+            coordinates (list) : The coordinates.
+            id          (str)  : The id of shape.
+            opacity     (int)  : The opacity of shape.
         """
-        build new point using an array of coordinates.
-        """
-        super().__init__(coordinates, debug, use_style, is_fill, fill_color,
-                       is_stroke, stroke_color, stroke_width, opacity, others_rules)
-        self.rayon = 1
+        super().__init__(coordinates, id=id, rayon=1, opacity=opacity, animation=animation, style=style)
 
 
-class Point2D(Circle):
-    def __init__(self, x, y, debug=False, use_style=False, is_fill=False, fill_color="black",
-                 is_stroke=False, stroke_color="black", stroke_width=2, opacity=1, others_rules=None):
+class Point2D(Point):
+    def __init__(self, x, y, id=None, opacity=1, animation=False, style=True):
+        """Build new 2D point using an array of coordinates.
+
+        Args:
+            x       (int) : Position on X - Axis
+            y       (int) : Position on Y - Axis
+            opacity (int) : Value of opacity
         """
-		build new 2D point using an array of coordinates.
-		"""
-        super().__init__([x, y], debug, use_style, is_fill, fill_color,
-                         is_stroke, stroke_color, stroke_width, opacity, others_rules)
-        self.rayon = 1
+        super().__init__([x, y], id=id, opacity=opacity, animation=animation, style=style)
         self.x = x
         self.y = y
 
@@ -44,9 +46,7 @@ class Point2D(Circle):
         """
         addition operator. (useful for translations)
         """
-        o_x = other.x if isinstance(other, Point2D) else other.coordinates[0]
-        o_y = other.y if isinstance(other, Point2D) else other.coordinates[1]
-        return Point2D(self.x + o_x, self.y + o_y)
+        return Point2D(self.x + other.coordinates[0], self.y + other.coordinates[1])
 
     def __sub__(self, other):
         """

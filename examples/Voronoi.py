@@ -46,7 +46,8 @@ class Segment:
 
 		if start_frame != end_frame:
 			# Draw segment by inflation
-			segment = S(seg.endpoints[0], seg.endpoints[0], use_style=True, is_stroke=True, stroke_color="blue")
+			segment = S(seg.endpoints[0], seg.endpoints[0])
+			segment.set_style(stroke_color="blue")
 			segment.animations.add_animation_by_frame(start_frame, Point(0, 0), AnimationType.INFLATION)
 
 			movement = seg.endpoints[1] - seg.endpoints[0]
@@ -57,8 +58,8 @@ class Segment:
 				last_frame = max(last_frame, end_frame)
 		else:
 			# Draw segment by pop
-			segment = S(seg.endpoints[0], seg.endpoints[1], use_style=True,
-			            is_stroke=True, stroke_color="blue", opacity=0)
+			segment = S(seg.endpoints[0], seg.endpoints[1], opacity=0)
+			segment.set_style(stroke_color="blue")
 			segment.animations.add_animation_by_frame(start_frame - 1, 0, AnimationType.DISPLAY)
 			segment.animations.add_animation_by_frame(end_frame, 1, AnimationType.DISPLAY)
 
@@ -135,8 +136,8 @@ class PriorityQueue:
 
 class Line:
 	def __init__(self):
-		self.line = S(Point(0, 0), Point(0, height), id="Defilement Line",
-		              use_style=True, is_stroke=True, stroke_color="red")
+		self.line = S(Point(0, 0), Point(0, height), id="Defilement Line")
+		self.line.set_style(stroke_color="red")
 		self.previous_x_line = 0
 
 	def compute_line(self, frame, x):
@@ -452,4 +453,4 @@ def main():
 	display(svg, ext="svg")
 
 if __name__ == '__main__':
-    main()
+	main()
