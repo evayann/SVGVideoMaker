@@ -7,6 +7,7 @@ from geo.quadrant import Quadrant
 class Group:
     def __init__(self):
         self.group = []
+        self.animations = self # Opaque structure to let user apply modification of animation on all a group.
 
     def add(self, *elements):
         for element in elements:
@@ -14,29 +15,22 @@ class Group:
 
     def set_verbose(self, boolean):
         for element in self.group:
-            element.set_verbose(boolean)
+            element.animations.set_verbose(boolean)
 
     def init_animation(self):
         for element in self.group:
-            element.init_animation()
+            element.animations.init_animation()
 
     def set_fps(self, fps):
         for element in self.group:
-            element.set_fps(fps)
-
-    def add_animation(self, time, position, anim_type=AnimationType.TRANSLATION):
-        if anim_type == AnimationType.MODIFICATION:
-            raise Exception("Group can't have modification animation")
-
-        for element in self.group:
-            element.animations[time] = position
+            element.animations.set_fps(fps)
 
     def add_animation_by_frame(self, frame, values, anim_type=AnimationType.TRANSLATION):
         if anim_type == AnimationType.MODIFICATION:
             raise Exception("Group can't have modification animation")
 
         for element in self.group:
-            element.add_animation_by_frame(frame, values, anim_type)
+            element.animations.add_animation_by_frame(frame, values, anim_type)
 
     def is_style(self):
         return False
@@ -44,28 +38,28 @@ class Group:
     def get_end_time(self):
         end_time = -1
         for element in self.group:
-            end_time = max(end_time, element.end_time)
+            end_time = max(end_time, element.animations.end_time)
         return end_time
 
     def update(self):
         for element in self.group:
-            element.update()
+            element.animations.update()
 
     def display_animations(self):
         for element in self.group:
-            element.display_animations()
+            element.animations.display_animations()
 
     def apply_translation(self, value):
         for element in self.group:
-            element.apply_translation(value)
+            element.animations.apply_translation(value)
 
     def apply_inflation(self, value):
         for element in self.group:
-            element.apply_inflation(value)
+            element.animations.apply_inflation(value)
 
     def reset(self):
         for element in self.group:
-            element.reset()
+            element.animations.reset()
 
     # region SVG
     def bounding_quadrant(self):

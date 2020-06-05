@@ -4,13 +4,16 @@ Implementation of necessary for shape displaying.
 
 # region Imports
 from abc import abstractmethod, ABC
+from geo.animation import Animation
 # endregion Imports
 
 class Shape(ABC):
 	"""
 	Necessary for display shape content
 	"""
-	def __init__(self, debug=False, id=None, use_style=False, is_fill=False, fill_color="black",
+	COUNTER = 0
+
+	def __init__(self, id=None, use_style=False, is_fill=False, fill_color="black",
 	             is_stroke=False, stroke_color="black", stroke_width=2, opacity=1, others_rules=None):
 		"""
 
@@ -24,8 +27,13 @@ class Shape(ABC):
 		:param opacity:
 		:param others_rules:
 		"""
-		self.debug = debug
-		self.id = id if id else self.__class__.__name__
+		if id:
+			self.id = id
+		else:
+			self.id = f"{self.__class__.__name__}{Shape.COUNTER}"
+			Shape.COUNTER += 1
+
+		self.animations = Animation(self)
 
 		# Set if we use style in different shape
 		self.use_style = use_style
@@ -44,6 +52,7 @@ class Shape(ABC):
 			for rule in others_rules:
 				self.others_rules.append(rule)
 
+	# region Getters
 	def is_style(self):
 		"""Get if shape have a custom style.
 
@@ -82,6 +91,20 @@ class Shape(ABC):
 			str: The string who describe the shape.
 		"""
 		return self.svg_content() if self.opacity > 0 else ""
+	# endregion Getters
+
+	# region Animations
+	@abstractmethod
+	def apply_translation(self, value):
+		pass
+
+	@abstractmethod
+	def apply_inflation(self, value):
+		pass
+
+	def apply_opacity(self, value):
+		self.opacity = round(self.opacity + value, 3)
+	# endregion Animations
 
 	# region Abstract
 	@abstractmethod

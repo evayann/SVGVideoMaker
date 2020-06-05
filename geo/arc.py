@@ -1,12 +1,13 @@
 
 # region Imports
 from geo.quadrant import Quadrant
-from geo.animation import Animation
+from geo.shape import Shape
 # endregion Imports
 
-class Arc(Animation):
-	def __init__(self, start, mid, end):
+class Arc(Shape):
+	def __init__(self, start, mid, end, opacity=1):
 		super().__init__(start, use_style=True, is_fill=False)
+		self.animations.set_start(start, opacity)
 		self.start_point = start
 		self.anim_point = start
 
@@ -23,7 +24,7 @@ class Arc(Animation):
 
 	# region Animation
 	def reset(self):
-		super().reset()
+		self.animations.reset()
 		self.anim_point = self.start_point.copy()
 
 	def apply_translation(self, value):
@@ -49,7 +50,6 @@ class Arc(Animation):
 		Return a quadrant who contain polygon
 		:return: the quadrant who contain polygon
 		"""
-		print(self.anim_point)
 		return f'<path d="m {"{} {}".format(*self.anim_point.coordinates)} ' \
 		       f'a {"{} {}".format(*self.mid.coordinates)}' \
 		       f" {self.rot_x} {1 if self.large_arc else 0} {1 if self.invert else 0}" \

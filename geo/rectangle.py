@@ -1,10 +1,10 @@
 
 # region Imports
 from geo import Point2D
-from geo.animation import Animation
+from geo.polygon import Polygon
 # endregion Imports
 
-class Rectangle:#(Animation):
+class Rectangle:#(Polygon):
 	def __init__(self, pt=None, width=None, height=None, points=None):
 		# Create Rectangle by width and length
 		if pt and height and width:

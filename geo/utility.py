@@ -83,14 +83,6 @@ def nearest_point(points, point, exclude_index=None, exclude_elements=None):
     Returns:
         int, point: index of point and the point
     """
-    """
-    
-    :param points:
-    :param point:
-    :param exclude_index:
-    :param exclude_elements:
-    :return:
-    """
     pt_id, near_pt, min_distance = -1, None, float("+inf")
     for i, pt in enumerate(points):
         # Check if the point is in exclude list

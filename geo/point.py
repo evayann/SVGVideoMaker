@@ -44,7 +44,9 @@ class Point2D(Circle):
         """
         addition operator. (useful for translations)
         """
-        return Point2D(self.x + other.x, self.y + other.y)
+        o_x = other.x if isinstance(other, Point2D) else other.coordinates[0]
+        o_y = other.y if isinstance(other, Point2D) else other.coordinates[1]
+        return Point2D(self.x + o_x, self.y + o_y)
 
     def __sub__(self, other):
         """

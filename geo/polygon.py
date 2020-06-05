@@ -6,11 +6,13 @@ All necessary to create, animate, and make geometry operation on Polygon.
 from geo.point import Point
 from geo.segment import Segment
 from geo.quadrant import Quadrant
+from geo.shape import Shape
 from geo.animation import ModificationAnimation
 from geo.utility import nearest_point, dont_match, couples
+from geo.debug import msg, DebugLevel, DEBUG_LEVEL
 # endregion Imports
 
-class Polygon(ModificationAnimation):
+class Polygon(Shape):
     """A polygon is a list of point.
 
     Args:
@@ -30,13 +32,16 @@ class Polygon(ModificationAnimation):
 
     p_id = 0
 
-    def __init__(self, points, id=None, fps=30, debug=False, use_style=False, is_fill=False, fill_color="black",
+    def __init__(self, points, id=None, fps=30, use_style=False, is_fill=False, fill_color="black",
                  is_stroke=False, stroke_color="black", stroke_width=2, opacity=1, others_rules=None):
-        super().__init__(points, fps=fps, debug=debug, use_style=use_style, is_fill=is_fill, fill_color=fill_color,
+        super().__init__(use_style=use_style, is_fill=is_fill, fill_color=fill_color,
                         is_stroke=is_stroke, stroke_color=stroke_color, stroke_width=stroke_width,
                         opacity=opacity, others_rules=others_rules)
 
         assert len(points) > 2, "Polygon need at less 3 points"
+        # Override default animation with modficication animation
+        self.animations = ModificationAnimation(self)
+        self.animations.set_start(points, opacity)
         self.start_points = points
         self.points = [p.copy() for p in points] # Copy points for animation
 
@@ -135,7 +140,15 @@ class Polygon(ModificationAnimation):
     # endregion Animation
 
     # region Shape
-    def reshape(self, lower_shape: list, bigger_shape: list, apply=False):
+    def reshape(self, lower_shape, bigger_shape, apply=False):
+        """
+        Make a new form for the animation
+        The lower form is improve to match to bigger form
+        :param lower_shape: the lower_shape of animation
+        :param bigger_shape: the bigger_shape of animation
+        :param apply: indicate if we need to apply the shape at the form
+        :return: an animation who match to bigger_shape from lower_shape
+        """
         matched = [-1] * len(bigger_shape)
 
         # Fill with nearest point
@@ -148,8 +161,7 @@ class Polygon(ModificationAnimation):
         for low in lower_shape:
             if low not in matched:
                 # Need to add this description point
-                if self.verbose:
-                    print(f"List matched don't contain {low}, need to add !")
+                msg(f"List matched don't contain {low}, need to add !", DebugLevel.VERBOSE)
 
                 # To do that, we search the nearest point to remove in new point area
                 # and save the id to don't erase this point
@@ -194,8 +206,7 @@ class Polygon(ModificationAnimation):
         if apply:
             # Save a copy to don't be affect
             # by utilisation of return
-            if self.verbose:
-                print("Apply reshape")
+            msg("Apply reshape", DebugLevel.VERBOSE)
             self.points = list(matched)
 
         return matched
@@ -204,7 +215,7 @@ class Polygon(ModificationAnimation):
         self.points = shape
 
     def reset(self):
-        super().reset()
+        self.animations.reset()
         self.points = [p.copy() for p in self.start_points]
     # endregion Shape
 
@@ -244,7 +255,7 @@ class Polygon(ModificationAnimation):
             x_text, y_text = self.points[0].coordinates
             string += f'<text x="{x_text}" y="{y_text}">{self.id}</text>\n'
 
-        if self.debug:
+        if DEBUG_LEVEL <= DebugLevel.VISUAL:
             string += "\n".join([p.svg_content() for p in self.points]) + "\n"
 
         return string

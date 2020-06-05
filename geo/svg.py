@@ -36,7 +36,7 @@ class SVG:
         Init all animations.
         """
         for element in self.elements:
-            element.init_animation()
+            element.animations.init_animation()
 
     def append(self, *elements):
         """Append all elements in svg.
@@ -67,21 +67,21 @@ class SVG:
         Print all key animations of all svg element in svg.
         """
         for element in self.elements:
-            print(element.display_animations())
+            print(element.animations.display_animations())
 
     def update(self):
         """
         Update animation of all svg element in svg.
         """
         for element in self.elements:
-            element.update()
+            element.animations.update()
 
     def reset(self):
         """
         Reset information about animation of all svg element in svg.
         """
         for element in self.elements:
-            element.reset()
+            element.animations.reset()
 
     def get_svg(self):
         """Compute svg to string.
@@ -150,16 +150,25 @@ class SVG:
     # region Setters
     def set_verbose(self, boolean):
         for element in self.elements:
-            element.set_verbose(boolean)
+            element.animations.set_verbose(boolean)
 
     def set_fps(self, fps):
         for element in self.elements:
-            element.set_fps(fps)
+            element.animations.set_fps(fps)
 
     def set_size(self, width, height):
         self.svg_dimensions = (width, height)
 
     def set_view_box(self, start_point, end_point):
+        """Set the view box of svg
+
+        Args:
+            start_point (Circle) : The top left corner of view box.
+            end_point   (Circle) : The bottom right corner of view box.
+
+        Returns:
+
+        """
         self.start_vb = start_point
         self.end_vb = end_point
     # endregion Setters
@@ -173,7 +182,7 @@ class SVG:
         """
         max_time = 0
         for element in self.elements:
-            max_time = max(element.get_end_time(), max_time)
+            max_time = max(element.animations.get_end_time(), max_time)
         return max_time
 
     def get_nb_frames(self):
@@ -184,7 +193,7 @@ class SVG:
         """
         nb_frame = 0
         for element in self.elements:
-            nb_frame = max(element.get_nb_frames(), nb_frame)
+            nb_frame = max(element.animations.get_nb_frames(), nb_frame)
         return nb_frame
     # endregion Getters
 

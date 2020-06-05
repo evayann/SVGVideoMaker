@@ -23,6 +23,7 @@ author = 'Yann Zavattero'
 # The full version, including alpha/beta/rc tags
 version = release = '0.1'
 
+master_doc = 'index'
 
 # -- General configuration ---------------------------------------------------
 
@@ -57,17 +58,7 @@ html_static_path = ['_static']
 
 # Options for the theme
 html_theme_options = {
-    'canonical_url': 'yann.fzcommunication.fr/index.php/',
-    'logo_only': False,
-    'display_version': True,
-    'prev_next_buttons_location': 'bottom',
-    'style_external_links': True,
-    'vcs_pageview_mode': 'display_github view',
     'style_nav_header_background': 'red',
-    # Toc options
-    'collapse_navigation': True,
-    'sticky_navigation': True,
-    'navigation_depth': 4,
-    'includehidden': True,
-    'titles_only': False
 }
+
+html_logo = "todo.png"

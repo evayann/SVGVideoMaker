@@ -5,12 +5,12 @@ With his svg implementation.
 
 # region Imports
 from geo.point import Point2D
-from geo.animation import Animation
+from geo.shape import Shape
 from geo.quadrant import Quadrant
 from geo.circle import Circle
 # endregion Imports
 
-class Segment(Animation):
+class Segment(Shape):
     """
     oriented segment between two points.
 
@@ -31,15 +31,16 @@ class Segment(Animation):
     """
     def __init__(self, start_point: Circle, end_point: Circle,
                  fps=30, verbose=False,
-                 debug=False, id=None, use_style=False, is_fill=False, fill_color="black",
+                 id=None, use_style=False, is_fill=False, fill_color="black",
                  is_stroke=False, stroke_color="black", stroke_width=2, opacity=1, others_rules=None):
         """
         create a segment from an array of two points.
         """
-        super().__init__([start_point, end_point], fps=fps, verbose=verbose, debug=debug, id=id, use_style=use_style,
+        super().__init__(id=id, use_style=use_style,
                          is_fill=is_fill, fill_color=fill_color,
                          is_stroke=is_stroke, stroke_color=stroke_color, stroke_width=stroke_width,
                          opacity=opacity, others_rules=others_rules)
+        self.animations.set_start([start_point, end_point], opacity)
         self.endpoints = [start_point, end_point]
         self.anim_points = [start_point.copy(), end_point.copy()]
 
@@ -61,7 +62,7 @@ class Segment(Animation):
 
     # region Animation
     def reset(self):
-        super().reset()
+        self.animations.reset()
         self.anim_points = [el.copy() for el in self.endpoints]
 
     def apply_translation(self, value):

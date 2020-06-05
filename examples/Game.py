@@ -7,7 +7,7 @@ from random import randint, seed as rand_seed, choice
 
 from math import sqrt
 
-from SVGVideoMaker import SVGVideoMaker
+from Video import Video
 from geo.animation import AnimationType
 from geo.point import Point
 from geo.polygon import Polygon
@@ -362,16 +362,16 @@ def main():
 	for i, turn in enumerate(iter_on_battle):
 		for j, poly in enumerate(turn):
 			if i % 100 == 40:
-				polygons[j].add_animation_by_frame((i + 1) * turn_space, 0, AnimationType.DISPLAY)
+				polygons[j].animations.add_animation_by_frame((i + 1) * turn_space, 0, AnimationType.DISPLAY)
 			if i % 100 == 90:
-				polygons[j].add_animation_by_frame((i + 1) * turn_space, 1, AnimationType.DISPLAY)
+				polygons[j].animations.add_animation_by_frame((i + 1) * turn_space, 1, AnimationType.DISPLAY)
 
-			polygons[j].add_animation_by_frame(round(i + 1) * turn_space, poly.points, AnimationType.MODIFICATION)
+			polygons[j].animations.add_animation_by_frame(round(i + 1) * turn_space, poly.points, AnimationType.MODIFICATION)
 
 	for p in polygons:
-		print(p.display_animations())
+		print(p.animations.display_animations())
 
-	video = SVGVideoMaker(svg, width=width*15, height=height*15, fps=fps, verbose=False)
+	video = Video(svg, width=width * 15, height=height * 15, fps=fps, verbose=False)
 	video.save_movie(name="The Game")
 	video.print_frame(50)
 	print("End")

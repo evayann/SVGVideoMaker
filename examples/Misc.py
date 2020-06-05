@@ -4,7 +4,7 @@ Test different function of SVGVideoMaker
 """
 
 # region Imports
-from SVGVideoMaker import SVGVideoMaker
+from Video import Video
 from geo.animation import AnimationType
 from geo.circle import Circle
 from geo.svg import SVG
@@ -49,57 +49,57 @@ def main():
     svg.append(pautre)
 
     # Make animation
-    video = SVGVideoMaker(svg, fps=fps)
+    video = Video(svg, fps=fps)
 
     # Add all animations
-    p.add_animation_by_frame(10 * fps, Point([100, 50]))
-    p.add_animation_by_frame(20 * fps, Point([100, 50]))
-    p.add_animation_by_frame(10 * fps, 30, AnimationType.INFLATION)
-    pautre.add_animation_by_frame(50 * fps, 0, AnimationType.DISPLAY)
+    p.animations.add_animation_by_frame(10 * fps, Point([100, 50]))
+    p.animations.add_animation_by_frame(20 * fps, Point([100, 50]))
+    p.animations.add_animation_by_frame(10 * fps, 30, AnimationType.INFLATION)
+    pautre.animations.add_animation_by_frame(50 * fps, 0, AnimationType.DISPLAY)
 
-    g.add_animation_by_frame(20 * fps, Point([100, 50]))
+    g.animations.add_animation_by_frame(20 * fps, Point([100, 50]))
 
-    square.add_animation_by_frame(2 * fps, Point([100, 100]))
-    square.add_animation_by_frame(4 * fps, Point([-100, -100]))
-    square.add_animation_by_frame(10 * fps, Point([100, 100]))
-    square.add_animation_by_frame(11 * fps, Point([-100, -100]))
-    square.add_animation_by_frame(20 * fps, Point([100, 100]))
+    square.animations.add_animation_by_frame(2 * fps, Point([100, 100]))
+    square.animations.add_animation_by_frame(4 * fps, Point([-100, -100]))
+    square.animations.add_animation_by_frame(10 * fps, Point([100, 100]))
+    square.animations.add_animation_by_frame(11 * fps, Point([-100, -100]))
+    square.animations.add_animation_by_frame(20 * fps, Point([100, 100]))
 
-    poly.add_animation_by_frame(1 * fps,
+    poly.animations.add_animation_by_frame(1 * fps,
                        [Point([-10, -10]), Point([-10, 10]), Point([10, 10]), Point([10, -10])],
                        AnimationType.MODIFICATION
                        )
 
-    poly.add_animation_by_frame(5 * fps,
+    poly.animations.add_animation_by_frame(5 * fps,
                        [Point([1, 1]), Point([1, 1]), Point([1, 1]), Point([1, 1])],
                        AnimationType.MODIFICATION
                        )
 
     revert_triangle = [Point([0, 10]), Point([-10, -10]), Point([10, -10])]
-    poly.add_animation_by_frame(10 * fps,
+    poly.animations.add_animation_by_frame(10 * fps,
                        revert_triangle,
                        AnimationType.MODIFICATION
                        )
 
     nice_shape = [Point([10, 20]), Point([-10, 20]), Point([-20, 10]), Point([-20, -10]), Point([-10, -20]), Point([10, -20]), Point([20, -10]), Point([20, 10])]
-    poly.add_animation_by_frame(20 * fps,
+    poly.animations.add_animation_by_frame(20 * fps,
                        nice_shape,
                        AnimationType.MODIFICATION
                        )
-    poly.add_animation_by_frame(22 * fps, revert_triangle, AnimationType.MODIFICATION)
-    poly.add_animation_by_frame(round(22.5 * fps), nice_shape, AnimationType.MODIFICATION)
-    poly.add_animation_by_frame(23 * fps, revert_triangle, AnimationType.MODIFICATION)
-    poly.add_animation_by_frame(round(23.25 * fps), nice_shape, AnimationType.MODIFICATION)
-    poly.add_animation_by_frame(round(23.5 * fps), revert_triangle, AnimationType.MODIFICATION)
-    poly.add_animation_by_frame(24 * fps, nice_shape, AnimationType.MODIFICATION)
-    poly.add_animation_by_frame(round(24.1 * fps), revert_triangle, AnimationType.MODIFICATION)
-    poly.add_animation_by_frame(round(24.2 * fps), nice_shape, AnimationType.MODIFICATION)
-    poly.add_animation_by_frame(30 * fps, revert_triangle, AnimationType.MODIFICATION)
+    poly.animations.add_animation_by_frame(22 * fps, revert_triangle, AnimationType.MODIFICATION)
+    poly.animations.add_animation_by_frame(round(22.5 * fps), nice_shape, AnimationType.MODIFICATION)
+    poly.animations.add_animation_by_frame(23 * fps, revert_triangle, AnimationType.MODIFICATION)
+    poly.animations.add_animation_by_frame(round(23.25 * fps), nice_shape, AnimationType.MODIFICATION)
+    poly.animations.add_animation_by_frame(round(23.5 * fps), revert_triangle, AnimationType.MODIFICATION)
+    poly.animations.add_animation_by_frame(24 * fps, nice_shape, AnimationType.MODIFICATION)
+    poly.animations.add_animation_by_frame(round(24.1 * fps), revert_triangle, AnimationType.MODIFICATION)
+    poly.animations.add_animation_by_frame(round(24.2 * fps), nice_shape, AnimationType.MODIFICATION)
+    poly.animations.add_animation_by_frame(30 * fps, revert_triangle, AnimationType.MODIFICATION)
 
-    poly.add_animation_by_frame(22 * fps, revert_triangle, AnimationType.MODIFICATION)
-    poly.add_animation_by_frame(30 * fps, nice_shape, AnimationType.MODIFICATION)
+    poly.animations.add_animation_by_frame(22 * fps, revert_triangle, AnimationType.MODIFICATION)
+    poly.animations.add_animation_by_frame(30 * fps, nice_shape, AnimationType.MODIFICATION)
 
-    pautre.add_animation_by_frame(5 * fps, [
+    pautre.animations.add_animation_by_frame(5 * fps, [
         Point([25.1, 16.51]),
         Point([35.1, 16.51]),
         Point([45.1, 16.51]),
@@ -110,7 +110,7 @@ def main():
         Point([25.1, 17.49])
     ], AnimationType.MODIFICATION)
 
-    pautre.add_animation_by_frame(10 * fps, [
+    pautre.animations.add_animation_by_frame(10 * fps, [
         Point([25.1, 16.51]),
         Point([35.1, 16.51]),
         Point([35.1, 16.51]),
@@ -123,7 +123,7 @@ def main():
         Point([25.1, 17.49])
     ], AnimationType.MODIFICATION)
 
-    pautre.add_animation_by_frame(15 * fps, [
+    pautre.animations.add_animation_by_frame(15 * fps, [
         Point([25.1, 16.51]),
         Point([35.1, 16.49]),
         Point([35.1, 15.51]),
@@ -136,16 +136,11 @@ def main():
         Point([25.1, 17.49])
     ], AnimationType.MODIFICATION)
 
-    arc.add_animation_by_frame(50 * fps, Point2D(-250, -250))
-    arc.add_animation_by_frame(60 * fps, Point2D(50, 50))
-    print(poly.display_animations())
-    print(arc.display_animations())
+    arc.animations.add_animation_by_frame(50 * fps, Point2D(-250, -250))
+    arc.animations.add_animation_by_frame(60 * fps, Point2D(50, 50))
+    print(poly.animations.display_animations())
+    print(arc.animations.display_animations())
     video.save_movie(name="my_out", max_time=70)
-
-    # print(poly.display_animation())
-    # video.print_frame(1) # Print the first frame
-    # video.print_frame(fps*15) # Print the frame at 15 seconds
-    # video.print_frame() # Print last frame
 
 
 if __name__ == '__main__':

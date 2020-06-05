@@ -1,9 +1,8 @@
 
 # region Imports
-from abc import abstractmethod
 from enum import Enum
 from copy import deepcopy
-from geo.shape import Shape
+from geo.debug import msg, DebugLevel
 # endregion Imports
 
 
@@ -24,26 +23,28 @@ class AnimationState(Enum):
     SAME = 1
     END = 2
 
-class Animation(Shape):
+class Animation:
+    """
+    Animation
+    """
 
     # Define value for save/get current values of all types
     KEY, VALUES = 0, 1
 
-    def __init__(self, init_point, fps=30, verbose=False,
-                 debug=False, id=None, use_style=False, is_fill=False, fill_color="black",
-                 is_stroke=False, stroke_color="black", stroke_width=2, opacity=1, others_rules=None):
-        super().__init__(debug=debug, id=id, use_style=use_style, is_fill=is_fill, fill_color=fill_color,
-                        is_stroke=is_stroke, stroke_color=stroke_color, stroke_width=stroke_width,
-                        opacity=opacity, others_rules=others_rules)
+    def __init__(self, svg_element, fps=30):
+        """Animation for all types (Translation, Inflation, Reshape, Opacity)
+
+        Args:
+            svg_element (Shape) : The element to animate.
+            fps         (int)   : The number of frames per seconds.
+        """
+        self.svg_el = svg_element
         self.fps = fps
-        self.current_frame = 0 # Frame number
+        self.current_frame = 0  # Frame number
 
-        self.animations = dict()
+        self.anims = dict()
         for anim_type in AnimationType:
-            self.animations[anim_type] = dict() # Position of element with second in key
-
-        self.animations[AnimationType.MODIFICATION][0] = init_point # Add the init_point for MODIFICATION
-        self.animations[AnimationType.DISPLAY][0] = opacity # Add the init display for DISPLAY
+            self.anims[anim_type] = dict() # Position of element with second in key
 
         self.anim_computed = None
 
@@ -51,18 +52,18 @@ class Animation(Shape):
         for anim_type in AnimationType:
             self.current_values[anim_type] = (-1, None) # Initialization
 
-        self.verbose = verbose
         self.nb_frames = 0
         self.end_time = -1
 
-    def set_verbose(self, boolean):
-        self.verbose = boolean
+    def set_start(self, init_point, opacity):
+        self.anims[AnimationType.MODIFICATION][0] = init_point # Add the init_point for MODIFICATION
+        self.anims[AnimationType.DISPLAY][0] = opacity # Add the init display for DISPLAY
 
     def set_fps(self, fps):
         self.fps = fps
 
     def init_animation(self):
-        self.anim_computed = deepcopy(self.animations)
+        self.anim_computed = deepcopy(self.anims)
 
     def finish_animation(self):
         self.anim_computed = None # Clear element computed
@@ -72,13 +73,12 @@ class Animation(Shape):
         # TODO
 
         # Add data if is good
-        self.animations[anim_type][frame] = deepcopy(values) # To don't be affect about possible modification
+        self.anims[anim_type][frame] = deepcopy(values) # To don't be affect about possible modification
         self.nb_frames = max(frame, self.nb_frames)
 
     def update(self):
         """
-        Update all animation, modification need to be in first
-        :return:
+        Update all animation, modification need to be in first.
         """
         self.update_translation()
         self.update_inflation()
@@ -94,7 +94,6 @@ class Animation(Shape):
         :param force: oblige to search animation, if false can use element in save memory
         :return: the previous animation values with his key time  and also the next animations values and his key time
         """
-        # if self.current_frame >= self.work_anim[anim_type][Animation.CURRENT][Animation.FRAME] or force:
         if self.current_frame >= self.current_values[anim_type][Animation.KEY] or force:
             # Search next animation data
             previous_anim, previous_time = None, 0
@@ -119,55 +118,73 @@ class Animation(Shape):
         state, (_, start_time), (translation, end_time) = self.read_animation(AnimationType.TRANSLATION)
         if state is AnimationState.NEW:
             self.current_values[AnimationType.TRANSLATION] = (end_time, translation / (end_time - start_time))
-            self.apply_translation(self.current_values[AnimationType.TRANSLATION][Animation.VALUES])
+            self.svg_el.apply_translation(self.current_values[AnimationType.TRANSLATION][Animation.VALUES])
         elif state is AnimationState.SAME:
             # Send the translation to add
-            self.apply_translation(self.current_values[AnimationType.TRANSLATION][Animation.VALUES])
+            self.svg_el.apply_translation(self.current_values[AnimationType.TRANSLATION][Animation.VALUES])
 
     def update_inflation(self):
         state, (_, start_time), (inflation, end_time) = self.read_animation(AnimationType.INFLATION)
         if state is AnimationState.NEW:
             self.current_values[AnimationType.INFLATION] = (end_time, inflation / (end_time - start_time))
-            self.apply_inflation(self.current_values[AnimationType.INFLATION][Animation.VALUES])
+            self.svg_el.apply_inflation(self.current_values[AnimationType.INFLATION][Animation.VALUES])
         elif state is AnimationState.SAME:
             # Send the inflation to add
-            self.apply_inflation(self.current_values[AnimationType.INFLATION][Animation.VALUES])
+            self.svg_el.apply_inflation(self.current_values[AnimationType.INFLATION][Animation.VALUES])
 
     def update_display(self):
         state, (old_opacity, start_time), (new_opacity, end_time) = self.read_animation(AnimationType.DISPLAY)
         if state is AnimationState.NEW:
             # Compute and apply opacity
             self.current_values[AnimationType.DISPLAY] = (end_time, (new_opacity - old_opacity) / (end_time - start_time))
-            self.opacity = round(self.opacity + self.current_values[AnimationType.DISPLAY][Animation.VALUES], 3)
+            self.svg_el.apply_opacity(self.current_values[AnimationType.DISPLAY][Animation.VALUES])
         elif state is AnimationState.SAME:
-            self.opacity = round(self.opacity + self.current_values[AnimationType.DISPLAY][Animation.VALUES], 3)
+            self.svg_el.apply_opacity(self.current_values[AnimationType.DISPLAY][Animation.VALUES])
 
     def reset(self):
+        """
+        Reset all animations.
+        """
         # Reset frame counter
         self.current_frame = 0
 
     # region Getters
     def get_end_time(self):
+        """Get the time of last frames.
+
+        Returns:
+            float : The time of last animation.
+        """
         return self.end_time
 
     def get_nb_frames(self):
+        """Get the number of frames.
+
+        Returns:
+            int : The number of frames.
+        """
         return self.nb_frames
     # endregion Getters
 
     def display_animations(self):
-        string = f"{self.id}, fps: {self.fps}," \
+        """Compute information about the animation (key frame and values).
+
+        Returns:
+            str : String who describe all animations types.
+        """
+        string = f"fps: {self.fps}," \
                  f" End time: {self.end_time}, Nb frames:{self.nb_frames}\n"
         for anim_type in AnimationType:
             string += f"\t{anim_type} : \n"
 
             # Get the number of digit for a nice format
             nb_key = len(str(self.nb_frames))
-            nb_values = len(str(len(self.animations[anim_type].values())))
+            nb_values = len(str(len(self.anims[anim_type].values())))
             have_element = False
 
-            for key, values in self.animations[anim_type].items():
+            for key, values in self.anims[anim_type].items():
                 string += f"\t\t>Frame: {key:{nb_key}},"
-                if anim_type is AnimationType.MODIFICATION:
+                if anim_type is AnimationType.MODIFICATION and isinstance(values, list):
                     string += f"Size:{len(values):{nb_values}}, {str(values)}\n"
                 else:
                     string += f"{values}\n"
@@ -178,35 +195,20 @@ class Animation(Shape):
 
         return string
 
-    # region Abstract
-    @abstractmethod
-    def apply_translation(self, value):
-        pass
-
-    @abstractmethod
-    def apply_inflation(self, value):
-        pass
-    # endregion Abstract
-
     # region Override
     def __str__(self):
         self.display_animations()
     # endregion Override
 
 class ModificationAnimation(Animation):
-    def __init__(self, init_point, fps=30, verbose=False,
-                 debug=False, use_style=False, is_fill=False, fill_color="black",
-                 is_stroke=False, stroke_color="black", stroke_width=2, opacity=1, others_rules=None):
-        super().__init__(init_point, fps, verbose, debug=debug, use_style=use_style, is_fill=is_fill, fill_color=fill_color,
-                        is_stroke=is_stroke, stroke_color=stroke_color, stroke_width=stroke_width,
-                        opacity=opacity, others_rules=others_rules)
+    def __init__(self, svg_element, fps=30):
+        super().__init__(svg_element, fps)
 
     def update_modification(self):
         state, (previous_val, start_frame), (next_val, end_frame) = self.read_animation(AnimationType.MODIFICATION)
         if state is AnimationState.NEW:
             if len(previous_val) != len(next_val):
-                if self.verbose:
-                    print(f"Not same size between key: {start_frame} and key: {end_frame} !")
+                msg(f"Not same size between key: {start_frame} and key: {end_frame} !", DebugLevel.VERBOSE)
 
                 # Simplify writing
                 anims = self.anim_computed[AnimationType.MODIFICATION]
@@ -214,10 +216,10 @@ class ModificationAnimation(Animation):
                 # Not same number of point, need to reshape element before add element
                 if len(previous_val) > len(next_val):
                     # Don't need to apply reshape because we have more points than necessary
-                    anims[end_frame] = self.reshape(next_val, previous_val)
+                    anims[end_frame] = self.svg_el.reshape(next_val, previous_val)
                 else:
                     # Need to apply the reshape because we need more points to match with next values
-                    anims[start_frame] = self.reshape(previous_val, next_val, apply=True)
+                    anims[start_frame] = self.svg_el.reshape(previous_val, next_val, apply=True)
 
                 # Get new values who are reshape
                 _, (previous_val, start_frame), (next_val, end_frame) = \
@@ -229,38 +231,15 @@ class ModificationAnimation(Animation):
             # Save incrementation to add from start to end frame
             self.current_values[AnimationType.MODIFICATION] = (end_frame, computed)
             # Send the modification to add
-            self.apply_modification(computed)
+            self.svg_el.apply_modification(computed)
         elif state is AnimationState.SAME:
             # Send modification
-            self.apply_modification(self.current_values[AnimationType.MODIFICATION][Animation.VALUES])
+            self.svg_el.apply_modification(self.current_values[AnimationType.MODIFICATION][Animation.VALUES])
 
     def update(self):
         """
-        Override default update
-        :return:
+        Override update of Animation
         """
         # Proceeded
         self.update_modification()
         super().update()
-
-    # region Abstract
-    @abstractmethod
-    def reshape(self, lower_shape, bigger_shape, apply=False):
-        """
-        Make a new form for the animation
-        The lower form is improve to match to bigger form
-        :param lower_shape: the lower_shape of animation
-        :param bigger_shape: the bigger_shape of animation
-        :param apply: indicate if we need to apply the shape at the form
-        :return: an animation who match to bigger_shape from lower_shape
-        """
-        pass
-
-    @abstractmethod
-    def apply_shape(self, shape):
-        pass
-
-    @abstractmethod
-    def apply_modification(self, values):
-        pass
-    # endregion Abstract

@@ -4,11 +4,11 @@ points (any dimension).
 # region Imports
 from math import sqrt
 
-from geo.animation import Animation
+from geo.shape import Shape
 from geo.quadrant import Quadrant
 # endregion Imports
 
-class Circle(Animation):
+class Circle(Shape):
     """
     a point is defined as a vector of any given dimension.
 
@@ -23,15 +23,15 @@ class Circle(Animation):
     distance = point1.distance_to(point2)
     """
     def __init__(self, coordinates, rayon=10, id=None, fps=30,
-                 debug=False, use_style=False, is_fill=False, fill_color="black",
+                 use_style=False, is_fill=False, fill_color="black",
 	             is_stroke=False, stroke_color="black", stroke_width=2, opacity=1, others_rules=None):
         """
         Instantiate a displayable circle
         """
-        super().__init__(coordinates, fps=fps, debug=debug, use_style=use_style, is_fill=is_fill, fill_color=fill_color,
+        super().__init__(use_style=use_style, is_fill=is_fill, fill_color=fill_color,
                         is_stroke=is_stroke, stroke_color=stroke_color, stroke_width=stroke_width,
                         opacity=opacity, others_rules=others_rules)
-
+        self.animations.set_start(coordinates, opacity)
         self.start_coordinates = coordinates
         self.coordinates = list(coordinates) # Copy coordinates for animation
         self.rayon = rayon
@@ -60,7 +60,7 @@ class Circle(Animation):
         self.rayon += value
 
     def reset(self):
-        super().reset()
+        self.animations.reset()
         self.coordinates = list(self.start_coordinates)
 
     # region SVG

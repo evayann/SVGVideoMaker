@@ -9,6 +9,7 @@ from getpass import getuser
 from cairosvg import svg2png
 from subprocess import Popen, PIPE
 from math import ceil
+from geo.debug import msg, DebugLevel
 # endregion Imports
 
 class Format(Enum):
@@ -20,7 +21,7 @@ class Format(Enum):
     MP4 = "mp4"
     GIF = "gif"
 
-class SVGVideoMaker:
+class Video:
     """ Instantiate a Video Maker.
 
     Args:
@@ -32,12 +33,8 @@ class SVGVideoMaker:
     """
     file_count = 0
 
-    def __init__(self, svg, width=500, height=500, fps=30, verbose=False):
+    def __init__(self, svg, width=500, height=500, fps=30):
         self.svg = svg
-
-        # Verbose for debug
-        self.verbose = verbose
-        self.svg.set_verbose(verbose)
 
         # Frame per seconds
         self.fps = fps
@@ -59,8 +56,7 @@ class SVGVideoMaker:
         """
 
         # Inform the different key animation
-        if self.verbose:
-            self.svg.display_keys_animations()
+        msg(self.svg.display_keys_animations(), DebugLevel.VERBOSE);
 
         # Prepare the size of movie
         nb_frame = ceil(max_time) * self.fps if max_time else self.svg.get_nb_frames()
@@ -71,8 +67,7 @@ class SVGVideoMaker:
             self.svg.init_animation()
             # Around max time to sup value
             for i in range(nb_frame):
-                if self.verbose:
-                    print(f"Compute frame {i}")
+                msg(f"Compute frame {i}", DebugLevel.VERBOSE)
                 yield i, self.svg.get_svg()
                 self.svg.update()
         except GeneratorExit:
@@ -120,8 +115,8 @@ class SVGVideoMaker:
         if name:
             n = name
         else:
-            n = f"frame{frame_number}_{str(SVGVideoMaker.file_count).zfill(5)}"
-            SVGVideoMaker.file_count += 1
+            n = f"frame{frame_number}_{str(Video.file_count).zfill(5)}"
+            Video.file_count += 1
 
         frame = None
         # Find frame and save it
@@ -176,8 +171,8 @@ def get_default_path_name(ext=Format.PNG):
         os.makedirs(path)
 
     ext = ext.value if isinstance(ext, Format) else ext
-    path_name = f"{path}svg_frame{str(SVGVideoMaker.file_count).zfill(5)}.{ext}"
-    SVGVideoMaker.file_count += 1
+    path_name = f"{path}svg_frame{str(Video.file_count).zfill(5)}.{ext}"
+    Video.file_count += 1
     return path_name
 
 def save(element, path, ext):

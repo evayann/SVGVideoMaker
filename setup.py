@@ -1,17 +1,17 @@
 import setuptools
 
-with open("README.md", "r") as fh:
-    long_description = fh.read()
+with open("ReadMe.md", "r") as rd_f:
+    long_description = rd_f.read()
 
 setuptools.setup(
-    name="SVGVideoMaker", # Replace with your own username
-    version="0.0.1",
+    name="SVGVideoMaker",
+    version="0.1",
     author="Yann Zavattero",
     author_email="yann.zavattero@hotmail.com",
     description="Creator of video from svg with cairosvg, ffmpeg",
-    long_description="TODO",
+    long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/LINK",
+    url="https://github.com/evayann/svg_video_maker",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
