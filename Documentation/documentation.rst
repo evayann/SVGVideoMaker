@@ -5,9 +5,9 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
-SVGVideoMaker
+Video
 ===================
-.. automodule:: SVGVideoMaker
+.. automodule:: video
    :members:
 
 Geometry

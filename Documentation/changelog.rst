@@ -2,6 +2,13 @@
 Changelog
 *********
 
+Version 0.2.1, Intern structure update
+======================================
+
+:Date: June 6, 2020
+
+Modification of intern structure and documentation.
+
 Version 0.1, First Release
 ==========================
 
