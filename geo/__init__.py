@@ -5,6 +5,7 @@ Simple interface for using element
 # region Easy Imports
 # Utility
 from geo.utility import couples, dont_match, nearest_point
+from geo.debug import *
 
 # SVG
 from geo.svg import SVG
