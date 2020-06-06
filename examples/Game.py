@@ -7,7 +7,7 @@ from random import randint, seed as rand_seed, choice
 
 from math import sqrt
 
-from Video import Video
+from video import Video
 from geo.animation import AnimationType
 from geo.point import Point
 from geo.polygon import Polygon

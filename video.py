@@ -37,7 +37,6 @@ class Video:
 
         # Frame per seconds
         self.fps = fps
-        self.svg.set_fps(self.fps)
 
         # Size / Dimension
         self.width = width

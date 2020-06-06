@@ -10,7 +10,7 @@ class Point(Circle):
     """
     Class who implements necessary to create and display point
     """
-    def __init__(self, coordinates, id=None, opacity=1, animation=False, style=True):
+    def __init__(self, coordinates, id=None, opacity=1, animation=True, style=True):
         """Build a point using an array of coordinates.
 
         Args:
@@ -22,7 +22,7 @@ class Point(Circle):
 
 
 class Point2D(Point):
-    def __init__(self, x, y, id=None, opacity=1, animation=False, style=True):
+    def __init__(self, x, y, id=None, opacity=1, animation=True, style=True):
         """Build new 2D point using an array of coordinates.
 
         Args:
@@ -36,34 +36,22 @@ class Point2D(Point):
 
     def cross_product(self, other):
         """
-        cross product between 2 2d point
+        Cross product between two 2d point.
         """
         return -self.y * other.x + self.x * other.y
 
     # region Override
     # region Math Operation
     def __add__(self, other):
-        """
-        addition operator. (useful for translations)
-        """
         return Point2D(self.x + other.coordinates[0], self.y + other.coordinates[1])
 
     def __sub__(self, other):
-        """
-        substraction operator. (useful for translations)
-        """
         return Point2D(self.x - other.x, self.y - other.y)
 
     def __mul__(self, factor):
-        """
-        multiplication by scalar operator. (useful for scaling)
-        """
         return Point2D(self.x * factor, self.y * factor)
 
     def __truediv__(self, factor):
-        """
-        division by scalar operator. (useful for scaling)
-        """
         return Point2D(self.x / factor, self.y / factor)
 
     def __abs__(self):

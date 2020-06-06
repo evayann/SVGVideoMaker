@@ -30,26 +30,32 @@ class Segment(Shape):
         intersection = segment1.intersection_with(segment2)
 
     """
-    def __init__(self, start_point: Circle, end_point: Circle, id=None, opacity=1, animation=False, style=True):
+    def __init__(self, start_point: Circle, end_point: Circle, id=None, opacity=1, animation=True, style=True):
         """
         create a segment from an array of two points.
         """
         super().__init__(id=id, animation=Animation if animation else None, style=style, opacity=opacity)
-        self.set_animation_start([start_point, end_point], opacity)
+        if animation:
+            self.set_animation_start([start_point, end_point], opacity)
         self.endpoints = [start_point, end_point]
         self.anim_points = [start_point.copy(), end_point.copy()]
 
     def copy(self):
-        """
-        return duplicate of given segment (no shared points with original,
-        they are also copied).
+        """Return duplicate of given segment.
+        No shared points with original,  they are also copied.
+
+        Returns:
+            Segment : The copy of self.
         """
         return Segment(self.endpoints[0].copy(), self.endpoints[1].copy())
 
     def length(self):
-        """
-        return length of segment.
-        example:
+        """Return length of segment.
+
+        Returns:
+            int : Length of segment.
+
+        Examples:
             segment = Segment([Point([1, 1]), Point([5, 1])])
             distance = segment.length() # distance is 4
         """
@@ -65,18 +71,15 @@ class Segment(Shape):
             self.anim_points[i] += value
 
     def apply_inflation(self, value):
-        """
-        Inflation is to move only end point
-        :param value:
-        :return:
-        """
         self.anim_points[-1] += value
     # endregion Animation
 
     # region SVG
     def bounding_quadrant(self):
-        """
-        return min quadrant containing self.
+        """Return a quadrant who contain the shape.
+
+        Returns:
+        	Quadrant: The quadrant who contain the shape.
         """
         quadrant = Quadrant.empty_quadrant(2)
         for point in self.anim_points:
@@ -84,8 +87,10 @@ class Segment(Shape):
         return quadrant
 
     def svg_content(self):
-        """
-        svg for tycat.
+        """Return a string who describe the shape.
+
+        Returns:
+        	str: The string who describe the shape.
         """
         return '<line x1="{}" y1="{}" x2="{}" y2="{}" {}/>\n'.format(
             *self.anim_points[0].coordinates,
@@ -94,8 +99,10 @@ class Segment(Shape):
     # endregion SVG
 
     def is_vertical(self):
-        """
-        return if we are a truely vertical segment.
+        """Return if we are a truely vertical segment.
+
+        Returns:
+            bool : Indicate if vertical.
         """
         return self.endpoints[0].coordinates[0] == self.endpoints[1].coordinates[0]
 
@@ -153,10 +160,12 @@ class Segment(Shape):
         return False
 
     def intersect_point(self, segment):
-        """
-        Return the parameter point if we have one, otherwise False
+        """Return the parameter point if we have one, otherwise False
+
+        Args:
         :param segment:
-        :return:
+        Returns:
+            bool : A boolean who indicate if we have intersection between the two segments.
         """
         start1, end1 = self.endpoints
         start2, end2 = segment.endpoints
@@ -175,7 +184,7 @@ class Segment(Shape):
 
     def random_points_in(self):
         """
-        return a random point in segment
+        Return a random point in segment.
         """
         from random import random
         t, p1, p2 = random(), self.endpoints[0], self.endpoints[1]
@@ -191,10 +200,6 @@ class Segment(Shape):
     def __str__(self):
         return "Segment([" + str(self.endpoints[0]) + ", " + \
                str(self.endpoints[1]) + "])"
-
-    def __repr__(self):
-        return "[" + repr(self.endpoints[0]) + ", " + \
-               repr(self.endpoints[1]) + "])"
 
     def __hash__(self):
         return hash(tuple(self.endpoints))

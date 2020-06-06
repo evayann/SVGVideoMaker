@@ -52,7 +52,11 @@ class Style:
 		Returns:
 			str: The string who describe style of this shape.
 		"""
-		string = f'opacity="{self.opacity}" '
+		string = ""
+
+		if self.opacity:
+			string += f'opacity="{self.opacity}" '
+
 		if self.fill_color:
 			string += f'fill="{self.fill_color}" '
 

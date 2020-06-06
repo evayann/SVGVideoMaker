@@ -31,16 +31,16 @@ class Animation:
     # Define value for save/get current values of all types
     KEY, VALUES = 0, 1
 
-    def __init__(self, svg_element, fps=30):
+    def __init__(self, svg_element, id=None):
         """Animation for all types (Translation, Inflation, Reshape, Opacity)
 
         Args:
             svg_element (Shape) : The element to animate.
-            fps         (int)   : The number of frames per seconds.
+            id          (str)   : An identifier of animation.
         """
         self.svg_el = svg_element
-        self.fps = fps
-        self.current_frame = 0  # Frame number
+        self.id = id if id else None
+        self.current_frame = 0
 
         self.anims = dict()
         for anim_type in AnimationType:
@@ -53,14 +53,10 @@ class Animation:
             self.current_values[anim_type] = (-1, None) # Initialization
 
         self.nb_frames = 0
-        self.end_time = -1
 
     def set_start(self, init_point, opacity):
         self.anims[AnimationType.MODIFICATION][0] = init_point # Add the init_point for MODIFICATION
         self.anims[AnimationType.DISPLAY][0] = opacity # Add the init display for DISPLAY
-
-    def set_fps(self, fps):
-        self.fps = fps
 
     def init_animation(self):
         self.anim_computed = deepcopy(self.anims)
@@ -87,24 +83,27 @@ class Animation:
         self.current_frame += 1
 
     def read_animation(self, anim_type, force=False):
-        """
-        Read the animation to compute and return the previous animation values with his key time
-        and also the next animations values and his key time
-        :param anim_type: the type of animation to read (in AnimationType)
-        :param force: oblige to search animation, if false can use element in save memory
-        :return: the previous animation values with his key time  and also the next animations values and his key time
+        """Read the animation to compute and return the previous animation values with his key frame.
+
+        Args:
+            anim_type (AnimationType) : The type of animation to read (in AnimationType).
+            force     (bool)          : Oblige to search animation, if false can use element in save memory.
+
+        Returns:
+            AnimationState, (AnimationData, int), (AnimationData, int) :
+                The previous animation values with his key time and also the next animations values and his key time.
         """
         if self.current_frame >= self.current_values[anim_type][Animation.KEY] or force:
             # Search next animation data
-            previous_anim, previous_time = None, 0
+            previous_anim, previous_frame = None, 0
             try:
-                for key_time, animation in self.anim_computed[anim_type].items():
+                for key_frame, animation in self.anim_computed[anim_type].items():
                     # We pass the value
-                    if self.current_frame < key_time:
-                        return AnimationState.NEW, (previous_anim, previous_time), (animation, key_time)
+                    if self.current_frame < key_frame:
+                        return AnimationState.NEW, (previous_anim, previous_frame), (animation, key_frame)
                     # Set previous element
                     previous_anim = animation
-                    previous_time = key_time
+                    previous_frame = key_frame
                 else:
                     # End of animation
                     return AnimationState.END, (None, 0), (None, 0)
@@ -115,28 +114,28 @@ class Animation:
             return AnimationState.SAME, (None, None), (None, None)
 
     def update_translation(self):
-        state, (_, start_time), (translation, end_time) = self.read_animation(AnimationType.TRANSLATION)
+        state, (_, start_frame), (translation, end_frame) = self.read_animation(AnimationType.TRANSLATION)
         if state is AnimationState.NEW:
-            self.current_values[AnimationType.TRANSLATION] = (end_time, translation / (end_time - start_time))
+            self.current_values[AnimationType.TRANSLATION] = (end_frame, translation / (end_frame - start_frame))
             self.svg_el.apply_translation(self.current_values[AnimationType.TRANSLATION][Animation.VALUES])
         elif state is AnimationState.SAME:
             # Send the translation to add
             self.svg_el.apply_translation(self.current_values[AnimationType.TRANSLATION][Animation.VALUES])
 
     def update_inflation(self):
-        state, (_, start_time), (inflation, end_time) = self.read_animation(AnimationType.INFLATION)
+        state, (_, start_frame), (inflation, end_frame) = self.read_animation(AnimationType.INFLATION)
         if state is AnimationState.NEW:
-            self.current_values[AnimationType.INFLATION] = (end_time, inflation / (end_time - start_time))
+            self.current_values[AnimationType.INFLATION] = (end_frame, inflation / (end_frame - start_frame))
             self.svg_el.apply_inflation(self.current_values[AnimationType.INFLATION][Animation.VALUES])
         elif state is AnimationState.SAME:
             # Send the inflation to add
             self.svg_el.apply_inflation(self.current_values[AnimationType.INFLATION][Animation.VALUES])
 
     def update_display(self):
-        state, (old_opacity, start_time), (new_opacity, end_time) = self.read_animation(AnimationType.DISPLAY)
+        state, (old_opacity, start_frame), (new_opacity, end_frame) = self.read_animation(AnimationType.DISPLAY)
         if state is AnimationState.NEW:
             # Compute and apply opacity
-            self.current_values[AnimationType.DISPLAY] = (end_time, (new_opacity - old_opacity) / (end_time - start_time))
+            self.current_values[AnimationType.DISPLAY] = (end_frame, (new_opacity - old_opacity) / (end_frame - start_frame))
             self.svg_el.apply_opacity(self.current_values[AnimationType.DISPLAY][Animation.VALUES])
         elif state is AnimationState.SAME:
             self.svg_el.apply_opacity(self.current_values[AnimationType.DISPLAY][Animation.VALUES])
@@ -149,14 +148,6 @@ class Animation:
         self.current_frame = 0
 
     # region Getters
-    def get_end_time(self):
-        """Get the time of last frames.
-
-        Returns:
-            float : The time of last animation.
-        """
-        return self.end_time
-
     def get_nb_frames(self):
         """Get the number of frames.
 
@@ -172,8 +163,7 @@ class Animation:
         Returns:
             str : String who describe all animations types.
         """
-        string = f"fps: {self.fps}," \
-                 f" End time: {self.end_time}, Nb frames:{self.nb_frames}\n"
+        string = f"ID : {self.id}, Nb frames:{self.nb_frames}\n"
         for anim_type in AnimationType:
             string += f"\t{anim_type} : \n"
 
@@ -201,8 +191,14 @@ class Animation:
     # endregion Override
 
 class ModificationAnimation(Animation):
-    def __init__(self, svg_element, fps=30):
-        super().__init__(svg_element, fps)
+    def __init__(self, svg_element, id=None):
+        """Animation for all types (Translation, Inflation, Reshape, Opacity)
+
+        Args:
+            svg_element (Shape) : The element to animate.
+            id          (str)   : An identifier of animation.
+        """
+        super().__init__(svg_element, id=id)
 
     def update_modification(self):
         state, (previous_val, start_frame), (next_val, end_frame) = self.read_animation(AnimationType.MODIFICATION)

@@ -32,13 +32,13 @@ class Polygon(Shape):
 
     p_id = 0
 
-    def __init__(self, points, id=None, opacity=1, animation=False, style=True):
+    def __init__(self, points, id=None, opacity=1, animation=True, style=True):
         super().__init__(id=id, animation=ModificationAnimation if animation else None, style=style, opacity=opacity)
 
         assert len(points) > 2, "Polygon need at less 3 points"
-        # Override default animation with modification animation
-        self.set_animation_start(points, opacity, ModificationAnimation)
-        self.start_points = points
+        if animation:
+            self.set_animation_start(points, opacity)
+        self.start_points = [p.copy() for p in points]
         self.points = [p.copy() for p in points] # Copy points for animation
 
         self.display_id = False
@@ -241,9 +241,10 @@ class Polygon(Shape):
         return box
 
     def svg_content(self):
-        """
-        Return a string who describe polygon
-        :return: the string who describe polygon
+        """Return a string who describe the shape.
+
+        Returns:
+        	str: The string who describe the shape.
         """
         coordinates = " ".join(("{},{}".format(*p.coordinates) for p in self.points))
         string = f'<polygon points="{coordinates}" {self.get_styles()}/>\n'
@@ -259,31 +260,22 @@ class Polygon(Shape):
 
     # region Override
     def __add__(self, other):
-        """
-        addition operator. (useful for translations)
-        """
         return Polygon([i + j for i, j in zip(self.points, other.points)])
 
     def __sub__(self, other):
-        """
-        substraction operator. (useful for translations)
-        """
         return Polygon([i - j for i, j in zip(self.points, other.points)])
 
     def __mul__(self, factor):
-        """
-        multiplication by scalar operator. (useful for scaling)
-        """
         return Polygon([c * factor for c in self.points])
 
     def __truediv__(self, factor):
-        """
-        division by scalar operator. (useful for scaling)
-        """
         return Polygon([c / factor for c in self.points])
 
     def __str__(self):
         points = ",\n".join(f"\t{str(p)}" for p in self.start_points)
-        return f"Polygon(id:{self.id}[\n{points}\n])\n"
+        return f"Polygon(id:{self.id}[\n{points}\n])"
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}"
     # endregion Override
 

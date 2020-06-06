@@ -7,7 +7,7 @@ from itertools import count
 import math
 from random import seed, randint
 from geo import Point2D as Point, Segment as S, Arc as A
-from Video import Video as Video, display
+from video import Video as Video, display
 from geo import SVG
 from geo.animation import AnimationType
 from geo.rectangle import Rectangle
@@ -441,7 +441,7 @@ def main():
 
 	svg = SVG(width=width, height=height, elements=alls)
 	svg.set_view_box(Point(0, 0), Point(width, height))
-	svg.display_keys_animations()
+	print(svg.get_keys_animations())
 	display(svg, ext="png")
 	video = Video(svg, fps=fps)
 	video.save_movie()

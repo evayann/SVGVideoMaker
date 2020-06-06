@@ -4,7 +4,7 @@ Test different function of SVGVideoMaker
 """
 
 # region Imports
-from Video import Video
+from video import Video
 from geo.animation import AnimationType
 from geo.circle import Circle
 from geo.svg import SVG
@@ -25,7 +25,7 @@ def main():
 
     g = Group()
     arc = Arc(Point2D(50, 50), Point2D(0, 0), Point2D(150, 50))
-    g.add(Polygon([Point([0, 0]), Point([0, 10]), Point([10, 10]), Point([10, 0])]),
+    g.append(Polygon([Point([0, 0]), Point([0, 10]), Point([10, 10]), Point([10, 0])]),
           Point([75, 50]), Circle([50, 50], 25), arc)
 
     p = Point([-150, -150])
@@ -57,7 +57,7 @@ def main():
     p.animations.add_animation_by_frame(10 * fps, 30, AnimationType.INFLATION)
     pautre.animations.add_animation_by_frame(50 * fps, 0, AnimationType.DISPLAY)
 
-    g.animations.add_animation_by_frame(20 * fps, Point([100, 50]))
+    g.add_animation_by_frame(20 * fps, Point([100, 50]))
 
     square.animations.add_animation_by_frame(2 * fps, Point([100, 100]))
     square.animations.add_animation_by_frame(4 * fps, Point([-100, -100]))

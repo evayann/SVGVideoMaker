@@ -23,12 +23,13 @@ class Circle(Shape):
 
     distance = point1.distance_to(point2)
     """
-    def __init__(self, coordinates, rayon=10, id=None, opacity=None, animation=False, style=True):
+    def __init__(self, coordinates, rayon=10, id=None, opacity=1, animation=True, style=True):
         """
         Instantiate a displayable circle
         """
         super().__init__(id=id, animation=Animation if animation else None, style=style, opacity=opacity)
-        self.set_animation_start(coordinates, opacity)
+        if animation:
+            self.set_animation_start(coordinates, opacity)
         self.start_coordinates = coordinates
         self.coordinates = list(coordinates) # Copy coordinates for animation
         self.rayon = rayon
@@ -62,16 +63,18 @@ class Circle(Shape):
 
     # region SVG
     def bounding_quadrant(self):
-        """
-        Return a quadrant who contain polygon
-        :return: the quadrant who contain polygon
+        """Return a quadrant who contain the shape.
+
+        Returns:
+        	Quadrant: The quadrant who contain the shape.
         """
         return Quadrant(self.coordinates, self.coordinates)
 
     def svg_content(self):
-        """
-        Return a quadrant who contain polygon
-        :return: the quadrant who contain polygon
+        """Return a string who describe the shape.
+
+        Returns:
+        	str: The string who describe the shape.
         """
         return '<circle cx="{}" cy="{}" r="{}" {}/>\n'.format(*self.coordinates, self.rayon, self.get_styles())
     # endregion SVG
@@ -79,27 +82,15 @@ class Circle(Shape):
     # region Override
     # region Math Operation
     def __add__(self, other):
-        """
-        addition operator. (useful for translations)
-        """
         return Circle([i + j for i, j in zip(self.coordinates, other.coordinates)])
 
     def __sub__(self, other):
-        """
-        substraction operator. (useful for translations)
-        """
         return Circle([i - j for i, j in zip(self.coordinates, other.coordinates)])
 
     def __mul__(self, factor):
-        """
-        multiplication by scalar operator. (useful for scaling)
-        """
         return Circle([c * factor for c in self.coordinates])
 
     def __truediv__(self, factor):
-        """
-        division by scalar operator. (useful for scaling)
-        """
         return Circle([c / factor for c in self.coordinates])
 
     def __abs__(self):
@@ -110,25 +101,19 @@ class Circle(Shape):
 
     def __ne__(self, other):
         return not isinstance(other, Circle) or self.coordinates != other.coordinates or self.rayon != other.rayon
+
+    def __lt__(self, other):
+        return self.coordinates < other.coordinates
     # endregion Math Operation
 
     def __str__(self):
-        """
-        print code generating the point.
-        """
         return f"{self.__class__.__name__}({', '.join(str(c) for c in self.coordinates)})"
 
     def __repr__(self):
-        return f"{self.__class__.__name__[0]}({', '.join(str(c) for c in self.coordinates)})"
+        return f"{self.__class__.__name__}"
 
     def __hash__(self):
         return sum((hash(c) for c in self.coordinates)) + hash(self.rayon)
-
-    def __lt__(self, other):
-        """
-        lexicographical comparison
-        """
-        return self.coordinates < other.coordinates
 
     def __iter__(self):
         for value in self.coordinates:

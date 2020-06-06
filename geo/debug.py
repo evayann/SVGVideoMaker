@@ -15,10 +15,11 @@ class DebugLevel(Enum):
 
 
 DEBUG_LEVEL = DebugLevel.NO
+DEBUG_LENGTH = max([len(dbg_lvl.name) for dbg_lvl in DebugLevel])
 
 def msg(str, dbg_lvl):
 	if DEBUG_LEVEL.value <= dbg_lvl.value:
-		print(str)
+		print(f"{f'{dbg_lvl.name}'.ljust(DEBUG_LENGTH)} : {str}")
 
 def set_debug(dbg_lvl):
 	global DEBUG_LEVEL

@@ -2,11 +2,14 @@
 Svg container for all svg element.
 Useful to display and save all element.
 """
+
+# region Imports
 from itertools import cycle
 from geo.quadrant import Quadrant
+from geo.group import Group
+# endregion Imports
 
-
-class SVG:
+class SVG(Group):
     """Container of all svg element.
 
      Args:
@@ -24,32 +27,12 @@ class SVG:
                        darkgrey'.split()
 
     def __init__(self, elements=None, width=500, height=500):
-        self.elements = []
+        super().__init__()
         if elements:
             self.append(elements)
         self.svg_dimensions = (width, height)
         self.start_vb = None
         self.end_vb = None
-
-    def init_animation(self):
-        """
-        Init all animations.
-        """
-        for element in self.elements:
-            element.animations.init_animation()
-
-    def append(self, *elements):
-        """Append all elements in svg.
-
-        Args:
-            *elements (list) : A list of all elements to add.
-        """
-        for element in elements:
-            if isinstance(element, list):
-                for el in element:
-                    self.elements.append(el)
-            else:
-                self.elements.append(element)
 
     def save(self, path, name):
         """Save the svg frame.
@@ -62,36 +45,8 @@ class SVG:
         f.write(self.get_svg())
         f.close()
 
-    def display_keys_animations(self):
-        """
-        Print all key animations of all svg element in svg.
-        """
-        for element in self.elements:
-            if element.animations:
-                print(element.animations.display_animations())
-
-    def get_keys_animations(self):
-        """
-        Get string of all key animations of all svg element in svg.
-        """
-        return "\n".join([el.animations.display_animations() for el in self.elements if el.animations])
-
-    def update(self):
-        """
-        Update animation of all svg element in svg.
-        """
-        for element in self.elements:
-            element.animations.update()
-
-    def reset(self):
-        """
-        Reset information about animation of all svg element in svg.
-        """
-        for element in self.elements:
-            element.animations.reset()
-
     def get_svg(self):
-        """Compute svg to string.
+        """Compute svg to string. Override default get_svg of group.
 
         Returns:
             str: A string who describe the svg.
@@ -100,7 +55,7 @@ class SVG:
             vb = (self.start_vb.coordinates, self.end_vb.coordinates)
         else:
             quadrant = Quadrant.empty_quadrant(2)
-            for element in self.elements:
+            for element in self.group:
                 quadrant.update(element.bounding_quadrant())
             quadrant.inflate(1.1) # To see correctly border
 
@@ -145,7 +100,7 @@ class SVG:
         Compute bounding quadrant and svg strings for all things to display.
         """
         strings = []
-        for color, thing in zip(cycle(iter(SVG.svg_colors)), self.elements):
+        for color, thing in zip(cycle(iter(SVG.svg_colors)), self.group):
             # if thing.is_style():
             #     strings.append('<g>\n')
             # else:
@@ -155,13 +110,10 @@ class SVG:
         return " ".join(strings)
 
     # region Setters
-    def set_verbose(self, boolean):
-        for element in self.elements:
-            element.animations.set_verbose(boolean)
-
-    def set_fps(self, fps):
-        for element in self.elements:
-            element.animations.set_fps(fps)
+    # def set_fps(self, fps):
+    #     for element in self.elements:
+    #         if element.animations:
+    #             element.animations.set_fps(fps)
 
     def set_size(self, width, height):
         self.svg_dimensions = (width, height)
@@ -178,33 +130,14 @@ class SVG:
     # endregion Setters
 
     # region Getters
-    def get_max_time(self):
-        """Get the time of a movie.
-
-        Returns:
-            int : The time of last key frame.
-        """
-        max_time = 0
-        for element in self.elements:
-            max_time = max(element.animations.get_end_time(), max_time)
-        return max_time
-
-    def get_nb_frames(self):
-        """Get the number of frames.
-
-        Returns:
-            int : The id of last key frame.
-        """
-        nb_frame = 0
-        for element in self.elements:
-            nb_frame = max(element.animations.get_nb_frames(), nb_frame)
-        return nb_frame
+    # def get_nb_frames(self):
+    #     """Get the number of frames.
+    #
+    #     Returns:
+    #         int : The id of last key frame.
+    #     """
+    #     nb_frame = 0
+    #     for element in self.elements:
+    #         nb_frame = max(element.animations.get_nb_frames(), nb_frame)
+    #     return nb_frame
     # endregion Getters
-
-    # region Override
-    def __str__(self):
-        string = ""
-        for element in self.elements:
-            string += str(element)
-        return string
-    # endregion Override

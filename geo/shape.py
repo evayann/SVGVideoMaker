@@ -41,7 +41,7 @@ class Shape(ABC):
 				self.animations = ModificationAnimation(self)
 		self.animations.set_start(init_pt, opacity)
 
-	def set_style(self, fill_color=None, stroke_color=None, stroke_width=None, opacity=None, others_rules=None):
+	def set_style(self, fill_color=None, stroke_color=None, stroke_width=None, opacity=None, others_rules=None, custom=True):
 		"""Set the style of a svg element.
 
 		Args:
@@ -50,11 +50,12 @@ class Shape(ABC):
 			stroke_width (int)  : The size of stroke of the shape. Default is no stroke.
 			opacity      (int)  : The opacity of shape. Default is 1.
 			others_rules (list) : A list of some others rules. Default is no others rules.
+			custom       (bool) : A bool who indicate if we set a default style or if it's custom.
 		"""
 		if self.style is None:
 			self.style = Style()
 
-		self.style.custom = True
+		self.style.custom = custom
 		if fill_color:
 			self.style.fill_color = fill_color
 		if stroke_color:
@@ -142,3 +143,8 @@ class Shape(ABC):
 		"""
 		pass
 	# endregion Abstract
+
+	# region Override
+	def __repr__(self):
+		return f"{self.__class__.__name__}"
+	# endregion Override
