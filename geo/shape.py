@@ -8,6 +8,8 @@ from geo.style import Style
 from geo.animation import Animation, ModificationAnimation
 # endregion Imports
 
+X, Y, Z = 0, 1, 2
+
 class Shape(ABC):
 	"""
 	Necessary for display shape content

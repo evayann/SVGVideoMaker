@@ -53,7 +53,7 @@ def main():
     p.animations.add_animation(10 * fps, Point([100, 50]))
     p.animations.add_animation(20 * fps, Point([100, 50]))
     p.animations.add_animation(10 * fps, 30, AnimationType.INFLATION)
-    pautre.animations.add_animation(50 * fps, 0, AnimationType.DISPLAY)
+    pautre.animations.add_animation(50 * fps, 0, AnimationType.OPACITY)
 
     g.add_animation(20 * fps, Point([100, 50]))
 

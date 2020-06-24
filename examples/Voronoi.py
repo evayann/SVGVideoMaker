@@ -60,8 +60,8 @@ class Segment:
 			# Draw segment by pop
 			segment = S(seg.endpoints[0], seg.endpoints[1], opacity=0)
 			segment.set_style(stroke_color="blue")
-			segment.animations.add_animation(start_frame - 1, 0, AnimationType.DISPLAY)
-			segment.animations.add_animation(end_frame, 1, AnimationType.DISPLAY)
+			segment.animations.add_animation(start_frame - 1, 0, AnimationType.OPACITY)
+			segment.animations.add_animation(end_frame, 1, AnimationType.OPACITY)
 
 		self.segment = segment
 

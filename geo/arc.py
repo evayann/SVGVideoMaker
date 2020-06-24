@@ -5,7 +5,7 @@ from math import pi, sin, cos
 from geo.animation import Animation, EllispePartAnimation
 from geo.quadrant import Quadrant
 from geo.debug import DEBUG_LEVEL, DebugLevel
-from geo.point import Point2D
+from geo.point import Point2D, X, Y
 from geo.shape import Shape
 # endregion Imports
 
@@ -67,7 +67,7 @@ class Arc(Shape):
 
 	# region Override
 	def __str__(self):
-		return f"{self.__class__.__name__}(Start : {self.start_point} Mid : {self.radius_values} End : {self.end_point})"
+		return f"{self.__class__.__name__}(Start : {self.start_point} Mid : {self.middle_point} End : {self.end_point})"
 	# endregion Override
 
 class EllipseArc(Shape):
@@ -76,30 +76,34 @@ class EllipseArc(Shape):
 		if style:
 			# Set new default style
 			self.set_style(fill_color="none", custom=False)
-		if animation:
-			self.animations.set_start(center, opacity, [start_angle, end_angle])
 
 		# Default value, use for reset
 		self.center = center
 		self.radius = radius
-		self.sa = start_angle
-		self.ea = end_angle
+		# Transform -90 degrees to 270 degrees...
+		self.sa = start_angle % 360 if start_angle < 0 else start_angle
+		self.ea = end_angle % 360 if end_angle < 0 else end_angle
+		# Init point values
 		self.start_point = None
 		self.end_point = None
+
+		# Set animation with the clamp angle
+		if animation:
+			self.animations.set_start(center, opacity, [self.sa, self.ea])
 
 		# Value of animation
 		self.center_anim = center.copy()
 		self.radius_anim = radius.copy()
-		self.sa_anim = start_angle
-		self.ea_anim = end_angle
+		self.sa_anim = self.sa
+		self.ea_anim = self.ea
+
+		# More option for arc
+		self.fl = 0
+		self.rot_x = 0
+		self.invert = 0
 
 		# Compute values of start and end with the given angles
 		self.compute_angles()
-
-		# More option for arc
-		self.rot_x = 0
-		self.invert = False
-		self.large_arc = False
 
 	def compute_angles(self):
 		# Compute angle and apply it to source and dest point
@@ -107,14 +111,14 @@ class EllipseArc(Shape):
 		sr, er = -self.sa_anim * pi / 180, -self.ea_anim * pi / 180
 		self.start_point = self.center_anim + Point2D(rx * cos(sr), ry * sin(sr))
 		self.end_point = self.center_anim + Point2D(rx * cos(er), ry * sin(er))
-
-		self.large_arc = int(abs(self.ea_anim - self.sa_anim) > 180)
-		self.invert = int(self.ea_anim < self.sa_anim)
+		# Check if we need to invert and use large arc to keep the shape of ellipse
+		self.fl = int(self.ea_anim - self.sa_anim > 180)
+		self.invert = 0#int(self.ea_anim < self.sa_anim)
 
 	# region Animation
 	def reset(self):
 		self.animations.reset()
-		# self.center_anim = self.center.copy()
+		self.center_anim = self.center.copy()
 		self.radius_anim = self.radius.copy()
 		self.sa_anim = self.sa.copy()
 		self.ea_anim = self.ea.copy()
@@ -124,6 +128,9 @@ class EllipseArc(Shape):
 
 	def apply_inflation(self, value):
 		self.radius_anim += value
+
+	def apply_rotate(self, value):
+		self.apply_angles([value, value])
 
 	def apply_angles(self, angles):
 		sa, ea = angles
@@ -143,6 +150,19 @@ class EllipseArc(Shape):
 		box = Quadrant.empty_quadrant(2)
 		for point in (self.start_point, self.end_point):
 			box.add_point(point)
+
+		# If points isn't in the same part of trigo circle, need to get max point
+		if self.ea_anim - self.sa_anim > 90:
+			sa_mod, ea_mod = self.sa_anim % 360, self.ea_anim % 360
+			if sa_mod <= 0 < ea_mod:
+				box.add_point(self.center_anim + Point2D(self.radius_anim.coordinates[X], 0))
+			if sa_mod <= 90 < ea_mod:
+				box.add_point(self.center_anim + Point2D(0, -self.radius_anim.coordinates[Y]))
+			if sa_mod <= 180 < ea_mod:
+				box.add_point(self.center_anim + Point2D(-self.radius_anim.coordinates[X], 0))
+			if sa_mod <= 270 < ea_mod:
+				box.add_point(self.center_anim + Point2D(0, self.radius_anim.coordinates[Y]))
+
 		return box
 
 	def svg_content(self):
@@ -162,7 +182,7 @@ class EllipseArc(Shape):
 
 		arc = arc.format(sx=sx, sy=sy, rx=rx, ry=ry,
 		                 rot_x=self.rot_x,
-		                 fl=self.large_arc,
+		                 fl=self.fl,
 		                 invert=self.invert,
 		                 dx=dx, dy=dy)
 

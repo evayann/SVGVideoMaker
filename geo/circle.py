@@ -4,7 +4,7 @@ points (any dimension).
 # region Imports
 from math import sqrt
 
-from geo.shape import Shape
+from geo.shape import Shape, X, Y
 from geo.quadrant import Quadrant
 from geo.animation import Animation
 # endregion Imports

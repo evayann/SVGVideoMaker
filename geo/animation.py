@@ -13,8 +13,9 @@ class AnimationType(Enum):
     TRANSLATION = 1
     MODIFICATION = 2
     INFLATION = 3
-    DISPLAY = 4
-    ANGLES = 5
+    OPACITY = 4
+    ROTATE = 5
+    ANGLES = 6
 
 class AnimationState(Enum):
     """
@@ -57,7 +58,7 @@ class Animation:
 
     def set_start(self, translate_points, opacity):
         self.anims[AnimationType.TRANSLATION][0] = translate_points # Add the init_point for TRANSLATION
-        self.anims[AnimationType.DISPLAY][0] = opacity # Add the init display for DISPLAY
+        self.anims[AnimationType.OPACITY][0] = opacity # Add the init display for DISPLAY
 
     def init_animation(self):
         self.anim_computed = deepcopy(self.anims)
@@ -66,8 +67,19 @@ class Animation:
         self.anim_computed = None # Clear element computed
 
     def add_animation(self, frame, values, anim_type=AnimationType.TRANSLATION):
-        # Check the data
+        # Check the data type and do some checking operation before
         # TODO
+        if anim_type == AnimationType.ANGLES:
+            # Check if degrees is integer and clamp it between 0 and 360
+            error = Exception(f"Animation type {AnimationType.ANGLES} need 2 degrees in integer")
+            if len(values) < 2:
+                raise error
+            val = []
+            for v in values:
+                if type(v) != int:
+                    raise error
+                val.append(v % 360)
+            values = val
 
         # Add data if is good
         self.anims[anim_type][frame] = deepcopy(values) # To don't be affect about possible modification
@@ -79,7 +91,8 @@ class Animation:
         """
         self.update_translation()
         self.update_inflation()
-        self.update_display()
+        self.update_opacity()
+        self.update_rotate()
         # Increment frame counter
         self.current_frame += 1
 
@@ -114,32 +127,31 @@ class Animation:
         else:  # We have already the next animation data
             return AnimationState.SAME, (None, None), (None, None)
 
-    def update_translation(self):
-        state, (_, start_frame), (translation, end_frame) = self.read_animation(AnimationType.TRANSLATION)
+    def update_generic(self, anim_type, apply):
+        state, (_, start_frame), (values, end_frame) = self.read_animation(anim_type) # Read values of Animation type
         if state is AnimationState.NEW:
-            self.current_values[AnimationType.TRANSLATION] = (end_frame, translation / (end_frame - start_frame))
-            self.svg_el.apply_translation(self.current_values[AnimationType.TRANSLATION][Animation.VALUES])
-        elif state is AnimationState.SAME:
-            # Send the translation to add
-            self.svg_el.apply_translation(self.current_values[AnimationType.TRANSLATION][Animation.VALUES])
+            # Compute addition and memoize for optimization
+            self.current_values[anim_type] = (end_frame, values / (end_frame - start_frame))
+        if state is not AnimationState.END:
+            apply(self.current_values[anim_type][Animation.VALUES])
+
+    def update_translation(self):
+        self.update_generic(AnimationType.TRANSLATION, self.svg_el.apply_translation)
 
     def update_inflation(self):
-        state, (_, start_frame), (inflation, end_frame) = self.read_animation(AnimationType.INFLATION)
-        if state is AnimationState.NEW:
-            self.current_values[AnimationType.INFLATION] = (end_frame, inflation / (end_frame - start_frame))
-            self.svg_el.apply_inflation(self.current_values[AnimationType.INFLATION][Animation.VALUES])
-        elif state is AnimationState.SAME:
-            # Send the inflation to add
-            self.svg_el.apply_inflation(self.current_values[AnimationType.INFLATION][Animation.VALUES])
+        self.update_generic(AnimationType.INFLATION, self.svg_el.apply_inflation)
 
-    def update_display(self):
-        state, (old_opacity, start_frame), (new_opacity, end_frame) = self.read_animation(AnimationType.DISPLAY)
+    def update_rotate(self):
+        self.update_generic(AnimationType.ROTATE, self.svg_el.apply_rotate)
+
+    def update_opacity(self):
+        state, (old_opacity, start_frame), (new_opacity, end_frame) = self.read_animation(AnimationType.OPACITY)
         if state is AnimationState.NEW:
             # Compute and apply opacity
-            self.current_values[AnimationType.DISPLAY] = (end_frame, (new_opacity - old_opacity) / (end_frame - start_frame))
-            self.svg_el.apply_opacity(self.current_values[AnimationType.DISPLAY][Animation.VALUES])
+            self.current_values[AnimationType.OPACITY] = (end_frame, (new_opacity - old_opacity) / (end_frame - start_frame))
+            self.svg_el.apply_opacity(self.current_values[AnimationType.OPACITY][Animation.VALUES])
         elif state is AnimationState.SAME:
-            self.svg_el.apply_opacity(self.current_values[AnimationType.DISPLAY][Animation.VALUES])
+            self.svg_el.apply_opacity(self.current_values[AnimationType.OPACITY][Animation.VALUES])
 
     def reset(self):
         """

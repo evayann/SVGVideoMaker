@@ -21,7 +21,6 @@ class Style:
 		self.stroke_width = stroke_width
 		self.stroke_color = stroke_color
 		self.opacity = opacity
-		self.custom = False
 
 		# Others rules
 		self.others_rules = []
@@ -47,6 +46,27 @@ class Style:
 		Clear all others rules.
 		"""
 		self.others_rules.clear()
+
+	def set(self, fill_color=None, stroke_linecaps=None, stroke_color=None, stroke_width=None, opacity=None):
+		"""Set style of given values
+
+		Args:
+			fill_color      (str)  : The color to fill shape. Default is black.
+			stroke_linecaps (str)  : The type of linecaps border. Default is none.
+			stroke_color    (str)  : The color of stroke of the shape. Default is blue.
+			stroke_width    (int)  : The size of stroke of the shape. Default is 2.
+			opacity         (int)  : The opacity of shape. Default is 1.
+		"""
+		if fill_color:
+			self.fill_color = fill_color
+		if stroke_linecaps:
+			self.stroke_linecaps = stroke_linecaps
+		if stroke_width:
+			self.stroke_width = stroke_width
+		if stroke_color:
+			self.stroke_color = stroke_color
+		if opacity:
+			self.opacity = opacity
 
 	def get_styles(self):
 		"""Get a string who describe all style.
