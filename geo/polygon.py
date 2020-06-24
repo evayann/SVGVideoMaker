@@ -37,7 +37,7 @@ class Polygon(Shape):
 
         assert len(points) > 2, "Polygon need at less 3 points"
         if animation:
-            self.set_animation_start(points, opacity)
+            self.animations.set_start(None, opacity, points)
         self.start_points = [p.copy() for p in points]
         self.points = [p.copy() for p in points] # Copy points for animation
 

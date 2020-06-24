@@ -33,13 +33,13 @@ class Shape(ABC):
 			self.style = None
 
 	# region Setters
-	def set_animation_start(self, init_pt, opacity, anim_type=Animation):
+	def set_animation_start(self, translate_points, opacity, anim_type=Animation):
 		if self.animations is None:
 			if anim_type == Animation:
 				self.animations = Animation(self)
 			elif anim_type == ModificationAnimation:
 				self.animations = ModificationAnimation(self)
-		self.animations.set_start(init_pt, opacity)
+		self.animations.set_start(translate_points, opacity)
 
 	def set_style(self, fill_color=None, stroke_color=None, stroke_width=None, opacity=None, others_rules=None, custom=True):
 		"""Set the style of a svg element.

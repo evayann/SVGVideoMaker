@@ -4,18 +4,20 @@ Module who contain necessary to play with style of any svg element.
 
 class Style:
 
-	def __init__(self, fill_color=None, stroke_color=None, stroke_width=2, opacity=1, others_rules=None):
+	def __init__(self, fill_color=None, stroke_linecaps=None, stroke_color=None, stroke_width=2, opacity=1, others_rules=None):
 		""" Create a style for svg
 
 		Args:
-			fill_color   (str)  : The color to fill shape. Default is black.
-			stroke_color (str)  : The color of stroke of the shape. Default is blue.
-			stroke_width (int)  : The size of stroke of the shape. Default is 2.
-			opacity      (int)  : The opacity of shape. Default is 1.
-			others_rules (list) : A list of some others rules. Default is no others rules.
+			fill_color      (str)  : The color to fill shape. Default is black.
+			stroke_linecaps (str)  : The type of linecaps border. Default is none.
+			stroke_color    (str)  : The color of stroke of the shape. Default is blue.
+			stroke_width    (int)  : The size of stroke of the shape. Default is 2.
+			opacity         (int)  : The opacity of shape. Default is 1.
+			others_rules    (list) : A list of some others rules. Default is no others rules.
 		"""
 		# Set if we use fill, stroke, opacity... and set it
 		self.fill_color = fill_color
+		self.stroke_linecaps = stroke_linecaps
 		self.stroke_width = stroke_width
 		self.stroke_color = stroke_color
 		self.opacity = opacity
@@ -65,6 +67,9 @@ class Style:
 
 		if self.stroke_width:
 			string += f'stroke-width="{self.stroke_width}" '
+
+		if self.stroke_linecaps:
+			string += f'stroke-linecap="{self.stroke_linecaps}" '
 
 		if self.others_rules:
 			string += " ".join(self.others_rules)

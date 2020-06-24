@@ -362,11 +362,11 @@ def main():
 	for i, turn in enumerate(iter_on_battle):
 		for j, poly in enumerate(turn):
 			if i % 100 == 40:
-				polygons[j].animations.add_animation_by_frame((i + 1) * turn_space, 0, AnimationType.DISPLAY)
+				polygons[j].animations.add_animation((i + 1) * turn_space, 0, AnimationType.DISPLAY)
 			if i % 100 == 90:
-				polygons[j].animations.add_animation_by_frame((i + 1) * turn_space, 1, AnimationType.DISPLAY)
+				polygons[j].animations.add_animation((i + 1) * turn_space, 1, AnimationType.DISPLAY)
 
-			polygons[j].animations.add_animation_by_frame(round(i + 1) * turn_space, poly.points, AnimationType.MODIFICATION)
+			polygons[j].animations.add_animation(round(i + 1) * turn_space, poly.points, AnimationType.MODIFICATION)
 
 	for p in polygons:
 		print(p.animations.display_animations())

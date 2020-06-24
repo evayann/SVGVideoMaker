@@ -48,10 +48,10 @@ class Segment:
 			# Draw segment by inflation
 			segment = S(seg.endpoints[0], seg.endpoints[0])
 			segment.set_style(stroke_color="blue")
-			segment.animations.add_animation_by_frame(start_frame, Point(0, 0), AnimationType.INFLATION)
+			segment.animations.add_animation(start_frame, Point(0, 0), AnimationType.INFLATION)
 
 			movement = seg.endpoints[1] - seg.endpoints[0]
-			segment.animations.add_animation_by_frame(end_frame, movement, AnimationType.INFLATION)
+			segment.animations.add_animation(end_frame, movement, AnimationType.INFLATION)
 
 			if bounds.is_in(segment.endpoints[0]) and bounds.is_in(segment.endpoints[1]):
 				global last_frame
@@ -60,8 +60,8 @@ class Segment:
 			# Draw segment by pop
 			segment = S(seg.endpoints[0], seg.endpoints[1], opacity=0)
 			segment.set_style(stroke_color="blue")
-			segment.animations.add_animation_by_frame(start_frame - 1, 0, AnimationType.DISPLAY)
-			segment.animations.add_animation_by_frame(end_frame, 1, AnimationType.DISPLAY)
+			segment.animations.add_animation(start_frame - 1, 0, AnimationType.DISPLAY)
+			segment.animations.add_animation(end_frame, 1, AnimationType.DISPLAY)
 
 		self.segment = segment
 
@@ -143,7 +143,7 @@ class Line:
 	def compute_line(self, frame, x):
 		# Add animation only if line move from his previous position
 		if width >= x > self.previous_x_line:
-			self.line.animations.add_animation_by_frame(frame, Point(x - self.previous_x_line, 0))
+			self.line.animations.add_animation(frame, Point(x - self.previous_x_line, 0))
 			self.previous_x_line = x
 
 	def get_line(self):

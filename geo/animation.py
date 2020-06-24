@@ -14,6 +14,7 @@ class AnimationType(Enum):
     MODIFICATION = 2
     INFLATION = 3
     DISPLAY = 4
+    ANGLES = 5
 
 class AnimationState(Enum):
     """
@@ -54,8 +55,8 @@ class Animation:
 
         self.nb_frames = 0
 
-    def set_start(self, init_point, opacity):
-        self.anims[AnimationType.MODIFICATION][0] = init_point # Add the init_point for MODIFICATION
+    def set_start(self, translate_points, opacity):
+        self.anims[AnimationType.TRANSLATION][0] = translate_points # Add the init_point for TRANSLATION
         self.anims[AnimationType.DISPLAY][0] = opacity # Add the init display for DISPLAY
 
     def init_animation(self):
@@ -64,7 +65,7 @@ class Animation:
     def finish_animation(self):
         self.anim_computed = None # Clear element computed
 
-    def add_animation_by_frame(self, frame, values, anim_type=AnimationType.TRANSLATION):
+    def add_animation(self, frame, values, anim_type=AnimationType.TRANSLATION):
         # Check the data
         # TODO
 
@@ -200,6 +201,10 @@ class ModificationAnimation(Animation):
         """
         super().__init__(svg_element, id=id)
 
+    def set_start(self, translate_points, opacity, modifications_points):
+        super().set_start(translate_points, opacity)
+        self.anims[AnimationType.MODIFICATION][0] = modifications_points  # Add the init_point for MODIFICATION
+
     def update_modification(self):
         state, (previous_val, start_frame), (next_val, end_frame) = self.read_animation(AnimationType.MODIFICATION)
         if state is AnimationState.NEW:
@@ -239,3 +244,31 @@ class ModificationAnimation(Animation):
         # Proceeded
         self.update_modification()
         super().update()
+
+class EllispePartAnimation(Animation):
+    def __init__(self, svg_element, id=None):
+        """Animation for all types (Translation, Inflation, Reshape, Opacity)
+
+        Args:
+            svg_element (Shape) : The element to animate.
+            id          (str)   : An identifier of animation.
+        """
+        super().__init__(svg_element, id=id)
+
+    def set_start(self, translate_points, opacity, angles):
+        super().set_start(translate_points, opacity)
+        self.anims[AnimationType.ANGLES][0] = angles  # Add the init_point for ANGLES
+
+    def update_angles(self):
+        state, (prev_values, start_frame), (next_values, end_frame) = self.read_animation(AnimationType.ANGLES)
+        if state is AnimationState.NEW:
+            nb_frames = end_frame - start_frame
+            computed = [(nv - pv) / nb_frames for pv, nv in zip(prev_values, next_values)]
+            self.current_values[AnimationType.ANGLES] = (end_frame, computed)
+            self.svg_el.apply_angles(computed)
+        elif state is AnimationState.SAME:
+            self.svg_el.apply_angles(self.current_values[AnimationType.ANGLES][Animation.VALUES])
+
+    def update(self):
+        super().update()
+        self.update_angles()

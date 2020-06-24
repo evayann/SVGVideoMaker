@@ -29,13 +29,13 @@ class Group:
             if el.animations:
                 el.animations.init_animation()
 
-    def add_animation_by_frame(self, frame, values, anim_type=AnimationType.TRANSLATION):
+    def add_animation(self, frame, values, anim_type=AnimationType.TRANSLATION):
         if anim_type == AnimationType.MODIFICATION:
             raise Exception("Group can't have modification animation")
 
         for el in self.group:
             if el.animations:
-                el.animations.add_animation_by_frame(frame, values, anim_type)
+                el.animations.add_animation(frame, values, anim_type)
 
     def is_style(self):
         return False

@@ -47,7 +47,7 @@ class Video:
         """Generator who return all svg in string for each frame.
 
         Args:
-            max_time (int): if none make all frame of one animation, otherwise make all frame on 'max_time'
+            max_time (int): if none make all frame of one animation, otherwise make all frame on before 'max_time'
 
         Yields:
             All svg frames in string with the frame number
@@ -82,7 +82,7 @@ class Video:
             path     (str) : The path where you save video. Default "./".
             name     (str) : The name of video. Default "out".
             ext      (str) : The extension of your video. Default mp4.
-            max_time (int) : The time of the end of video. Default value is the length of your video.
+            max_time (int) : The time of the end of video in seconds. Default value is the length of your video.
         """
 
         # Prepare command to write video
