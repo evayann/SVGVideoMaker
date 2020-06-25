@@ -1,9 +1,9 @@
 
 # region Imports
-from geo.point import Point2D
-from geo.debug import msg, DebugLevel
-from geo.polygon import Polygon
-from geo.animation import ModificationAnimation
+from SVGVideoMaker.geo.point import Point2D
+from SVGVideoMaker.geo.debug import msg, DebugLevel
+from SVGVideoMaker.geo.polygon import Polygon
+from SVGVideoMaker.geo.animation import ModificationAnimation
 # endregion Imports
 
 class Rectangle(Polygon):

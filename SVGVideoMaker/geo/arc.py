@@ -2,11 +2,11 @@
 # region Imports
 from math import pi, sin, cos
 
-from geo.animation import Animation, EllispePartAnimation
-from geo.quadrant import Quadrant
-from geo.debug import DEBUG_LEVEL, DebugLevel
-from geo.point import Point2D, X, Y
-from geo.shape import Shape
+from SVGVideoMaker.geo.animation import Animation, EllispePartAnimation
+from SVGVideoMaker.geo.quadrant import Quadrant
+from SVGVideoMaker.geo.debug import DEBUG_LEVEL, DebugLevel
+from SVGVideoMaker.geo.point import Point2D, X, Y
+from SVGVideoMaker.geo.shape import Shape
 # endregion Imports
 
 class Arc(Shape):

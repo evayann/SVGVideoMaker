@@ -2,7 +2,7 @@
 # region Imports
 from enum import Enum
 from copy import deepcopy
-from geo.debug import msg, DebugLevel
+from SVGVideoMaker.geo.debug import msg, DebugLevel
 # endregion Imports
 
 

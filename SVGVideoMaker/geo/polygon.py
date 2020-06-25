@@ -3,13 +3,13 @@ All necessary to create, animate, and make geometry operation on Polygon.
 """
 
 # region Imports
-from geo.point import Point
-from geo.segment import Segment
-from geo.quadrant import Quadrant
-from geo.shape import Shape
-from geo.animation import ModificationAnimation
-from geo.utility import nearest_point, dont_match, couples
-from geo.debug import msg, DebugLevel, DEBUG_LEVEL
+from SVGVideoMaker.geo.point import Point
+from SVGVideoMaker.geo.segment import Segment
+from SVGVideoMaker.geo.quadrant import Quadrant
+from SVGVideoMaker.geo.shape import Shape
+from SVGVideoMaker.geo.animation import ModificationAnimation
+from SVGVideoMaker.geo.utility import nearest_point, dont_match, couples
+from SVGVideoMaker.geo.debug import msg, DebugLevel, DEBUG_LEVEL
 # endregion Imports
 
 class Polygon(Shape):

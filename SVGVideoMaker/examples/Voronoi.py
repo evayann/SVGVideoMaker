@@ -6,11 +6,11 @@ import heapq
 from itertools import count
 import math
 from random import seed, randint
-from geo import Point2D as Point, Segment as S, Arc as A
-from video import Video as Video, display
-from geo import SVG
-from geo.animation import AnimationType
-from geo.rectangle import Rectangle
+from SVGVideoMaker import Point2D as Point, Segment as S, Arc as A
+from SVGVideoMaker import Video as Video, display
+from SVGVideoMaker import SVG
+from SVGVideoMaker import AnimationType
+from SVGVideoMaker import Rectangle
 # endregion Imports
 
 class Segment:
@@ -405,7 +405,6 @@ line = Line()
 last_frame = -1
 
 def main():
-
 	seed(1)
 	nb_points = 250
 	points = []
@@ -436,7 +435,7 @@ def main():
 
 	display(svg, ext="png")
 	video = Video(svg, fps=fps)
-	video.save_movie(ext="gif")
+	video.save_movie()
 
 if __name__ == '__main__':
 	main()

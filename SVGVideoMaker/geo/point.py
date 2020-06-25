@@ -3,7 +3,7 @@ Multi dimensional point and 2D point
 """
 
 # region Imports
-from geo.circle import Circle, X, Y
+from SVGVideoMaker.geo.circle import Circle, X, Y
 # endregion Imports
 
 class Point(Circle):

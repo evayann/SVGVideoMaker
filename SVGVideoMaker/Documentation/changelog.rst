@@ -2,15 +2,21 @@
 Changelog
 *********
 
-Version 0.3, New Shape, EllipseArc
-==================================
+Version 0.3, New Shape, EllipseArc and structure update
+=======================================================
 
-:Date: June 24, 2020
+:Date: June 25, 2020
 
-New shape release, EllipseArc !
+New shape release, EllipseArc ! And simplify import.
 
 Features
 --------
+
+* Structure update, simplify everything with
+
+.. code:: Python
+
+    import SVGVideoMaker
 
 * Implementations of a new shape, the EllipseArc. An ellipse where you can give what part to display from X degrees to Y degrees.
 * New animation for EllipseArc, EllipseArcAnimation who support angles modification.

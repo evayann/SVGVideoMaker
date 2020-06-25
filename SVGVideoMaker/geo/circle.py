@@ -4,9 +4,9 @@ points (any dimension).
 # region Imports
 from math import sqrt
 
-from geo.shape import Shape, X, Y
-from geo.quadrant import Quadrant
-from geo.animation import Animation
+from SVGVideoMaker.geo.shape import Shape, X, Y
+from SVGVideoMaker.geo.quadrant import Quadrant
+from SVGVideoMaker.geo.animation import Animation
 # endregion Imports
 
 class Circle(Shape):

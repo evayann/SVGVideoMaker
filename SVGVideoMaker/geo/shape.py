@@ -4,8 +4,8 @@ Implementation of necessary for shape displaying.
 
 # region Imports
 from abc import abstractmethod, ABC
-from geo.style import Style
-from geo.animation import Animation, ModificationAnimation
+from SVGVideoMaker.geo.style import Style
+from SVGVideoMaker.geo.animation import Animation, ModificationAnimation
 # endregion Imports
 
 X, Y, Z = 0, 1, 2

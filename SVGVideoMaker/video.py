@@ -9,7 +9,7 @@ from getpass import getuser
 from cairosvg import svg2png
 from subprocess import Popen, PIPE
 from math import ceil
-from geo.debug import msg, DebugLevel
+from SVGVideoMaker.geo.debug import msg, DebugLevel
 # endregion Imports
 
 class Format(Enum):

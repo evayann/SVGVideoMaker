@@ -5,8 +5,8 @@ Useful to display and save all element.
 
 # region Imports
 from itertools import cycle
-from geo.quadrant import Quadrant
-from geo.group import Group
+from SVGVideoMaker.geo.quadrant import Quadrant
+from SVGVideoMaker.geo.group import Group
 # endregion Imports
 
 class SVG(Group):

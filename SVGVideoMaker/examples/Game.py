@@ -7,11 +7,11 @@ from random import randint, seed as rand_seed, choice
 
 from math import sqrt
 
-from video import Video
-from geo.animation import AnimationType
-from geo.point import Point
-from geo.polygon import Polygon
-from geo.svg import SVG
+from SVGVideoMaker.video import Video
+from SVGVideoMaker.geo.animation import AnimationType
+from SVGVideoMaker.geo.point import Point
+from SVGVideoMaker.geo.polygon import Polygon
+from SVGVideoMaker.geo.svg import SVG
 # endregion Imports
 
 class Vector(Point):
@@ -371,7 +371,7 @@ def main():
 	for p in polygons:
 		print(p.animations.display_animations())
 
-	from geo.debug import set_debug, DebugLevel
+	from SVGVideoMaker.geo import set_debug, DebugLevel
 	set_debug(DebugLevel.VERBOSE)
 	video = Video(svg, width=width * 15, height=height * 15, fps=fps)
 	video.save_movie(name="The Game")

@@ -7,7 +7,7 @@ Indices and tables
 
 Video
 ===================
-.. automodule:: video
+.. automodule:: SVGVideoMaker.video
    :members:
 
 Geometry
@@ -17,39 +17,44 @@ You will find all element about shape.
 
 Group
 -------------------
-.. automodule:: geo.group
+.. automodule:: SVGVideoMaker.geo.group
    :members:
 
 Shape
 -------------------
-.. automodule:: geo.shape
+.. automodule:: SVGVideoMaker.geo.shape
    :members:
 
 Polygon
 -------------------
-.. automodule:: geo.polygon
+.. automodule:: SVGVideoMaker.geo.polygon
    :members:
 
 Rectangle
 -------------------
-.. automodule:: geo.rectangle
+.. automodule:: SVGVideoMaker.geo.rectangle
    :members:
 
 Point and Circle
 -------------------
-.. automodule:: geo.circle
+.. automodule:: SVGVideoMaker.geo.circle
    :members:
 
-.. automodule:: geo.point
+.. automodule:: SVGVideoMaker.geo.point
+   :members:
+
+Arc and EllipseArc
+-------------------
+.. automodule:: SVGVideoMaker.geo.arc
    :members:
 
 Animation
 -------------------
-.. automodule:: geo.animation
+.. automodule:: SVGVideoMaker.geo.animation
    :members:
 
 Utility
 ===================
-.. automodule:: geo.utility
+.. automodule:: SVGVideoMaker.geo.utility
    :members:
 

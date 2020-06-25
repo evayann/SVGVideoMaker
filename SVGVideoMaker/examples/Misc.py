@@ -3,7 +3,7 @@ Test different function of SVGVideoMaker
 """
 
 # region Imports
-from video import Video
+from SVGVideoMaker.video import Video
 from geo.animation import AnimationType
 from geo.circle import Circle
 from geo.svg import SVG

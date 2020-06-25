@@ -9,7 +9,7 @@ Install the package via pip.
 
 .. code:: bash
 
-    pip install svg_video_maker
+    pip install SVGVideoMaker
 
 
 Via Git or Download

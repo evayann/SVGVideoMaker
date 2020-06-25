@@ -4,11 +4,11 @@ With his svg implementation.
 """
 
 # region Imports
-from geo.point import Point2D
-from geo.shape import Shape
-from geo.quadrant import Quadrant
-from geo.circle import Circle
-from geo.animation import Animation
+from SVGVideoMaker.geo.point import Point2D
+from SVGVideoMaker.geo.shape import Shape
+from SVGVideoMaker.geo.quadrant import Quadrant
+from SVGVideoMaker.geo.circle import Circle
+from SVGVideoMaker.geo.animation import Animation
 # endregion Imports
 
 class Segment(Shape):

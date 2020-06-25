@@ -3,10 +3,10 @@ Test EllipseArc of SVGVideoMaker
 """
 
 # region Imports
-from geo.animation import AnimationType
-from geo.arc import EllipseArc
-from geo import Point2D, SVG
-from video import Video
+from SVGVideoMaker.geo.animation import AnimationType
+from SVGVideoMaker.geo.arc import EllipseArc
+from SVGVideoMaker.geo import Point2D, SVG
+from SVGVideoMaker.video import Video
 # endregion Imports
 
 # Global values

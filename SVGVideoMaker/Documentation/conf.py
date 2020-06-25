@@ -12,7 +12,7 @@
 
 import os
 import sys
-sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath('../..'))
 
 # -- Project information -----------------------------------------------------
 
@@ -21,7 +21,7 @@ copyright = '2020, Yann Zavattero'
 author = 'Yann Zavattero'
 
 # The full version, including alpha/beta/rc tags
-version = release = '0.2.1'
+version = release = '0.3'
 
 master_doc = 'index'
 

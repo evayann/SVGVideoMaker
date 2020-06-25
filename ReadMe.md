@@ -44,15 +44,15 @@ See video in examples file.
 ### Misc
 
 This example illustrate divers function you can use with this API.
-![Misc Gif](./examples/Misc.gif)
+![Misc Gif](SVGVideoMaker/examples/Misc.gif)
 
 ### Voronoi
 
 This example is an implementation of Voronoi diagram.
-![Voronoi Gif](./examples/Voronoi.gif)
+![Voronoi Gif](SVGVideoMaker/examples/Voronoi.gif)
 
 ### Game
 
 This example is an implementation of territory battle.
-![Game Gif](./examples/Game.gif)
+![Game Gif](SVGVideoMaker/examples/Game.gif)
  

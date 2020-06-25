@@ -1,7 +1,7 @@
 
 # region Imports
-from geo.animation import AnimationType
-from geo.quadrant import Quadrant
+from SVGVideoMaker.geo.animation import AnimationType
+from SVGVideoMaker.geo.quadrant import Quadrant
 # endregion Imports
 
 class Group:

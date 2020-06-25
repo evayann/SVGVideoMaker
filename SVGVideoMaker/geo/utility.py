@@ -4,7 +4,7 @@ Some utility function.
 
 # region Imports
 from itertools import islice, cycle
-from geo.segment import Segment
+from SVGVideoMaker.geo.segment import Segment
 # endregion Imports
 
 # region Utility
