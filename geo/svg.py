@@ -101,20 +101,12 @@ class SVG(Group):
         """
         strings = []
         for color, thing in zip(cycle(iter(SVG.svg_colors)), self.group):
-            # if thing.is_style():
-            #     strings.append('<g>\n')
-            # else:
             strings.append('<g fill="{}" stroke="{}">\n'.format(color, color))
             strings.append(thing.get_svg())
             strings.append('</g>\n')
         return " ".join(strings)
 
     # region Setters
-    # def set_fps(self, fps):
-    #     for element in self.elements:
-    #         if element.animations:
-    #             element.animations.set_fps(fps)
-
     def set_size(self, width, height):
         self.svg_dimensions = (width, height)
 
@@ -128,16 +120,3 @@ class SVG(Group):
         self.start_vb = start_point
         self.end_vb = end_point
     # endregion Setters
-
-    # region Getters
-    # def get_nb_frames(self):
-    #     """Get the number of frames.
-    #
-    #     Returns:
-    #         int : The id of last key frame.
-    #     """
-    #     nb_frame = 0
-    #     for element in self.elements:
-    #         nb_frame = max(element.animations.get_nb_frames(), nb_frame)
-    #     return nb_frame
-    # endregion Getters

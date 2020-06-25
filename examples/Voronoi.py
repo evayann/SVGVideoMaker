@@ -13,7 +13,6 @@ from geo.animation import AnimationType
 from geo.rectangle import Rectangle
 # endregion Imports
 
-
 class Segment:
 	def __init__(self, y):
 		self.start = y
@@ -28,16 +27,14 @@ class Segment:
 		           seg.intersect_point(S(Point(0, height), Point(width, height)))]:
 			if pt:
 				if not bounds.is_in(seg.endpoints[0]):
-					seg.endpoints[0] = pt
+					seg.endpoints[0] = round(pt, 3)
 				elif not bounds.is_in(seg.endpoints[1]): # movement endpoints[1]
-					seg.endpoints[1] = pt
+					seg.endpoints[1] = round(pt, 3)
 
 	def compute_segment(self):
-		# Reorient segment
-		if self.start < self.end:
-			seg = S(self.start, self.end)
-		else:
-			seg = S(self.end, self.start)
+		# Round and reorient segment
+		self.start, self.end = round(self.start, 3), round(self.end, 3)
+		seg = S(self.start, self.end) if self.start < self.end else S(self.end, self.start)
 
 		# Crop segment to map to size
 		self.compute_bound(seg)
@@ -60,7 +57,7 @@ class Segment:
 			# Draw segment by pop
 			segment = S(seg.endpoints[0], seg.endpoints[1], opacity=0)
 			segment.set_style(stroke_color="blue")
-			segment.animations.add_animation(start_frame - 1, 0, AnimationType.OPACITY)
+			segment.animations.add_animation(start_frame - 1 if start_frame > 0 else 0, 0, AnimationType.OPACITY)
 			segment.animations.add_animation(end_frame, 1, AnimationType.OPACITY)
 
 		self.segment = segment
@@ -155,8 +152,7 @@ class Voronoi:
 		self.arc = None  # binary tree for parabola arcs
 
 		# Display
-		self.segments_outputs = [] # list of animate segment
-		self.arcs_output = [] # list of arc
+		self.segments_outputs = []  # list of animate segment
 
 		self.points = PriorityQueue()  # site events
 		self.event = PriorityQueue()  # circle events
@@ -202,6 +198,8 @@ class Voronoi:
 
 		self.finish_edges()
 		line.compute_line(last_frame, width)
+		# Add an extra translation to make disappear the bar
+		line.line.animations.add_animation(last_frame + fps, Point(20, 0))
 
 	def process_point(self):
 		# get next event from site pq
@@ -399,10 +397,6 @@ class Voronoi:
 	def get_segment(self):
 		return [S(Point(o.start.x, o.start.y), Point(o.end.x, o.end.y)) for o in self.output]
 
-	def get_arcs(self):
-		return self.arcs_output
-
-
 
 fps, width, height = 30, 500, 500
 speed = 2
@@ -421,6 +415,7 @@ def main():
 	# points = [Point(10, 50), Point(75, 10), Point(150, 50), Point(40, 100), Point(25, 34), Point(450, 300),
 	#           Point(15, 400), Point(65, 480), Point(350, 150), Point(450, 450), Point(250, 205), Point(250, 250),
 	#           Point(200, 150), Point(310, 210), Point(410, 150)]
+	# points = [Point(10, 10), Point(20, 10), Point(10, 20)]
 	# points = [Point(10, 50), Point(75, 10), Point(150, 50), Point(40, 100), Point(25, 34)]
 	# points = [Point(10, 10), Point(200, 200), Point(300, 100)]
 	# points = [Point(10, 10), Point(480, 480)]
@@ -436,21 +431,12 @@ def main():
 		if bounds.is_in(segment.endpoints[0]) and bounds.is_in(segment.endpoints[1]):
 			alls.append(segment)
 
-	for arc in vp.get_arcs():
-		alls.append(arc)
-
 	svg = SVG(width=width, height=height, elements=alls)
 	svg.set_view_box(Point(0, 0), Point(width, height))
-	print(svg.get_keys_animations())
+
 	display(svg, ext="png")
 	video = Video(svg, fps=fps)
-	video.save_movie()
-
-	svg = SVG()
-	svg.set_view_box(Point(0, 0), Point(width, height))
-	for seg in vp.get_segment():
-		svg.append(seg)
-	display(svg, ext="svg")
+	video.save_movie(ext="gif")
 
 if __name__ == '__main__':
 	main()

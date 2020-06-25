@@ -36,7 +36,7 @@ class Segment(Shape):
         """
         super().__init__(id=id, animation=Animation if animation else None, style=style, opacity=opacity)
         if animation:
-            self.set_animation_start([start_point, end_point], opacity)
+            self.set_animation_start(opacity)
         self.endpoints = [start_point, end_point]
         self.anim_points = [start_point.copy(), end_point.copy()]
 

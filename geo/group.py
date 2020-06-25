@@ -120,4 +120,12 @@ class Group:
 
     def __repr__(self):
         return self.__class__.__name__
+
+    def __iter__(self):
+        # Yield only non group element (shape like arc, polygon...)
+        for element in self.group:
+            if type(element) == Group:
+                element.__iter__()
+            else:
+                yield element
     # endregion Override

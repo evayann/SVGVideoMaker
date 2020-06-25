@@ -17,6 +17,11 @@ Features
 * Add new style attribute, stroke-linecaps
 * Modification on animation structure
 
+Bug Fixes
+---------
+
+* Fix bug who don't play animation if it's only on 1 frame.
+
 Version 0.2.1, Intern structure update
 ======================================
 

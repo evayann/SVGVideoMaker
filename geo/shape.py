@@ -35,39 +35,31 @@ class Shape(ABC):
 			self.style = None
 
 	# region Setters
-	def set_animation_start(self, translate_points, opacity, anim_type=Animation):
+	def set_animation_start(self, opacity, anim_type=Animation):
 		if self.animations is None:
 			if anim_type == Animation:
 				self.animations = Animation(self)
 			elif anim_type == ModificationAnimation:
 				self.animations = ModificationAnimation(self)
-		self.animations.set_start(translate_points, opacity)
+		self.animations.set_start(opacity)
 
-	def set_style(self, fill_color=None, stroke_color=None, stroke_width=None, opacity=None, others_rules=None, custom=True):
+	def set_style(self, fill_color=None, stroke_color=None, stroke_width=None, stroke_linecaps=None,
+	              opacity=None, others_rules=None, custom=True):
 		"""Set the style of a svg element.
 
 		Args:
-			fill_color   (str)  : The color to fill shape. Default is black.
-			stroke_color (str)  : The color of stroke of the shape. Default is blue.
-			stroke_width (int)  : The size of stroke of the shape. Default is no stroke.
-			opacity      (int)  : The opacity of shape. Default is 1.
-			others_rules (list) : A list of some others rules. Default is no others rules.
-			custom       (bool) : A bool who indicate if we set a default style or if it's custom.
+			fill_color   (str)    : The color to fill shape.
+			stroke_color (str)    : The color of stroke of the shape.
+			stroke_width (float)  : The size of stroke of the shape.
+			opacity      (float)  : The opacity of shape.
+			others_rules (list)   : A list of some others rules.
+			custom       (bool)   : A bool who indicate if we set a default style or if it's custom.
 		"""
 		if self.style is None:
 			self.style = Style()
-
-		self.style.custom = custom
-		if fill_color:
-			self.style.fill_color = fill_color
-		if stroke_color:
-			self.style.stroke_color = stroke_color
-		if stroke_width:
-			self.style.stroke_width = stroke_width
-		if opacity:
-			self.style.opacity = opacity
+		self.style.set(fill_color, stroke_color, stroke_width, stroke_linecaps, opacity, custom)
 		if others_rules:
-			self.style.others_rules = others_rules
+			self.style.add_other_rules(others_rules)
 
 	def add_other_rule(self, rules):
 		"""Add new rules at previous others rules.

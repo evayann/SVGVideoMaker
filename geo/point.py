@@ -62,6 +62,9 @@ class Point2D(Point):
 
     def __ne__(self, other):
         return not isinstance(other, Point2D) or self.coordinates != other.coordinates or self.rayon != other.rayon
+
+    def __round__(self, n=None):
+        return Point2D(round(self.x, n), round(self.y, n))
     # endregion Math Operation
 
     def __hash__(self):

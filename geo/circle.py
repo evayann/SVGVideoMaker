@@ -29,7 +29,7 @@ class Circle(Shape):
         """
         super().__init__(id=id, animation=Animation if animation else None, style=style, opacity=opacity)
         if animation:
-            self.set_animation_start(coordinates, opacity)
+            self.set_animation_start(opacity)
         self.start_coordinates = coordinates
         self.coordinates = list(coordinates) # Copy coordinates for animation
         self.rayon = rayon
@@ -104,6 +104,9 @@ class Circle(Shape):
 
     def __lt__(self, other):
         return self.coordinates < other.coordinates
+
+    def __round__(self, n=None):
+        return Circle([round(el, n) for el in self.coordinates])
     # endregion Math Operation
 
     def __str__(self):

@@ -46,6 +46,7 @@ class Arc(Shape):
 	# region SVG
 	def bounding_quadrant(self):
 		"""Return a quadrant who contain the shape.
+
 		Returns:
 			Quadrant: The quadrant who contain the shape.
 		"""
@@ -55,7 +56,8 @@ class Arc(Shape):
 		return box
 
 	def svg_content(self):
-		"""Return a string who describe the shape.
+		"""Return a string who describe the shape
+		.
 		Returns:
 			str: The string who describe the shape.
 		"""
@@ -76,6 +78,8 @@ class EllipseArc(Shape):
 		if style:
 			# Set new default style
 			self.set_style(fill_color="none", custom=False)
+		if animation:
+			self.animations.set_start(opacity)
 
 		# Default value, use for reset
 		self.center = center
@@ -86,10 +90,6 @@ class EllipseArc(Shape):
 		# Init point values
 		self.start_point = None
 		self.end_point = None
-
-		# Set animation with the clamp angle
-		if animation:
-			self.animations.set_start(center, opacity, [self.sa, self.ea])
 
 		# Value of animation
 		self.center_anim = center.copy()
@@ -113,7 +113,7 @@ class EllipseArc(Shape):
 		self.end_point = self.center_anim + Point2D(rx * cos(er), ry * sin(er))
 		# Check if we need to invert and use large arc to keep the shape of ellipse
 		self.fl = int(self.ea_anim - self.sa_anim > 180)
-		self.invert = 0#int(self.ea_anim < self.sa_anim)
+		self.invert = 0
 
 	# region Animation
 	def reset(self):
@@ -129,15 +129,10 @@ class EllipseArc(Shape):
 	def apply_inflation(self, value):
 		self.radius_anim += value
 
-	def apply_rotate(self, value):
-		self.apply_angles([value, value])
-
 	def apply_angles(self, angles):
-		sa, ea = angles
-		self.sa_anim += sa
-		self.ea_anim += ea
+		self.sa_anim += angles
+		self.ea_anim += angles
 		self.compute_angles()
-
 	# endregion Animation
 
 	# region SVG
