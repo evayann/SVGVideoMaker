@@ -88,10 +88,12 @@ class Video:
         # Prepare command to write video
         cmd = [
             "ffmpeg",
-            "-y", # Overwrite output file if exist
-            "-s", f"{self.width}x{self.height}", # Size
-            "-r", f"{self.fps}", # fps
-            "-i", "-", # input come from a pipe like that "exec | ffmpeg"
+            "-y",  # Overwrite output file if exist
+            "-s", f"{self.width}x{self.height}",  # Size
+            "-r", f"{self.fps}",  # fps
+            "-i", "-",  # input come from a pipe like that "exec | ffmpeg"
+            "-filter_complex",  # filter to make a higer quality color palette
+            "[0:v] split [a][b];[a] palettegen [p];[b][p] paletteuse",
             f"{path}{name}.{ext}"
         ]
 
