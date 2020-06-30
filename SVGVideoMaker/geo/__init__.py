@@ -12,7 +12,7 @@ from SVGVideoMaker.geo.svg import *
 # Shape
 from SVGVideoMaker.geo.rectangle import *
 from SVGVideoMaker.geo.segment import *
-from SVGVideoMaker.geo.circle import *
+from SVGVideoMaker.geo.ellipse import *
 from SVGVideoMaker.geo.point import *
 from SVGVideoMaker.geo.arc import *
 

@@ -7,6 +7,7 @@ Useful to display and save all element.
 from itertools import cycle
 from SVGVideoMaker.geo.quadrant import Quadrant
 from SVGVideoMaker.geo.group import Group
+from SVGVideoMaker.geo.gradient import Gradient
 # endregion Imports
 
 class SVG(Group):
@@ -26,13 +27,15 @@ class SVG(Group):
                        saddlebrown moccasin mistyrose cornflowerblue\
                        darkgrey'.split()
 
-    def __init__(self, elements=None, width=500, height=500):
+    def __init__(self, elements=None, width=500, height=500, background_color="white"):
         super().__init__()
         if elements:
             self.append(elements)
+        self.background_color = background_color
         self.svg_dimensions = (width, height)
         self.start_vb = None
         self.end_vb = None
+        self.gradients = []
 
     def save(self, path, name):
         """Save the svg frame.
@@ -89,8 +92,9 @@ class SVG(Group):
         svg_file += ' viewBox="{} {}'.format(*start)
         svg_file += ' {} {}"'.format(*dimensions)
         svg_file += ' xmlns="http://www.w3.org/2000/svg">\n'
+        svg_file += f"<defs>\n{self.get_gradients_svg()}\n</defs>\n"
         svg_file += '<rect x="{}" y="{}"'.format(*start) # min size
-        svg_file += ' width="{}" height="{}" fill="white"/>\n'.format(*dimensions)
+        svg_file += ' width="{}" height="{}" fill="{}"/>\n'.format(*dimensions, self.background_color)
         svg_file += '<g stroke-width="{}">\n'.format(stroke_size)
         svg_file += f"{self.compute_displays()}\n</g>\n </svg>\n"
         return svg_file
@@ -106,7 +110,31 @@ class SVG(Group):
             strings.append('</g>\n')
         return " ".join(strings)
 
+    def get_gradients_svg(self):
+        return "\n".join([gradient.svg_content() for gradient in self.gradients])
+
+    def add_gradient(self, id, offsets=None, colors=None, opacities=None, orientation_start=None, orientation_end=None):
+        """Add a gradient to svg to be use in svg color.
+        With the differents offsets, colors and opacities.
+        If isn't the same number, keep the minimal value.
+
+        Args:
+            id                (str)   : The id of gradient.
+            offsets           (list)  : List of different offset. Each offset is between 0 and 100. Value in percent.
+            colors            (list)  : List of different colors. Each offset is between 0 and 100.
+            opacities         (list)  : List of different opacities. Each offset is between 0 and 1.
+            orientation_start (tuple) : The start point of orientation. Format (0, 0). Default is vertical.
+            orientation_end   (tuple) : The end point of orientation. Format (0, 1). Default is vertical.
+        """
+        gradient = Gradient(id, orientation_start, orientation_end)
+        for offset, color, opacity in zip(offsets, colors, opacities):
+            gradient.add_color(offset, color, opacity)
+        self.gradients.append(gradient)
+
     # region Setters
+    def set_background_color(self, color):
+        self.background_color = color
+
     def set_size(self, width, height):
         self.svg_dimensions = (width, height)
 

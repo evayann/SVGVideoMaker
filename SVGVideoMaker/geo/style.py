@@ -61,11 +61,13 @@ class Style:
 			opacity      (float)  : The opacity of shape.
 			custom       (bool)   : A bool who indicate if we set a default style or if it's custom.
 		"""
+		if custom:
+			self.custom = custom
 		if fill_color:
 			self.fill_color = fill_color
 		if stroke_linecaps:
 			self.stroke_linecaps = stroke_linecaps
-		if stroke_width:
+		if stroke_width is not None:
 			self.stroke_width = stroke_width
 		if stroke_color:
 			self.stroke_color = stroke_color
@@ -89,7 +91,7 @@ class Style:
 		if self.stroke_color:
 			string += f'stroke="{self.stroke_color}" '
 
-		if self.stroke_width:
+		if self.stroke_width is not None:
 			string += f'stroke-width="{self.stroke_width}" '
 
 		if self.stroke_linecaps:

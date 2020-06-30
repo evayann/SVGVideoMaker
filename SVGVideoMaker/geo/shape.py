@@ -5,7 +5,7 @@ Implementation of necessary for shape displaying.
 # region Imports
 from abc import abstractmethod, ABC
 from SVGVideoMaker.geo.style import Style
-from SVGVideoMaker.geo.animation import Animation, ModificationAnimation
+from SVGVideoMaker.geo.animation import AnimationType, Animation, ModificationAnimation
 # endregion Imports
 
 X, Y, Z = 0, 1, 2
@@ -21,6 +21,7 @@ class Shape(ABC):
 
 		Args:
 			id (str) : The id of shape. If None default id is the name of class with a number.
+			animation (Animation): The Type of animation for this shape.
 		"""
 		if id:
 			self.id = id
@@ -29,10 +30,11 @@ class Shape(ABC):
 			Shape.COUNTER += 1
 
 		self.animations = animation(self) if animation else None
-		if style:
-			self.style = Style(opacity=opacity)
-		else:
-			self.style = None
+
+		self.translation = [0, 0]
+		self.rotation = 0
+
+		self.style = Style(opacity=opacity) if style else None
 
 	# region Setters
 	def set_animation_start(self, opacity, anim_type=Animation):
@@ -81,6 +83,21 @@ class Shape(ABC):
 		"""
 		return self.style.custom if self.style else False
 
+	def get_transform(self):
+		"""Get a string who describe all transform.
+
+		Returns:
+			str: The string who describe transform of this shape.
+		"""
+
+		translation = " ".join([str(el) for el in self.translation])
+		string = f'transform="translate({translation})'
+		if self.rotation != 0:
+			center_pt = "{} {}".format(*self.get_center())
+			string += f"rotate({self.rotation} {center_pt})"
+
+		return string + '" '
+
 	def get_styles(self):
 		"""Get a string who describe all style.
 
@@ -105,13 +122,42 @@ class Shape(ABC):
 	# endregion Getters
 
 	# region Animations
-	@abstractmethod
-	def apply_translation(self, value):
-		pass
+	def add_translation(self, frame, x, y=None):
+		"""Add translation animation on shape at frame.
 
-	@abstractmethod
-	def apply_inflation(self, value):
-		pass
+		Args:
+			frame (int): The frame.
+			x     (int): The translation on X axis.
+			y     (int): The translation on Y axis.
+		"""
+		if self.animations:
+			self.animations.add_animation(frame, AnimationType.TRANSLATION, x=x, y=y)
+
+	def add_rotate(self, frame, value):
+		"""Add rotation animation on shape at frame.
+
+		Args:
+			frame (int): The frame.
+			value (float): The rotation in degrees.
+		"""
+		if self.animations:
+			self.animations.add_animation(frame, AnimationType.ROTATION, value=value)
+
+	def add_opacity(self, frame, value):
+		"""Add opacity animation on shape at frame.
+
+		Args:
+			frame (int): The frame.
+			value (float): The percent of opacity. Between 0 and 1.
+		"""
+		if self.animations:
+			self.animations.add_animation(frame,  AnimationType.OPACITY, value=value)
+
+	def apply_translation(self, value):
+		self.translation = [v + old for v, old in zip(value, self.translation)]
+
+	def apply_rotation(self, value):
+		self.rotation += value
 
 	def apply_opacity(self, value):
 		if self.style:
@@ -119,6 +165,15 @@ class Shape(ABC):
 	# endregion Animations
 
 	# region Abstract
+	@abstractmethod
+	def get_center(self):
+		"""Return a point who is the center of shape.
+
+		Returns:
+			Point: The center of shape
+		"""
+		pass
+
 	@abstractmethod
 	def svg_content(self):
 		"""Return a string who describe the shape.

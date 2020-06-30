@@ -9,7 +9,7 @@ from SVGVideoMaker.geo.quadrant import Quadrant
 from SVGVideoMaker.geo.animation import Animation
 # endregion Imports
 
-class Circle(Shape):
+class Ellipse(Shape):
     """
     a point is defined as a vector of any given dimension.
 
@@ -23,26 +23,27 @@ class Circle(Shape):
 
     distance = point1.distance_to(point2)
     """
-    def __init__(self, coordinates, rayon=10, id=None, opacity=1, animation=True, style=True):
+    def __init__(self, center, rx=10, ry=5, id=None, opacity=1, animation=True, style=True):
         """
-        Instantiate a displayable circle
+        Instantiate a displayable ellipse
         """
         super().__init__(id=id, animation=Animation if animation else None, style=style, opacity=opacity)
         if animation:
             self.set_animation_start(opacity)
-        self.start_coordinates = coordinates
-        self.coordinates = list(coordinates) # Copy coordinates for animation
-        self.rayon = rayon
+        self.start_coordinates = center
+        self.coordinates = list(center) # Copy coordinates for animation
+        self.rx = rx
+        self.ry = ry
 
     def copy(self):
         """
         return copy of given point.
         """
-        return Circle(list(self.coordinates), self.rayon)
+        return Ellipse(list(self.coordinates), self.rx, self.ry)
 
     def distance_to(self, other):
         """
-        euclidean distance between two points.
+        Euclidean distance between two Ellipse center to center.
         """
         if self < other:
             return other.distance_to(self)  # we are now a symmetric function
@@ -50,12 +51,21 @@ class Circle(Shape):
         total = sum(((c1 - c2) ** 2 for c1, c2 in zip(self.coordinates, other.coordinates)))
         return sqrt(total)
 
+    def get_center(self):
+        """Return a point who is the center of shape.
+
+		Returns:
+			Point: The center of shape
+		"""
+        return self.coordinates
+
     def apply_translation(self, value):
         for i, v in enumerate(value.coordinates):
             self.coordinates[i] += v
 
     def apply_inflation(self, value):
-        self.rayon += value
+        self.rx += value
+        self.ry += value
 
     def reset(self):
         self.animations.reset()
@@ -68,7 +78,11 @@ class Circle(Shape):
         Returns:
         	Quadrant: The quadrant who contain the shape.
         """
-        return Quadrant(self.coordinates, self.coordinates)
+        from SVGVideoMaker.geo.point import Point2D
+        radius = Point2D(self.rx, self.ry)
+        mini = [coord - r for coord, r in zip(self.coordinates, radius)]
+        maxi = [coord + r for coord, r in zip(self.coordinates, radius)]
+        return Quadrant(mini, maxi)
 
     def svg_content(self):
         """Return a string who describe the shape.
@@ -76,37 +90,40 @@ class Circle(Shape):
         Returns:
         	str: The string who describe the shape.
         """
-        return '<circle cx="{}" cy="{}" r="{}" {}/>\n'.format(*self.coordinates, self.rayon, self.get_styles())
+        string = '<ellipse cx="{}" cy="{}" rx="{}" ry="{}" {} {}/>\n'
+        return string.format(*self.coordinates, self.rx, self.ry, self.get_transform(), self.get_styles())
     # endregion SVG
 
     # region Override
     # region Math Operation
     def __add__(self, other):
-        return Circle([i + j for i, j in zip(self.coordinates, other.coordinates)])
+        return Ellipse([i + j for i, j in zip(self.coordinates, other.coordinates)], self.rx, self.ry)
 
     def __sub__(self, other):
-        return Circle([i - j for i, j in zip(self.coordinates, other.coordinates)])
+        return Ellipse([i - j for i, j in zip(self.coordinates, other.coordinates)], self.rx, self.ry)
 
     def __mul__(self, factor):
-        return Circle([c * factor for c in self.coordinates])
+        return Ellipse([c * factor for c in self.coordinates], self.rx, self.ry)
 
     def __truediv__(self, factor):
-        return Circle([c / factor for c in self.coordinates])
+        return Ellipse([c / factor for c in self.coordinates], self.rx, self.ry)
 
     def __abs__(self):
-        return Circle([abs(c) for c in self.coordinates])
+        return Ellipse([abs(c) for c in self.coordinates], self.rx, self.ry)
 
     def __eq__(self, other):
-        return isinstance(other, Circle) and self.coordinates == other.coordinates and self.rayon == other.rayon
+        return isinstance(other, Ellipse) and self.coordinates == other.coordinates and \
+               self.rx == other.rx and self.ry == other.ry
 
     def __ne__(self, other):
-        return not isinstance(other, Circle) or self.coordinates != other.coordinates or self.rayon != other.rayon
+        return not isinstance(other, Ellipse) or self.coordinates != other.coordinates or \
+               self.rx == other.rx or self.ry == other.ry
 
     def __lt__(self, other):
         return self.coordinates < other.coordinates
 
     def __round__(self, n=None):
-        return Circle([round(el, n) for el in self.coordinates])
+        return Ellipse([round(el, n) for el in self.coordinates], self.rx, self.ry)
     # endregion Math Operation
 
     def __str__(self):
@@ -116,9 +133,15 @@ class Circle(Shape):
         return f"{self.__class__.__name__}"
 
     def __hash__(self):
-        return sum((hash(c) for c in self.coordinates)) + hash(self.rayon)
+        return sum((hash(c) for c in self.coordinates)) + hash(self.rx) + hash(self.ry)
 
     def __iter__(self):
         for value in self.coordinates:
             yield value
     # endregion Override
+
+class Circle(Ellipse):
+    def __init__(self, center, radius=10, id=None, opacity=1, animation=True, style=True):
+        super().__init__(center, rx=radius, ry=radius, id=id,
+                         opacity=opacity, animation=animation, style=style)
+

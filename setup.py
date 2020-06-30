@@ -5,7 +5,7 @@ with open("ReadMe.md", "r") as rd_f:
 
 setuptools.setup(
     name="SVGVideoMaker",
-    version="0.3.1",
+    version="0.4",
     author="Yann Zavattero",
     author_email="yann.zavattero@hotmail.com",
     description="Creator of video from svg with cairosvg, ffmpeg",

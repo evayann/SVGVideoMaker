@@ -43,28 +43,30 @@ class Video:
         self.height = height
         self.svg.set_size(width, height)
 
-    def make_movie(self, max_time=None):
+    def make_movie(self, start=None, end=None):
         """Generator who return all svg in string for each frame.
 
         Args:
-            max_time (int): if none make all frame of one animation, otherwise make all frame on before 'max_time'
+            start (int): Begin of movie in seconds.
+            end   (int): End of movie in seconds.
 
         Yields:
             All svg frames in string with the frame number
         """
 
+        # Prepare the size of movie
+        start_frame = ceil(start) * self.fps if start else 0
+        end_frame = ceil(end) * self.fps if end else self.svg.get_nb_frames()
+
         # Inform the different key animation
         msg(self.svg.get_keys_animations(), DebugLevel.VERBOSE)
-
-        # Prepare the size of movie
-        nb_frame = ceil(max_time) * self.fps if max_time else self.svg.get_nb_frames()
 
         # Encapsulate generator in try to reset animation
         # if the generator was break
         try:
             self.svg.init_animation()
             # Around max time to sup value
-            for i in range(nb_frame):
+            for i in range(start_frame, end_frame + 1):
                 msg(f"Compute frame {i}", DebugLevel.VERBOSE)
                 yield i, self.svg.get_svg()
                 self.svg.update()
@@ -75,14 +77,15 @@ class Video:
         # Normal reset
         self.svg.reset()
 
-    def save_movie(self, path="./", name="out", ext="mp4", max_time=None):
+    def save_movie(self, start=None, end=None, path="./", name="out", ext="mp4"):
         """Make a video file from svg and all the key frame.
 
         Args:
-            path     (str) : The path where you save video. Default "./".
-            name     (str) : The name of video. Default "out".
-            ext      (str) : The extension of your video. Default mp4.
-            max_time (int) : The time of the end of video in seconds. Default value is the length of your video.
+            start (int): Begin of movie in seconds.
+            end   (int): End of movie in seconds.
+            path  (str) : The path where you save video. Default "./".
+            name  (str) : The name of video. Default "out".
+            ext   (str) : The extension of your video. Default mp4.
         """
 
         # Prepare command to write video
@@ -99,8 +102,10 @@ class Video:
 
         pipe = Popen(cmd, stdin=PIPE, stderr=PIPE) # Start video compilation with command
         # Display bytestream on stdin to pass at ffmpeg
-        for _, frame in self.make_movie(max_time=max_time):
+        for _, frame in self.make_movie(start, end):
             pipe.stdin.write(svg2png(frame))
+        pipe.stdin.close()
+        pipe.wait()
 
     def save_frame(self, frame_number=-1, path="./", name=None):
         """Save the frame 'frame_number' on a file at 'path' with 'name' and extension 'ext'.

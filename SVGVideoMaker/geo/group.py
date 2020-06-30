@@ -29,13 +29,16 @@ class Group:
             if el.animations:
                 el.animations.init_animation()
 
-    def add_animation(self, frame, values, anim_type=AnimationType.TRANSLATION):
+    def add_animation(self, frame, anim_type=AnimationType.TRANSLATION, x=None, y=None, value=None):
         if anim_type == AnimationType.MODIFICATION:
             raise Exception("Group can't have modification animation")
 
         for el in self.group:
             if el.animations:
-                el.animations.add_animation(frame, values, anim_type)
+                if value:
+                    el.animations.add_animation(frame, anim_type, value=value)
+                elif x and y:
+                    el.animations.add_animation(frame, anim_type, x=x, y=y)
 
     def is_style(self):
         return False
@@ -43,7 +46,7 @@ class Group:
     def get_nb_frames(self):
         nb_frames = -1
         for el in self.group:
-            nb_frames = max(nb_frames, el.animations.nb_frames)
+            nb_frames = max(nb_frames, el.animations.get_nb_frames())
         return nb_frames
 
     def get_keys_animations(self):

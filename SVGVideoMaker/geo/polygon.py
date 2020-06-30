@@ -7,7 +7,7 @@ from SVGVideoMaker.geo.point import Point
 from SVGVideoMaker.geo.segment import Segment
 from SVGVideoMaker.geo.quadrant import Quadrant
 from SVGVideoMaker.geo.shape import Shape
-from SVGVideoMaker.geo.animation import ModificationAnimation
+from SVGVideoMaker.geo.animation import ModificationAnimation, AnimationType
 from SVGVideoMaker.geo.utility import nearest_point, dont_match, couples
 from SVGVideoMaker.geo.debug import msg, DebugLevel, DEBUG_LEVEL
 # endregion Imports
@@ -121,10 +121,24 @@ class Polygon(Shape):
         else:
             return self
 
+    def get_center(self):
+        """Return a point who is the center of shape.
+
+		Returns:
+			Point: The center of shape
+		"""
+        box = self.bounding_quadrant()
+        coords = [mini + ((maxi - mini) / 2) for maxi, mini in zip(box.max_coordinates, box.min_coordinates)]
+        return Point(coords)
+
     # region Animation
-    def apply_translation(self, value):
-        for i in range(len(self.points)):
-            self.points[i] += value
+    # def apply_translation(self, value):
+    #     for i in range(len(self.points)):
+    #         self.points[i] += value
+
+    def add_modification(self, frame, values):
+        if self.animations:
+            self.animations.add_animation(frame, AnimationType.MODIFICATION, value=values)
 
     def apply_modification(self, values):
         for i in range(len(self.points)):

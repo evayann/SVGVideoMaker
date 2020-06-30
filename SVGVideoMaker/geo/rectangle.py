@@ -10,13 +10,13 @@ class Rectangle(Polygon):
 	def __init__(self, pt=None, width=None, height=None, points=None, id=None, opacity=1, animation=True, style=True):
 		# Create Rectangle by width and length
 		if pt and height and width:
-			pts = [pt, pt + Point2D(width, 0), pt + Point2D(0, height), pt + Point2D(width, height)]
+			pts = [pt, pt + Point2D(width, 0), pt + Point2D(width, height), pt + Point2D(0, height)]
 		# Create by points position
 		elif isinstance(list, points) and len(points) == 4:
 			pts = points
 		# Default Rectangle
 		else:
-			pts = [Point2D(0, 0), Point2D(1, 0), Point2D(0, 1), Point2D(1, 1)]
+			pts = [Point2D(0, 0), Point2D(1, 0), Point2D(1, 1), Point2D(0, 1)]
 			msg("Bad construction of rectangle. Need a point with height and width or a list of 4 points. Instantiate a default rectangle from 0,0 to 1,1", DebugLevel.WARNING)
 
 		super().__init__(pts, id=id, opacity=opacity, animation=ModificationAnimation if animation else None, style=style)

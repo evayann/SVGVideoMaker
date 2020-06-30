@@ -2,6 +2,27 @@
 Changelog
 *********
 
+Version 0.4, Transform Update, Gradient
+=======================================================
+
+:Date: June 30, 2020
+
+New animation with transform SVG ! And amazing Gradient !
+
+Features
+--------
+
+* SVG Transform use for rotation and translation
+* Implementation of gradient
+* SVG background color can be change
+* Simplification for add animation
+
+Bug Fixes
+---------
+* Stroke-width who cant be set to 0
+* Wait pipe to FFMPEG finish before kill program
+
+
 Version 0.3, New Shape, EllipseArc and structure update
 =======================================================
 

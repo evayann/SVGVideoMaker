@@ -3,7 +3,7 @@ Multi dimensional point and 2D point
 """
 
 # region Imports
-from SVGVideoMaker.geo.circle import Circle, X, Y
+from SVGVideoMaker.geo.ellipse import Circle, X, Y
 # endregion Imports
 
 class Point(Circle):
@@ -18,7 +18,7 @@ class Point(Circle):
             id          (str)  : The id of shape.
             opacity     (int)  : The opacity of shape.
         """
-        super().__init__(coordinates, id=id, rayon=1, opacity=opacity, animation=animation, style=style)
+        super().__init__(coordinates, id=id, radius=1, opacity=opacity, animation=animation, style=style)
 
 
 class Point2D(Point):
@@ -58,15 +58,15 @@ class Point2D(Point):
         return Point2D(abs(self.x), abs(self.y))
 
     def __eq__(self, other):
-        return isinstance(other, Point2D) and self.coordinates == other.coordinates and self.rayon == other.rayon
+        return isinstance(other, Point2D) and self.coordinates == other.coordinates and self.radius == other.radius
 
     def __ne__(self, other):
-        return not isinstance(other, Point2D) or self.coordinates != other.coordinates or self.rayon != other.rayon
+        return not isinstance(other, Point2D) or self.coordinates != other.coordinates or self.radius != other.radius
 
     def __round__(self, n=None):
         return Point2D(round(self.x, n), round(self.y, n))
     # endregion Math Operation
 
     def __hash__(self):
-        return hash(self.x) + hash(self.y) + hash(self.rayon)
+        return hash(self.x) + hash(self.y) + hash(self.radius)
     # endregion Override

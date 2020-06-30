@@ -7,7 +7,7 @@ With his svg implementation.
 from SVGVideoMaker.geo.point import Point2D
 from SVGVideoMaker.geo.shape import Shape
 from SVGVideoMaker.geo.quadrant import Quadrant
-from SVGVideoMaker.geo.circle import Circle
+from SVGVideoMaker.geo.ellipse import Circle
 from SVGVideoMaker.geo.animation import Animation
 # endregion Imports
 
@@ -61,6 +61,14 @@ class Segment(Shape):
         """
         return self.endpoints[0].distance_to(self.endpoints[1])
 
+    def get_center(self):
+        """Return a point who is the center of shape.
+
+		Returns:
+			Point: The center of shape
+		"""
+        return self.endpoints[0] + (self.endpoints[0] + self.endpoints[1]) / 2
+
     # region Animation
     def reset(self):
         self.animations.reset()
@@ -92,9 +100,10 @@ class Segment(Shape):
         Returns:
         	str: The string who describe the shape.
         """
-        return '<line x1="{}" y1="{}" x2="{}" y2="{}" {}/>\n'.format(
+        return '<line x1="{}" y1="{}" x2="{}" y2="{}" {} {}/>\n'.format(
             *self.anim_points[0].coordinates,
             *self.anim_points[1].coordinates,
+            self.get_transform(),
             self.get_styles())
     # endregion SVG
 

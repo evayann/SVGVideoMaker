@@ -31,13 +31,18 @@ class Arc(Shape):
 		self.large_arc = False
 		self.invert = False
 
+	def get_center(self):
+		"""Return a point who is the center of shape.
+
+		Returns:
+			Point: The center of shape
+		"""
+		return self.mid
+
 	# region Animation
 	def reset(self):
 		self.animations.reset()
 		self.anim_point = self.start_point.copy()
-
-	def apply_translation(self, value):
-		self.anim_point += value
 
 	def apply_inflation(self, value):
 		raise Exception("Not supported yet")
@@ -64,7 +69,7 @@ class Arc(Shape):
 		return f'<path d="m {"{} {}".format(*self.anim_point.coordinates)} ' \
 		       f'a {"{} {}".format(*self.mid.coordinates)}' \
 		       f" {self.rot_x} {1 if self.large_arc else 0} {1 if self.invert else 0}" \
-		       f' {"{} {}".format(*self.end.coordinates)}" {self.get_styles()}></path>'
+		       f' {"{} {}".format(*self.end.coordinates)}" {self.get_transform()} {self.get_styles()}></path>'
 	# endregion SVG
 
 	# region Override
@@ -115,6 +120,14 @@ class EllipseArc(Shape):
 		self.fl = int(self.ea_anim - self.sa_anim > 180)
 		self.invert = 0
 
+	def get_center(self):
+		"""Return a point who is the center of shape.
+
+		Returns:
+			Point: The center of shape
+		"""
+		return self.center_anim
+
 	# region Animation
 	def reset(self):
 		self.animations.reset()
@@ -123,8 +136,6 @@ class EllipseArc(Shape):
 		self.sa_anim = self.sa.copy()
 		self.ea_anim = self.ea.copy()
 
-	def apply_translation(self, value):
-		self.center_anim += value
 
 	def apply_inflation(self, value):
 		self.radius_anim += value
@@ -181,7 +192,7 @@ class EllipseArc(Shape):
 		                 invert=self.invert,
 		                 dx=dx, dy=dy)
 
-		string = f'<path d="{arc}" {self.get_styles()}></path>'
+		string = f'<path d="{arc}" {self.get_transform()} {self.get_styles()}></path>'
 
 		if DEBUG_LEVEL.value <= DebugLevel.VISUAL.value:
 			string += f"{self.center_anim.svg_content()} {self.start_point.svg_content()} {self.end_point.svg_content()}"
