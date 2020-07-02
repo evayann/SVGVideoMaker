@@ -15,7 +15,7 @@ class AnimationType(Enum):
     INFLATION = 3
     ROTATION = 4
     OPACITY = 5
-    ANGLES = 6
+    ANGLE_TRANSLATION = 6
 
 class AnimationState(Enum):
     """
@@ -240,7 +240,7 @@ class ModificationAnimation(Animation):
             nb_frame_to_move = end_frame - start_frame
             computed = [((n - p) / nb_frame_to_move) for n, p in zip(next_val, previous_val)]
             # Save incrementation to add from start to end frame
-            self.current_values[AnimationType.MODIFICATION] = (end_frame, computed)
+            self.current_values[AnimationType.MODIFICATION] = end_frame, computed
             # Send the modification to add
             self.svg_el.apply_modification(computed)
         elif state is AnimationState.CURRENT:
@@ -265,21 +265,9 @@ class EllispePartAnimation(Animation):
         """
         super().__init__(svg_element, id=id)
 
-    # def set_start(self, translate_points, opacity, angles):
-    #     super().set_start(translate_points, opacity)
-    #     self.anims[AnimationType.ANGLES][0] = angles  # Add the init_point for ANGLES
-
-    def update_angles(self):
-        self.update_generic(AnimationType.ANGLES, self.svg_el.apply_angles)
-        # state, (prev_values, start_frame), (next_values, end_frame) = self.read_animation(AnimationType.ANGLES)
-        # if state is AnimationState.NEW:
-        #     nb_frames = end_frame - start_frame
-        #     computed = [(nv - pv) / nb_frames for pv, nv in zip(prev_values, next_values)]
-        #     self.current_values[AnimationType.ANGLES] = (end_frame, computed)
-        #     self.svg_el.apply_angles(computed)
-        # elif state is AnimationState.SAME:
-        #     self.svg_el.apply_angles(self.current_values[AnimationType.ANGLES][Animation.VALUES])
+    def update_angle_translation(self):
+        self.update_generic(AnimationType.ANGLE_TRANSLATION, self.svg_el.apply_angle_translation)
 
     def update(self):
         super().update()
-        self.update_angles()
+        self.update_angle_translation()

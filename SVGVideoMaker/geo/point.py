@@ -46,7 +46,7 @@ class Point2D(Point):
         return Point2D(self.x + other.coordinates[0], self.y + other.coordinates[1])
 
     def __sub__(self, other):
-        return Point2D(self.x - other.x, self.y - other.y)
+        return Point2D(self.x - other.coordinates[0], self.y - other.coordinates[1])
 
     def __mul__(self, factor):
         return Point2D(self.x * factor, self.y * factor)
@@ -57,16 +57,10 @@ class Point2D(Point):
     def __abs__(self):
         return Point2D(abs(self.x), abs(self.y))
 
-    def __eq__(self, other):
-        return isinstance(other, Point2D) and self.coordinates == other.coordinates and self.radius == other.radius
-
-    def __ne__(self, other):
-        return not isinstance(other, Point2D) or self.coordinates != other.coordinates or self.radius != other.radius
-
     def __round__(self, n=None):
         return Point2D(round(self.x, n), round(self.y, n))
     # endregion Math Operation
 
     def __hash__(self):
-        return hash(self.x) + hash(self.y) + hash(self.radius)
+        return hash(self.x) + hash(self.y) + hash(self.rx) + hash(self.ry)
     # endregion Override

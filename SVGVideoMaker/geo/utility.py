@@ -20,9 +20,6 @@ def couples(iterable, turns=1):
     Returns:
         iter: An iterator by couple turn's time.
     """
-    """
-    
-    """
     return zip(iterable*turns, islice(cycle(iterable*turns), 1, None))
 
 def dont_match(shape, shape_to_match, start_check=-1):

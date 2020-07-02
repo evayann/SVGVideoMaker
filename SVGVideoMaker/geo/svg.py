@@ -92,11 +92,13 @@ class SVG(Group):
         svg_file += ' viewBox="{} {}'.format(*start)
         svg_file += ' {} {}"'.format(*dimensions)
         svg_file += ' xmlns="http://www.w3.org/2000/svg">\n'
-        svg_file += f"<defs>\n{self.get_gradients_svg()}\n</defs>\n"
-        svg_file += '<rect x="{}" y="{}"'.format(*start) # min size
-        svg_file += ' width="{}" height="{}" fill="{}"/>\n'.format(*dimensions, self.background_color)
-        svg_file += '<g stroke-width="{}">\n'.format(stroke_size)
-        svg_file += f"{self.compute_displays()}\n</g>\n </svg>\n"
+        if self.gradients:
+            svg_file += f"<defs>\n{self.get_gradients_svg()}\n</defs>\n"
+        if self.background_color:
+            svg_file += '<rect x="{}" y="{}"'.format(*start) # min size
+            svg_file += ' width="{}" height="{}" fill="{}"/>\n'.format(*dimensions, self.background_color)
+        svg_file += '\t<g stroke-width="{}">\n'.format(stroke_size)
+        svg_file += f"{self.compute_displays()}\n\t</g>\n</svg>\n"
         return svg_file
 
     def compute_displays(self):

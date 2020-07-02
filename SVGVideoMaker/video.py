@@ -66,7 +66,7 @@ class Video:
         try:
             self.svg.init_animation()
             # Around max time to sup value
-            for i in range(start_frame, end_frame + 1):
+            for i in range(start_frame, end_frame):
                 msg(f"Compute frame {i}", DebugLevel.VERBOSE)
                 yield i, self.svg.get_svg()
                 self.svg.update()

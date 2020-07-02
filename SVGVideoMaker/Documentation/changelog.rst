@@ -2,6 +2,21 @@
 Changelog
 *********
 
+Version 0.4.1, Bug Fixes
+=======================================================
+
+:Date: June 30, 2020
+
+Bug Fixes Update
+
+Bug Fixes
+---------
+* Exclude last frame of make_movie. Ex: 30 frames : 0 -> 30
+* Update Rectangle to have a width and a height store and modification on internal structure
+* Clean up some comments
+* Patch creation of segment with segments() methods of polygon and change name to get_segments()
+* Patch bug on hash of point
+
 Version 0.4, Transform Update, Gradient
 =======================================================
 

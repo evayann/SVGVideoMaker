@@ -3,7 +3,7 @@ All necessary to create, animate, and make geometry operation on Polygon.
 """
 
 # region Imports
-from SVGVideoMaker.geo.point import Point
+from SVGVideoMaker.geo.point import Point2D, Point
 from SVGVideoMaker.geo.segment import Segment
 from SVGVideoMaker.geo.quadrant import Quadrant
 from SVGVideoMaker.geo.shape import Shape
@@ -55,22 +55,22 @@ class Polygon(Shape):
         create a square, horizontally aligned.
         used in test scripts as a quick way to get polygons.
         """
-        starting_point = Point([start_x, start_y])
+        starting_point = Point2D(start_x, start_y)
         points = [
-            Point([0.0, 0.0]),
-            Point([side, 0.0]),
-            Point([side, side]),
-            Point([0.0, side]),
+            Point2D(0, 0),
+            Point2D(side, 0),
+            Point2D(side, side),
+            Point2D(0, side),
         ]
         points = [p + starting_point for p in points]
         square_polygon = cls(points)
         return square_polygon
 
-    def segments(self):
+    def get_segments(self):
         """
         iterate through all segments.
         """
-        return map(Segment, couples(self.points))
+        return [Segment(start, end) for start, end in couples(self.points)]
 
     def segments_points(self):
         """
@@ -235,7 +235,7 @@ class Polygon(Shape):
         have an intersection
         """
         from itertools import product
-        for s1, s2 in product(self.segments(), polygon.segments()):
+        for s1, s2 in product(self.get_segments(), polygon.get_segments()):
             if s1.intersection_with(s2):
                 return True
         return False
@@ -261,7 +261,7 @@ class Polygon(Shape):
         	str: The string who describe the shape.
         """
         coordinates = " ".join(("{},{}".format(*p.coordinates) for p in self.points))
-        string = f'<polygon points="{coordinates}" {self.get_styles()}/>\n'
+        string = f'<polygon points="{coordinates}" {self.get_transform()} {self.get_styles()}/>\n'
         if self.display_id:
             x_text, y_text = self.points[0].coordinates
             string += f'<text x="{x_text}" y="{y_text}">{self.id}</text>\n'

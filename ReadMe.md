@@ -41,18 +41,13 @@ You can display a svg element in terminal with `display(svg_element)` and you ca
 
 See video in examples file.
 
-### Misc
+### Polygon
 
-This example illustrate divers function you can use with this API.
-![Misc Gif](SVGVideoMaker/examples/Misc.gif)
+Utilisation of polygon of this API.
+![Misc Gif](SVGVideoMaker/examples/Polygon.gif)
 
-### Voronoi
+### Ellipse
 
-This example is an implementation of Voronoi diagram.
-![Voronoi Gif](SVGVideoMaker/examples/Voronoi.gif)
-
-### Game
-
-This example is an implementation of territory battle.
-![Game Gif](SVGVideoMaker/examples/Game.gif)
+Utilisation of ellipse of this API.
+![Voronoi Gif](SVGVideoMaker/examples/EllipseArc.gif)
  

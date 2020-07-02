@@ -2,12 +2,13 @@
 # region Imports
 from math import pi, sin, cos
 
-from SVGVideoMaker.geo.animation import Animation, EllispePartAnimation
+from SVGVideoMaker.geo.animation import Animation, EllispePartAnimation, AnimationType
 from SVGVideoMaker.geo.quadrant import Quadrant
 from SVGVideoMaker.geo.debug import DEBUG_LEVEL, DebugLevel
 from SVGVideoMaker.geo.point import Point2D, X, Y
 from SVGVideoMaker.geo.shape import Shape
 # endregion Imports
+
 
 class Arc(Shape):
 	def __init__(self, start, mid, end, id=None, opacity=1, animation=True, style=True):
@@ -129,6 +130,27 @@ class EllipseArc(Shape):
 		return self.center_anim
 
 	# region Animation
+	def add_angle_translation(self, frame, value):
+		"""Add translation of angles animation on shape at frame.
+
+		Args:
+			frame (int): The frame.
+			value (int): The value of translation.
+		"""
+		if self.animations:
+			self.animations.add_animation(frame, AnimationType.ANGLE_TRANSLATION, value=value)
+
+	def add_angles(self, frame, x, y):
+		"""Add modification of angles animation on shape at frame.
+
+		Args:
+			frame (int): The frame.
+			x     (int): The degrees of start.
+			y     (int): The degrees of end.
+		"""
+		if self.animations:
+			self.animations.add_animation(frame, AnimationType.ANGLES, x=x, y=y)
+
 	def reset(self):
 		self.animations.reset()
 		self.center_anim = self.center.copy()
@@ -136,11 +158,10 @@ class EllipseArc(Shape):
 		self.sa_anim = self.sa.copy()
 		self.ea_anim = self.ea.copy()
 
-
 	def apply_inflation(self, value):
 		self.radius_anim += value
 
-	def apply_angles(self, angles):
+	def apply_angle_translation(self, angles):
 		self.sa_anim += angles
 		self.ea_anim += angles
 		self.compute_angles()

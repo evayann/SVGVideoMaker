@@ -8,7 +8,7 @@ from SVGVideoMaker.geo.point import Point2D
 from SVGVideoMaker.geo.shape import Shape
 from SVGVideoMaker.geo.quadrant import Quadrant
 from SVGVideoMaker.geo.ellipse import Circle
-from SVGVideoMaker.geo.animation import Animation
+from SVGVideoMaker.geo.animation import Animation, AnimationType
 # endregion Imports
 
 class Segment(Shape):
@@ -67,7 +67,7 @@ class Segment(Shape):
 		Returns:
 			Point: The center of shape
 		"""
-        return self.endpoints[0] + (self.endpoints[0] + self.endpoints[1]) / 2
+        return self.endpoints[0] + (self.endpoints[1] - self.endpoints[0]) / 2
 
     # region Animation
     def reset(self):
@@ -169,7 +169,7 @@ class Segment(Shape):
         return False
 
     def intersect_point(self, segment):
-        """Return the parameter point if we have one, otherwise False
+        """Return the intersection point if we have one, otherwise False
 
         Args:
         :param segment:
@@ -177,19 +177,23 @@ class Segment(Shape):
             bool : A boolean who indicate if we have intersection between the two segments.
         """
         start1, end1 = self.endpoints
+        sx1, sy1 = start1.coordinates
+        ex1, ey1 = end1.coordinates
         start2, end2 = segment.endpoints
+        sx2, sy2 = start2.coordinates
+        ex2, ey2 = end2.coordinates
 
-        d = (end2.y - start2.y) * (end1.x - start1.x) - (end2.x - start2.x) * (end1.y - start1.y)
+        d = (ey2 - sy2) * (ex1 - sx1) - (ex2 - sx2) * (ey1 - sy1)
         if d:
-            uA = ((end2.x - start2.x) * (start1.y - start2.y) - (end2.y - start2.y) * (start1.x - start2.x)) / d
-            uB = ((end1.x - start1.x) * (start1.y - start2.y) - (end1.y - start1.y) * (start1.x - start2.x)) / d
+            u_a = ((ex2 - sx2) * (sy1 - sy2) - (ey2 - sy2) * (sx1 - sx2)) / d
+            u_b = ((ex1 - sx1) * (sy1 - sy2) - (ey1 - sy1) * (sx1 - sx2)) / d
         else:
             return False
 
-        if not (0 <= uA <= 1 and 0 <= uB <= 1):
+        if not (0 <= u_a <= 1 and 0 <= u_b <= 1):
             return False
 
-        return Point2D(start1.x + uA * (end1.x - start1.x), start1.y + uA * (end1.y - start1.y))
+        return Point2D(sx1 + u_a * (ex1 - sx1), sy1 + u_a * (ey1 - sy1))
 
     def random_points_in(self):
         """

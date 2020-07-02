@@ -94,9 +94,9 @@ class Shape(ABC):
 		string = f'transform="translate({translation})'
 		if self.rotation != 0:
 			center_pt = "{} {}".format(*self.get_center())
-			string += f"rotate({self.rotation} {center_pt})"
+			string += f" rotate({self.rotation} {center_pt})"
 
-		return string + '" '
+		return string + '"'
 
 	def get_styles(self):
 		"""Get a string who describe all style.
@@ -152,6 +152,18 @@ class Shape(ABC):
 		"""
 		if self.animations:
 			self.animations.add_animation(frame,  AnimationType.OPACITY, value=value)
+
+	def add_inflation(self, frame, x, y=None):
+		"""Add translation animation on shape at frame.
+
+		Args:
+			frame (int): The frame.
+			x     (int): The inflation on X axis.
+			y     (int): The inflation on Y axis.
+		"""
+		if self.animations:
+			y = x if y is None else y
+			self.animations.add_animation(frame, AnimationType.INFLATION, value=Point2D(x, y))
 
 	def apply_translation(self, value):
 		self.translation = [v + old for v, old in zip(value, self.translation)]
