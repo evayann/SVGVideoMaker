@@ -46,20 +46,20 @@ class Shape(ABC):
 		self.animations.set_start(opacity)
 
 	def set_style(self, fill_color=None, stroke_color=None, stroke_width=None, stroke_linecaps=None,
-	              opacity=None, others_rules=None, custom=True):
+	              stroke_dasharray=None, opacity=None, others_rules=None, custom=True):
 		"""Set the style of a svg element.
 
 		Args:
-			fill_color   (str)    : The color to fill shape.
-			stroke_color (str)    : The color of stroke of the shape.
-			stroke_width (float)  : The size of stroke of the shape.
-			opacity      (float)  : The opacity of shape.
-			others_rules (list)   : A list of some others rules.
-			custom       (bool)   : A bool who indicate if we set a default style or if it's custom.
+			fill_color       (str)    : The color to fill shape.
+			stroke_color     (str)    : The color of stroke of the shape.
+			stroke_width     (float)  : The size of stroke of the shape.
+			stroke_dasharray (str)    : The string who describe the dasharray of the shape.
+			opacity          (float)  : The opacity of shape.
+			custom           (bool)   : A bool who indicate if we set a default style or if it's custom.
 		"""
 		if self.style is None:
 			self.style = Style()
-		self.style.set(fill_color, stroke_color, stroke_width, stroke_linecaps, opacity, custom)
+		self.style.set(fill_color, stroke_color, stroke_width, stroke_linecaps, stroke_dasharray, opacity, custom)
 		if others_rules:
 			self.style.add_other_rules(others_rules)
 

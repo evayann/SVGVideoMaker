@@ -21,7 +21,7 @@ copyright = '2020, Yann Zavattero'
 author = 'Yann Zavattero'
 
 # The full version, including alpha/beta/rc tags
-version = release = '0.4.1'
+version = release = '0.4.2'
 
 master_doc = 'index'
 

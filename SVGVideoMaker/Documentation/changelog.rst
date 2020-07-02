@@ -2,10 +2,17 @@
 Changelog
 *********
 
+Version 0.4.2, Stroke Dash array
+=======================================================
+
+:Date: July 02, 2020
+
+Add stroke dash array
+
 Version 0.4.1, Bug Fixes
 =======================================================
 
-:Date: June 30, 2020
+:Date: July 02, 2020
 
 Bug Fixes Update
 

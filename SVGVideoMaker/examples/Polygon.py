@@ -8,8 +8,8 @@ from SVGVideoMaker.video import Video
 # endregion Imports
 
 # Global values
-fps = 15
-seconds = 15
+fps = 30
+seconds = 5
 position_offset = 20
 width, height = 110, 180
 center = Point2D(width // 2, height // 2)
@@ -24,10 +24,8 @@ def create_column(colum, sens):
 	stroke_incrementer = 0.2
 
 	for i in range(height // position_offset):
-		squarre = Polygon.square(colum - half_size, i * position_offset + int(position_offset / 2) - half_size,
-		                         size)
+		squarre = Polygon.square(colum - half_size, i * position_offset + int(position_offset / 2) - half_size, size)
 		stroke_incrementer *= 1.5 if i <= 4 else 0.5
-
 		if i % 2:
 			for j, seg in enumerate(squarre.get_segments()):
 				seg.add_rotate(seconds * fps, value=sens * full_turn)
@@ -35,7 +33,8 @@ def create_column(colum, sens):
 				svg.append(seg)
 		else:
 			squarre.add_rotate(seconds * fps, value=sens * full_turn)
-			squarre.set_style(stroke_color="black", stroke_width=1 + stroke_incrementer, stroke_linecaps="round")
+			squarre.set_style(stroke_color="black", stroke_width=1 + stroke_incrementer,
+			                  stroke_linecaps="round", stroke_dasharray=f"1,2")
 			svg.append(squarre)
 
 
@@ -71,7 +70,7 @@ def main():
 
 	video = Video(svg, fps=fps, width=width*5, height=height*5)
 	print(svg.display_animations())
-	video.save_movie(name="polygon", end=seconds + 1)
+	video.save_movie(name="polygon", end=seconds + 1, ext="gif")
 
 
 if __name__ == '__main__':
