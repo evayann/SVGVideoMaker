@@ -29,12 +29,12 @@ def create_column(colum, sens):
 		if i % 2:
 			for j, seg in enumerate(squarre.get_segments()):
 				seg.add_rotate(seconds * fps, value=sens * full_turn)
-				seg.set_style(stroke_color="red", stroke_linecaps="round")
+				seg.set_style(stroke_color="red", stroke_linecaps="round", custom=False)
 				svg.append(seg)
 		else:
 			squarre.add_rotate(seconds * fps, value=sens * full_turn)
 			squarre.set_style(stroke_color="black", stroke_width=1 + stroke_incrementer,
-			                  stroke_linecaps="round", stroke_dasharray=f"1,2")
+			                  stroke_linecaps="round", stroke_dasharray=f"1,2", custom=False)
 			svg.append(squarre)
 
 
@@ -52,7 +52,8 @@ def main():
 	p1 = Polygon(p1_start)
 	p1.add_modification(seconds * fps, values=p1_end)
 
-	p2 = Rectangle(Point2D(center.x - 30, center.y - 10), 60, 20)
+	p2 = Polygon([Point2D(center.x - 30, center.y - 10), Point2D(center.x + 30, center.y - 10),
+	              Point2D(center.x + 30, center.y + 10), Point2D(center.x - 30, center.y + 10)])
 	p2.add_modification(seconds * fps, values=[center - Point2D(10, 10),
 	                                           center - Point2D(2, 0),
 	                                           center - Point2D(10, -10),
@@ -69,7 +70,7 @@ def main():
 	svg.append(p1, p2, p3)
 
 	video = Video(svg, fps=fps, width=width*5, height=height*5)
-	print(svg.display_animations())
+	video.save_frame(seconds * fps, path="./", name="anim")
 	video.save_movie(name="polygon", end=seconds + 1, ext="gif")
 
 

@@ -3,6 +3,13 @@ Necessary to make gradient for SVG
 """
 
 class Gradient:
+	""" Initialize gradient
+
+	    Args:
+	        id    (str) : The identifier of point.
+	        start (int) : Start point of segment of gradient.
+	        end   (int) : End point of segment of gradient.
+	"""
 	def __init__(self, id, start=None, end=None):
 		self.id = id
 		if start and end:

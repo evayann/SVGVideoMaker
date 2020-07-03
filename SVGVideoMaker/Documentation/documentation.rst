@@ -30,6 +30,11 @@ Polygon
 .. automodule:: SVGVideoMaker.geo.polygon
    :members:
 
+Segment
+-------------------
+.. automodule:: SVGVideoMaker.geo.segment
+   :members:
+
 Rectangle
 -------------------
 .. automodule:: SVGVideoMaker.geo.rectangle

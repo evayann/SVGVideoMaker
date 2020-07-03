@@ -3,33 +3,35 @@ Multi dimensional point and 2D point
 """
 
 # region Imports
-from SVGVideoMaker.geo.ellipse import Circle, X, Y
+from SVGVideoMaker.geo.ellipse import Circle
 # endregion Imports
 
 class Point(Circle):
-    """
-    Class who implements necessary to create and display point
-    """
-    def __init__(self, coordinates, id=None, opacity=1, animation=True, style=True):
-        """Build a point using an array of coordinates.
+    """ Initialize 2D point
 
         Args:
-            coordinates (list) : The coordinates.
-            id          (str)  : The id of shape.
-            opacity     (int)  : The opacity of shape.
-        """
+            coordinates (list of float) : List of all coordinates on differents axes of point.
+            id          (str)  : The identifier of point.
+            opacity     (int)  : The initial opacity of shape.
+            animation   (bool) : Boolean to use or not animation.
+            style       (bool) : Boolean to use or not style.
+    """
+    def __init__(self, coordinates, id=None, opacity=1, animation=True, style=True):
         super().__init__(coordinates, id=id, radius=1, opacity=opacity, animation=animation, style=style)
 
 
 class Point2D(Point):
-    def __init__(self, x, y, id=None, opacity=1, animation=True, style=True):
-        """Build new 2D point using an array of coordinates.
+    """ Initialize 2D point
 
         Args:
-            x       (int) : Position on X - Axis
-            y       (int) : Position on Y - Axis
-            opacity (int) : Value of opacity
-        """
+            x         (float) : Position on X - Axis
+            y         (float) : Position on Y - Axis
+            id        (str)   : The identifier of point.
+            opacity   (int)   : The initial opacity of shape.
+            animation (bool)  : Boolean to use or not animation.
+            style     (bool)  : Boolean to use or not style.
+    """
+    def __init__(self, x, y, id=None, opacity=1, animation=True, style=True):
         super().__init__([x, y], id=id, opacity=opacity, animation=animation, style=style)
         self.x = x
         self.y = y

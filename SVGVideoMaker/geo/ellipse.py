@@ -4,24 +4,20 @@ points (any dimension).
 # region Imports
 from math import sqrt
 
-from SVGVideoMaker.geo.shape import Shape, X, Y
+from SVGVideoMaker.geo.shape import Shape
 from SVGVideoMaker.geo.quadrant import Quadrant
 from SVGVideoMaker.geo.animation import Animation
 # endregion Imports
 
 class Ellipse(Shape):
-    """
-    a point is defined as a vector of any given dimension.
+    """ Initialize 2D point
 
-    for example:
-
-    - create a point at x=2, y=5:
-
-    my_point = Point([2, 5])
-
-    - find distance between two points:
-
-    distance = point1.distance_to(point2)
+        Args:
+            center    (Point) : Center of ellipse.
+            id        (str)   : The identifier of point.
+            opacity   (int)   : The initial opacity of shape.
+            animation (bool)  : Boolean to use or not animation.
+            style     (bool)  : Boolean to use or not style.
     """
     def __init__(self, center, rx=10, ry=5, id=None, opacity=1, animation=True, style=True):
         """
@@ -32,6 +28,8 @@ class Ellipse(Shape):
             self.set_animation_start(opacity)
         self.start_coordinates = center
         self.coordinates = list(center) # Copy coordinates for animation
+        self.anim_rx = rx
+        self.anim_ry = ry
         self.rx = rx
         self.ry = ry
 
@@ -68,8 +66,11 @@ class Ellipse(Shape):
         self.ry += value
 
     def reset(self):
+        super().reset()
         self.animations.reset()
         self.coordinates = list(self.start_coordinates)
+        self.anim_rx = self.rx
+        self.anim_ry = self.ry
 
     # region SVG
     def bounding_quadrant(self):

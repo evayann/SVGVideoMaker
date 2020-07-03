@@ -89,7 +89,6 @@ class Shape(ABC):
 		Returns:
 			str: The string who describe transform of this shape.
 		"""
-
 		translation = " ".join([str(el) for el in self.translation])
 		string = f'transform="translate({translation})'
 		if self.rotation != 0:
@@ -122,6 +121,10 @@ class Shape(ABC):
 	# endregion Getters
 
 	# region Animations
+	def reset(self):
+		self.translation = [0, 0]
+		self.rotation = 0
+
 	def add_translation(self, frame, x, y=None):
 		"""Add translation animation on shape at frame.
 
@@ -163,7 +166,7 @@ class Shape(ABC):
 		"""
 		if self.animations:
 			y = x if y is None else y
-			self.animations.add_animation(frame, AnimationType.INFLATION, value=Point2D(x, y))
+			self.animations.add_animation(frame, AnimationType.INFLATION, x=x, y=y)
 
 	def apply_translation(self, value):
 		self.translation = [v + old for v, old in zip(value, self.translation)]

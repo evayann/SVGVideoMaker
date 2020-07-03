@@ -7,33 +7,21 @@ With his svg implementation.
 from SVGVideoMaker.geo.point import Point2D
 from SVGVideoMaker.geo.shape import Shape
 from SVGVideoMaker.geo.quadrant import Quadrant
-from SVGVideoMaker.geo.ellipse import Circle
-from SVGVideoMaker.geo.animation import Animation, AnimationType
+from SVGVideoMaker.geo.animation import Animation
 # endregion Imports
 
 class Segment(Shape):
+    """ Initialize segment
+
+    Args:
+        start_point (Ellipse) : The start point of segment.
+        end_point   (Ellipse) : The end point of segment.
+        id          (str)     : The identifier of segment.
+        opacity     (int)     : The initial opacity of shape.
+        animation   (bool)    : Boolean to use or not animation.
+        style       (bool)    : Boolean to use or not style.
     """
-    oriented segment between two points.
-
-    for example:
-
-    - create a new segment between two points:
-
-        segment = Segment([point1, point2])
-
-    - create a new segment from coordinates:
-
-        segment = Segment([Point([1.0, 2.0]), Point([3.0, 4.0])])
-
-    - compute intersection point with other segment:
-
-        intersection = segment1.intersection_with(segment2)
-
-    """
-    def __init__(self, start_point: Circle, end_point: Circle, id=None, opacity=1, animation=True, style=True):
-        """
-        create a segment from an array of two points.
-        """
+    def __init__(self, start_point, end_point, id=None, opacity=1, animation=True, style=True):
         super().__init__(id=id, animation=Animation if animation else None, style=style, opacity=opacity)
         if animation:
             self.set_animation_start(opacity)
@@ -71,6 +59,7 @@ class Segment(Shape):
 
     # region Animation
     def reset(self):
+        super().reset()
         self.animations.reset()
         self.anim_points = [el.copy() for el in self.endpoints]
 

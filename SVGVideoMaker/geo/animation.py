@@ -157,6 +157,9 @@ class Animation:
         """
         # Reset frame counter
         self.current_frame = 0
+        self.init_animation()
+        for anim_type in AnimationType:
+            self.current_values[anim_type] = (-1, None)
 
     # region Getters
     def get_nb_frames(self):
@@ -184,9 +187,9 @@ class Animation:
             have_element = False
 
             for key, values in self.anims[anim_type].items():
-                string += f"\t\t>Frame: {key:{nb_key}},"
+                string += f"\t\t>Frame: {key:{nb_key}}, "
                 if anim_type is AnimationType.MODIFICATION and isinstance(values, list):
-                    string += f"Size:{len(values):{nb_values}}, {str(values)}\n"
+                    string += f'Size:{len(values):{nb_values}}, {" ".join(map(str, values))}\n'
                 else:
                     string += f"{values}\n"
                 have_element = True

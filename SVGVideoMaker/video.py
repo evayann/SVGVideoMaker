@@ -66,10 +66,10 @@ class Video:
         try:
             self.svg.init_animation()
             # Around max time to sup value
-            for i in range(start_frame, end_frame):
+            for i in range(start_frame, end_frame + 1):
                 msg(f"Compute frame {i}", DebugLevel.VERBOSE)
-                yield i, self.svg.get_svg()
                 self.svg.update()
+                yield i, self.svg.get_svg()
         except GeneratorExit:
             # Reset animation when generator was break
             self.svg.reset()
@@ -126,13 +126,13 @@ class Video:
         frame = None
         # Find frame and save it
         for i, frame in self.make_movie():
-            if i + 1 == frame_number:
+            if i == frame_number:
                 # If no name given, assign name like that : frame_53_00001
                 save(frame, f"{path}{n}", Format.SVG)
                 break
         else:  # If frame not found, print last
             if frame:
-                save(frame, path, Format.PNG)
+                save(frame, f"{path}{n}", Format.SVG)
             else:
                 # If None, the movie have no frame
                 raise Exception(f"Can't display frame {frame_number} if movie have no frame")

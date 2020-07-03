@@ -15,5 +15,5 @@ Install the package via pip.
 Via Git or Download
 ===================
 
-Or you can clone this `repo <https://github.com/evayann/svg_video_maker>`_ and add source code in your project.
+Or you can clone this `repo <https://github.com/evayann/SVGVideoMaker>`_ and add source code in your project.
 

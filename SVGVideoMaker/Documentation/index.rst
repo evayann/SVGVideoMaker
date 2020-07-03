@@ -12,4 +12,4 @@
    changelog
 
 .. meta::
-   :github_url: https://github.com/evayann/svg_video_maker
+   :github_url: https://github.com/evayann/SVGVideoMaker

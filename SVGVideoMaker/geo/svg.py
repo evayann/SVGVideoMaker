@@ -106,10 +106,13 @@ class SVG(Group):
         Compute bounding quadrant and svg strings for all things to display.
         """
         strings = []
-        for color, thing in zip(cycle(iter(SVG.svg_colors)), self.group):
-            strings.append('<g fill="{}" stroke="{}">\n'.format(color, color))
-            strings.append(thing.get_svg())
-            strings.append('</g>\n')
+        colors = cycle(iter(SVG.svg_colors))
+        for thing in self.group:
+            if thing.is_style():
+                strings.append(thing.get_svg())
+            else:
+                color = next(colors)
+                strings.append(f'<g fill="{color}" stroke="{color}">\n{thing.get_svg()}\n</g>\n')
         return " ".join(strings)
 
     def get_gradients_svg(self):
@@ -117,7 +120,7 @@ class SVG(Group):
 
     def add_gradient(self, id, offsets=None, colors=None, opacities=None, orientation_start=None, orientation_end=None):
         """Add a gradient to svg to be use in svg color.
-        With the differents offsets, colors and opacities.
+        With the different offsets, colors and opacities.
         If isn't the same number, keep the minimal value.
 
         Args:

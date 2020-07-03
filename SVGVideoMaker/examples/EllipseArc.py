@@ -7,6 +7,7 @@ from SVGVideoMaker.geo.animation import AnimationType
 from SVGVideoMaker.geo.arc import EllipseArc
 from SVGVideoMaker.geo import Point2D, SVG, Ellipse
 from SVGVideoMaker.video import Video
+from SVGVideoMaker import Group
 # endregion Imports
 
 # Global values
@@ -24,6 +25,7 @@ svg.set_view_box(Point2D(0, 0), Point2D(width, height))
 
 def create_column(colum, sens):
 	stroke_incrementer = 0.2
+	g = Group()
 	for i in range(height // position_offset):
 		start_angle = 90 + angle_offset * i if sens == 1 else 0 - angle_offset * i
 		end_angle = 180 + angle_offset * i if sens == 1 else 90 - angle_offset * i
@@ -37,8 +39,9 @@ def create_column(colum, sens):
 
 		stroke_incrementer *= 1.5 if i <= 4 else 0.5
 		arc.set_style(stroke_color="black", stroke_width=1 + stroke_incrementer, stroke_linecaps="round")
-
-		svg.append(arc)
+		g.append(arc)
+		# svg.append(arc)
+	svg.append(g)
 
 
 def main():

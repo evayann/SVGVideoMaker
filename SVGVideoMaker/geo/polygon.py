@@ -13,25 +13,15 @@ from SVGVideoMaker.geo.debug import msg, DebugLevel, DEBUG_LEVEL
 # endregion Imports
 
 class Polygon(Shape):
-    """A polygon is a list of point.
+    """ Initialize polygon
 
     Args:
-        points:
-        id:
-        fps:
-        debug:
-        use_style:
-        is_fill:
-        fill_color:
-        is_stroke:
-        stroke_color:
-        stroke_width:
-        opacity:
-        others_rules:
+        points    (list of Ellipse) : List of all points who describe polygon.
+        id        (str)     : The identifier of polygon.
+        opacity   (int)     : The initial opacity of shape.
+        animation (bool)    : Boolean to use or not animation.
+        style     (bool)    : Boolean to use or not style.
     """
-
-    p_id = 0
-
     def __init__(self, points, id=None, opacity=1, animation=True, style=True):
         super().__init__(id=id, animation=ModificationAnimation if animation else None, style=style, opacity=opacity)
 
@@ -45,9 +35,6 @@ class Polygon(Shape):
 
         if id:
             self.id = id
-        else:
-            self.id = Polygon.p_id
-            Polygon.p_id += 1
 
     @classmethod
     def square(cls, start_x, start_y, side):
@@ -132,10 +119,6 @@ class Polygon(Shape):
         return Point(coords)
 
     # region Animation
-    # def apply_translation(self, value):
-    #     for i in range(len(self.points)):
-    #         self.points[i] += value
-
     def add_modification(self, frame, values):
         if self.animations:
             self.animations.add_animation(frame, AnimationType.MODIFICATION, value=values)
@@ -151,13 +134,15 @@ class Polygon(Shape):
 
     # region Shape
     def reshape(self, lower_shape, bigger_shape, apply=False):
-        """
-        Make a new form for the animation
-        The lower form is improve to match to bigger form
-        :param lower_shape: the lower_shape of animation
-        :param bigger_shape: the bigger_shape of animation
-        :param apply: indicate if we need to apply the shape at the form
-        :return: an animation who match to bigger_shape from lower_shape
+        """Make a new form for the animation.
+        The lower form is improve to match to bigger form.
+
+        Args:
+            :param lower_shape: the lower_shape of animation
+            :param bigger_shape: the bigger_shape of animation
+            :param apply: indicate if we need to apply the shape at the form
+        Returns:
+            :return: an animation who match to bigger_shape from lower_shape
         """
         matched = [-1] * len(bigger_shape)
 
@@ -225,6 +210,7 @@ class Polygon(Shape):
         self.points = shape
 
     def reset(self):
+        super().reset()
         self.animations.reset()
         self.points = [p.copy() for p in self.start_points]
     # endregion Shape

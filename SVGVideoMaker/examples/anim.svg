@@ -1,0 +1,186 @@
+<svg width="550" height="900" viewBox="0 0 110 180" xmlns="http://www.w3.org/2000/svg">
+<rect x="0" y="0" width="110" height="180" fill="white"/>
+	<g stroke-width="0.6">
+<g fill="red" stroke="red">
+<polygon points="5,5 15,5 15,15 5,15" transform="translate(0 0) rotate(359.99999999999943 10.0 10.0)" opacity="1" stroke="black" stroke-dasharray="1,2" stroke-width="1.3" stroke-linecap="round" />
+
+</g>
+ <g fill="green" stroke="green">
+<line x1="5" y1="25" x2="15" y2="25" transform="translate(0 0) rotate(359.99999999999943 10.0 25.0)" opacity="1" stroke="red" stroke-width="2" stroke-linecap="round" />
+
+</g>
+ <g fill="blue" stroke="blue">
+<line x1="15" y1="25" x2="15" y2="35" transform="translate(0 0) rotate(359.99999999999943 15.0 30.0)" opacity="1" stroke="red" stroke-width="2" stroke-linecap="round" />
+
+</g>
+ <g fill="purple" stroke="purple">
+<line x1="15" y1="35" x2="5" y2="35" transform="translate(0 0) rotate(359.99999999999943 10.0 35.0)" opacity="1" stroke="red" stroke-width="2" stroke-linecap="round" />
+
+</g>
+ <g fill="orange" stroke="orange">
+<line x1="5" y1="35" x2="5" y2="25" transform="translate(0 0) rotate(359.99999999999943 5.0 30.0)" opacity="1" stroke="red" stroke-width="2" stroke-linecap="round" />
+
+</g>
+ <g fill="saddlebrown" stroke="saddlebrown">
+<polygon points="5,45 15,45 15,55 5,55" transform="translate(0 0) rotate(359.99999999999943 10.0 50.0)" opacity="1" stroke="black" stroke-dasharray="1,2" stroke-width="1.675" stroke-linecap="round" />
+
+</g>
+ <g fill="mediumseagreen" stroke="mediumseagreen">
+<line x1="5" y1="65" x2="15" y2="65" transform="translate(0 0) rotate(359.99999999999943 10.0 65.0)" opacity="1" stroke="red" stroke-width="2" stroke-linecap="round" />
+
+</g>
+ <g fill="darkolivegreen" stroke="darkolivegreen">
+<line x1="15" y1="65" x2="15" y2="75" transform="translate(0 0) rotate(359.99999999999943 15.0 70.0)" opacity="1" stroke="red" stroke-width="2" stroke-linecap="round" />
+
+</g>
+ <g fill="lightskyblue" stroke="lightskyblue">
+<line x1="15" y1="75" x2="5" y2="75" transform="translate(0 0) rotate(359.99999999999943 10.0 75.0)" opacity="1" stroke="red" stroke-width="2" stroke-linecap="round" />
+
+</g>
+ <g fill="dimgray" stroke="dimgray">
+<line x1="5" y1="75" x2="5" y2="65" transform="translate(0 0) rotate(359.99999999999943 5.0 70.0)" opacity="1" stroke="red" stroke-width="2" stroke-linecap="round" />
+
+</g>
+ <g fill="mediumpurple" stroke="mediumpurple">
+<polygon points="5,85 15,85 15,95 5,95" transform="translate(0 0) rotate(359.99999999999943 10.0 90.0)" opacity="1" stroke="black" stroke-dasharray="1,2" stroke-width="2.5187500000000003" stroke-linecap="round" />
+
+</g>
+ <g fill="midnightblue" stroke="midnightblue">
+<line x1="5" y1="105" x2="15" y2="105" transform="translate(0 0) rotate(359.99999999999943 10.0 105.0)" opacity="1" stroke="red" stroke-width="2" stroke-linecap="round" />
+
+</g>
+ <g fill="olive" stroke="olive">
+<line x1="15" y1="105" x2="15" y2="115" transform="translate(0 0) rotate(359.99999999999943 15.0 110.0)" opacity="1" stroke="red" stroke-width="2" stroke-linecap="round" />
+
+</g>
+ <g fill="chartreuse" stroke="chartreuse">
+<line x1="15" y1="115" x2="5" y2="115" transform="translate(0 0) rotate(359.99999999999943 10.0 115.0)" opacity="1" stroke="red" stroke-width="2" stroke-linecap="round" />
+
+</g>
+ <g fill="darkorchid" stroke="darkorchid">
+<line x1="5" y1="115" x2="5" y2="105" transform="translate(0 0) rotate(359.99999999999943 5.0 110.0)" opacity="1" stroke="red" stroke-width="2" stroke-linecap="round" />
+
+</g>
+ <g fill="hotpink" stroke="hotpink">
+<polygon points="5,125 15,125 15,135 5,135" transform="translate(0 0) rotate(359.99999999999943 10.0 130.0)" opacity="1" stroke="black" stroke-dasharray="1,2" stroke-width="1.3796875000000002" stroke-linecap="round" />
+
+</g>
+ <g fill="darkred" stroke="darkred">
+<line x1="5" y1="145" x2="15" y2="145" transform="translate(0 0) rotate(359.99999999999943 10.0 145.0)" opacity="1" stroke="red" stroke-width="2" stroke-linecap="round" />
+
+</g>
+ <g fill="peru" stroke="peru">
+<line x1="15" y1="145" x2="15" y2="155" transform="translate(0 0) rotate(359.99999999999943 15.0 150.0)" opacity="1" stroke="red" stroke-width="2" stroke-linecap="round" />
+
+</g>
+ <g fill="goldenrod" stroke="goldenrod">
+<line x1="15" y1="155" x2="5" y2="155" transform="translate(0 0) rotate(359.99999999999943 10.0 155.0)" opacity="1" stroke="red" stroke-width="2" stroke-linecap="round" />
+
+</g>
+ <g fill="mediumslateblue" stroke="mediumslateblue">
+<line x1="5" y1="155" x2="5" y2="145" transform="translate(0 0) rotate(359.99999999999943 5.0 150.0)" opacity="1" stroke="red" stroke-width="2" stroke-linecap="round" />
+
+</g>
+ <g fill="orangered" stroke="orangered">
+<polygon points="5,165 15,165 15,175 5,175" transform="translate(0 0) rotate(359.99999999999943 10.0 170.0)" opacity="1" stroke="black" stroke-dasharray="1,2" stroke-width="1.094921875" stroke-linecap="round" />
+
+</g>
+ <g fill="darkmagenta" stroke="darkmagenta">
+<polygon points="95,5 105,5 105,15 95,15" transform="translate(0 0) rotate(-359.99999999999943 100.0 10.0)" opacity="1" stroke="black" stroke-dasharray="1,2" stroke-width="1.3" stroke-linecap="round" />
+
+</g>
+ <g fill="darkgoldenrod" stroke="darkgoldenrod">
+<line x1="95" y1="25" x2="105" y2="25" transform="translate(0 0) rotate(-359.99999999999943 100.0 25.0)" opacity="1" stroke="red" stroke-width="2" stroke-linecap="round" />
+
+</g>
+ <g fill="mediumslateblue" stroke="mediumslateblue">
+<line x1="105" y1="25" x2="105" y2="35" transform="translate(0 0) rotate(-359.99999999999943 105.0 30.0)" opacity="1" stroke="red" stroke-width="2" stroke-linecap="round" />
+
+</g>
+ <g fill="firebrick" stroke="firebrick">
+<line x1="105" y1="35" x2="95" y2="35" transform="translate(0 0) rotate(-359.99999999999943 100.0 35.0)" opacity="1" stroke="red" stroke-width="2" stroke-linecap="round" />
+
+</g>
+ <g fill="palegreen" stroke="palegreen">
+<line x1="95" y1="35" x2="95" y2="25" transform="translate(0 0) rotate(-359.99999999999943 95.0 30.0)" opacity="1" stroke="red" stroke-width="2" stroke-linecap="round" />
+
+</g>
+ <g fill="royalblue" stroke="royalblue">
+<polygon points="95,45 105,45 105,55 95,55" transform="translate(0 0) rotate(-359.99999999999943 100.0 50.0)" opacity="1" stroke="black" stroke-dasharray="1,2" stroke-width="1.675" stroke-linecap="round" />
+
+</g>
+ <g fill="tan" stroke="tan">
+<line x1="95" y1="65" x2="105" y2="65" transform="translate(0 0) rotate(-359.99999999999943 100.0 65.0)" opacity="1" stroke="red" stroke-width="2" stroke-linecap="round" />
+
+</g>
+ <g fill="tomato" stroke="tomato">
+<line x1="105" y1="65" x2="105" y2="75" transform="translate(0 0) rotate(-359.99999999999943 105.0 70.0)" opacity="1" stroke="red" stroke-width="2" stroke-linecap="round" />
+
+</g>
+ <g fill="springgreen" stroke="springgreen">
+<line x1="105" y1="75" x2="95" y2="75" transform="translate(0 0) rotate(-359.99999999999943 100.0 75.0)" opacity="1" stroke="red" stroke-width="2" stroke-linecap="round" />
+
+</g>
+ <g fill="pink" stroke="pink">
+<line x1="95" y1="75" x2="95" y2="65" transform="translate(0 0) rotate(-359.99999999999943 95.0 70.0)" opacity="1" stroke="red" stroke-width="2" stroke-linecap="round" />
+
+</g>
+ <g fill="orchid" stroke="orchid">
+<polygon points="95,85 105,85 105,95 95,95" transform="translate(0 0) rotate(-359.99999999999943 100.0 90.0)" opacity="1" stroke="black" stroke-dasharray="1,2" stroke-width="2.5187500000000003" stroke-linecap="round" />
+
+</g>
+ <g fill="saddlebrown" stroke="saddlebrown">
+<line x1="95" y1="105" x2="105" y2="105" transform="translate(0 0) rotate(-359.99999999999943 100.0 105.0)" opacity="1" stroke="red" stroke-width="2" stroke-linecap="round" />
+
+</g>
+ <g fill="moccasin" stroke="moccasin">
+<line x1="105" y1="105" x2="105" y2="115" transform="translate(0 0) rotate(-359.99999999999943 105.0 110.0)" opacity="1" stroke="red" stroke-width="2" stroke-linecap="round" />
+
+</g>
+ <g fill="mistyrose" stroke="mistyrose">
+<line x1="105" y1="115" x2="95" y2="115" transform="translate(0 0) rotate(-359.99999999999943 100.0 115.0)" opacity="1" stroke="red" stroke-width="2" stroke-linecap="round" />
+
+</g>
+ <g fill="cornflowerblue" stroke="cornflowerblue">
+<line x1="95" y1="115" x2="95" y2="105" transform="translate(0 0) rotate(-359.99999999999943 95.0 110.0)" opacity="1" stroke="red" stroke-width="2" stroke-linecap="round" />
+
+</g>
+ <g fill="darkgrey" stroke="darkgrey">
+<polygon points="95,125 105,125 105,135 95,135" transform="translate(0 0) rotate(-359.99999999999943 100.0 130.0)" opacity="1" stroke="black" stroke-dasharray="1,2" stroke-width="1.3796875000000002" stroke-linecap="round" />
+
+</g>
+ <g fill="red" stroke="red">
+<line x1="95" y1="145" x2="105" y2="145" transform="translate(0 0) rotate(-359.99999999999943 100.0 145.0)" opacity="1" stroke="red" stroke-width="2" stroke-linecap="round" />
+
+</g>
+ <g fill="green" stroke="green">
+<line x1="105" y1="145" x2="105" y2="155" transform="translate(0 0) rotate(-359.99999999999943 105.0 150.0)" opacity="1" stroke="red" stroke-width="2" stroke-linecap="round" />
+
+</g>
+ <g fill="blue" stroke="blue">
+<line x1="105" y1="155" x2="95" y2="155" transform="translate(0 0) rotate(-359.99999999999943 100.0 155.0)" opacity="1" stroke="red" stroke-width="2" stroke-linecap="round" />
+
+</g>
+ <g fill="purple" stroke="purple">
+<line x1="95" y1="155" x2="95" y2="145" transform="translate(0 0) rotate(-359.99999999999943 95.0 150.0)" opacity="1" stroke="red" stroke-width="2" stroke-linecap="round" />
+
+</g>
+ <g fill="orange" stroke="orange">
+<polygon points="95,165 105,165 105,175 95,175" transform="translate(0 0) rotate(-359.99999999999943 100.0 170.0)" opacity="1" stroke="black" stroke-dasharray="1,2" stroke-width="1.094921875" stroke-linecap="round" />
+
+</g>
+ <g fill="saddlebrown" stroke="saddlebrown">
+<polygon points="54.99999999999961,34.9999999999995 55.0000000000005,34.9999999999995 54.99999999999993,35.0 45.0000000000005,15.0 45.0,14.999999999999964 65.0,14.999999999999964 65.00000000000057,15.0 54.99999999999949,35.0" transform="translate(0 0)" opacity="1" stroke-width="2" />
+
+</g>
+ <g fill="mediumseagreen" stroke="mediumseagreen">
+<polygon points="44.99999999999993,80.0 53.000000000000114,89.99999999999943 45.00000000000014,100.000000000001 64.999999999999,100.0 56.99999999999979,90.00000000000057 64.99999999999986,80.0" transform="translate(0 0)" opacity="1" stroke-width="2" />
+
+</g>
+ <g fill="darkolivegreen" stroke="darkolivegreen">
+<polygon points="45.00000000000002,165.00000000000057 45.0,165.00000000000057 45.0000000000005,165.0 65.00000000000043,164.99999999999886 55.0000000000005,144.99999999999943 54.99999999999961,144.99999999999943 54.99999999999949,145.0 54.99999999999949,145.00000000000114" transform="translate(0 0)" opacity="1" stroke-width="2" />
+
+</g>
+
+	</g>
+</svg>

@@ -5,7 +5,7 @@ from math import pi, sin, cos
 from SVGVideoMaker.geo.animation import Animation, EllispePartAnimation, AnimationType
 from SVGVideoMaker.geo.quadrant import Quadrant
 from SVGVideoMaker.geo.debug import DEBUG_LEVEL, DebugLevel
-from SVGVideoMaker.geo.point import Point2D, X, Y
+from SVGVideoMaker.geo.point import Point2D
 from SVGVideoMaker.geo.shape import Shape
 # endregion Imports
 
@@ -42,6 +42,7 @@ class Arc(Shape):
 
 	# region Animation
 	def reset(self):
+		super().reset()
 		self.animations.reset()
 		self.anim_point = self.start_point.copy()
 
@@ -152,6 +153,7 @@ class EllipseArc(Shape):
 			self.animations.add_animation(frame, AnimationType.ANGLES, x=x, y=y)
 
 	def reset(self):
+		super().reset()
 		self.animations.reset()
 		self.center_anim = self.center.copy()
 		self.radius_anim = self.radius.copy()
